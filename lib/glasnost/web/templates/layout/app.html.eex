@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Блог на блокчейне Голоса</title>
+  <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css"></link>
+
+</head>
+
+<body>
+  <header>
+  <div class="ui large fixed inverted menu">
+  <div class="ui container">
+    <a href="/" class="header item">
+      <img class="logo" src="/images/golos-logo.png">
+    </a>
+    <a href="#" class="item">Главная</a>
+    <a href="#" class="item">О блоге</a>
+    <a href="#" class="item">О Голосе</a>
+  </div>
+</div>  </header>
+  <div class="ui container">
+  <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+  <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
+  <main role="main">
+       <%= render @view_module, @view_template, assigns %>
+  </main>
+
+</div> <!-- /container -->
+<script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+</body>
+</html>

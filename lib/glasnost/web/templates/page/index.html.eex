@@ -1,0 +1,17 @@
+<div class="ui link stackable three cards">
+<%= for post <- @posts do %>
+<% img_src = hd(post.json_metadata["image"]) %>
+<a class="ui card" href="<%= post.permlink %>">
+  <div class="image">
+    <img src="<%= img_src %>">
+  </div>
+  <div class="content">
+    <div class="header"> <%= post.title %> </div>
+    <div class="meta">
+    </div>
+    <div class="description">
+    </div>
+  </div>
+</a>
+<% end %>
+</div>

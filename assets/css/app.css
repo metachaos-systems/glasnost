@@ -1,0 +1,13 @@
+/* This file is for your main application css. */
+
+img {
+  max-width: 100%;
+}
+
+ul {
+  text-align: left;
+}
+
+main {
+  margin-top: 80px;
+}
