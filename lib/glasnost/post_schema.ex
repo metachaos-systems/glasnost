@@ -1,8 +1,8 @@
-defmodule Glasnost.Comment do
+defmodule Glasnost.Post do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "golos_comments" do
+  schema "posts" do
     field :author, :string
     field :permlink, :string
     field :title, :string

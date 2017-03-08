@@ -1,7 +1,7 @@
 defmodule RuntimeConfig do
 
   def blog_author do
-    System.get_env("GOLOS_BLOG_AUTHOR")
+    System.get_env("GLASNOST_BLOG_AUTHOR")
   end
 
   def source_blockchain do

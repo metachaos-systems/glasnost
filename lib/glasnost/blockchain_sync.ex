@@ -8,7 +8,7 @@ defmodule Golos.Sync do
 
   def init(args) do
     import Ecto.Query
-    Repo.delete_all(from c in Glasnost.Comment)
+    Repo.delete_all(from c in Glasnost.Post)
     blog_author = RuntimeConfig.blog_author
 
     state = %{current_cursor: "", blog_author: blog_author, client_mod: RuntimeConfig.blockchain_client_mod}
@@ -23,11 +23,11 @@ defmodule Golos.Sync do
      for post <- posts do
        post = update_in(post["json_metadata"], &Poison.Parser.parse!(&1))
        result =
-         case Repo.get(Glasnost.Comment, post["id"]) do
-           nil  -> %Glasnost.Comment{}
+         case Repo.get(Glasnost.Post, post["id"]) do
+           nil  -> %Glasnost.Post{}
            comment -> comment
          end
-         |> Glasnost.Comment.changeset(post)
+         |> Glasnost.Post.changeset(post)
          |> Repo.insert_or_update
 
        case result do

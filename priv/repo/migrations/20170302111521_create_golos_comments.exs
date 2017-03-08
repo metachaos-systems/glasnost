@@ -1,9 +1,9 @@
-defmodule Glasnost.Repo.Migrations.CreateGolosComments do
+defmodule Glasnost.Repo.Migrations.CreatePosts do
   use Ecto.Migration
 
   def change do
 
-  create_if_not_exists table(:golos_comments, engine: :set) do
+  create_if_not_exists table(:posts, engine: :set) do
       add :id, :integer
       add :author, :string, []
       add :title, :string
