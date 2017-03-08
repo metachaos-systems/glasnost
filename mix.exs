@@ -37,6 +37,7 @@ defmodule Glasnost.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:ex_golos, ">= 0.5.0"},
+     {:steemex, ">= 0.0.0"},
      {:calendar, ">= 0.16.0"},
      {:ecto_mnesia, "~> 0.7.1"},
      {:cowboy, "~> 1.0"},

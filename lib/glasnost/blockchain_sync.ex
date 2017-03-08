@@ -10,14 +10,16 @@ defmodule Golos.Sync do
     import Ecto.Query
     Repo.delete_all(from c in Glasnost.Comment)
     blog_author = RuntimeConfig.blog_author
-    state = %{current_cursor: "", blog_author: blog_author}
+
+    state = %{current_cursor: "", blog_author: blog_author, client_mod: RuntimeConfig.blockchain_client_mod}
+
     Process.send_after(self(), :tick, 1_000)
     {:ok, state}
   end
 
   def handle_info(:tick, state) do
      utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> String.replace(~r/\..+/, "")
-     {:ok, posts} = Golos.get_discussions_by_author_before_date(state.blog_author, state.current_cursor, utc_now_str, 100)
+     {:ok, posts} = state.client_mod.get_discussions_by_author_before_date(state.blog_author, state.current_cursor, utc_now_str, 100)
      for post <- posts do
        post = update_in(post["json_metadata"], &Poison.Parser.parse!(&1))
        result =

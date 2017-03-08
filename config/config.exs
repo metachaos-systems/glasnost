@@ -26,6 +26,9 @@ config :logger, :console,
 config :ex_golos,
   url: System.get_env("GOLOS_URL")
 
+config :steemex,
+  url: System.get_env("STEEM_URL")
+
 config :glasnost, Glasnost.Repo,
   adapter: Ecto.Adapters.Mnesia
 

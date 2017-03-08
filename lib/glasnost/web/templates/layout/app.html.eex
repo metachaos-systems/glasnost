@@ -18,11 +18,11 @@
   <div class="ui large fixed inverted menu">
   <div class="ui container">
     <a href="/" class="header item">
-      <img class="logo" src="/images/golos-logo.png">
+      <img class="logo" src="/images/<%=naive_image_chooser("logo", @conn.assigns.lang)%>">
     </a>
-    <a href="#" class="item">Главная</a>
-    <a href="#" class="item">О блоге</a>
-    <a href="#" class="item">О Голосе</a>
+    <a href="/" class="item"><%=naive_translate("home", @conn.assigns.lang)%></a>
+    <a href="#" class="item"><%=naive_translate("about", @conn.assigns.lang)%></a>
+    <a href="#" class="item"><%=naive_translate("about_steemlike_chain", @conn.assigns.lang)%></a>
   </div>
 </div>  </header>
   <div class="ui container">

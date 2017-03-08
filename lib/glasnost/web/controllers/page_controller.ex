@@ -2,6 +2,8 @@ defmodule Glasnost.Web.PageController do
   use Glasnost.Web, :controller
   import Ecto.Query
 
+  plug :put_lang, []
+
   def index(conn, _params) do
     blog_author = RuntimeConfig.blog_author
     posts = Glasnost.Repo.all(from c in Glasnost.Comment, order_by: [desc: c.id])
@@ -15,4 +17,9 @@ defmodule Glasnost.Web.PageController do
     post = put_in(post.body, body)
     render conn, "post.html", post: post
   end
+
+  def put_lang(conn, lang) do
+    assign(conn, :lang, RuntimeConfig.language)
+  end
+
 end
