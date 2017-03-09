@@ -14,6 +14,10 @@ defmodule Glasnost.Web.LayoutView do
         "home" => %{
           "ru" => "Главная",
           "en" => "Home"
+        },
+        "head title" => %{
+          "ru" => "Блог на блокчейне Голоса",
+          "en" => "Steem blockchain blog"
         }
     }[key][lang]
   end
