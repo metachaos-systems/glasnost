@@ -15,12 +15,12 @@ use Mix.Config
 # which you typically run after static files are built.
 config :glasnost, Glasnost.Web.Endpoint,
   on_init: {Glasnost.Web.Endpoint, :load_from_system_env, []},
-  url: [host: "example.com", port: 80],
+  url: [host: "localhost", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 config :phoenix_distillery, PhoenixDistillery.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "localhost", port: {:system, "PORT"}], # This is critical for ensuring web-sockets properly authorize.
+  url: [host: "example.com", port: {:system, "PORT"}], # This is critical for ensuring web-sockets properly authorize.
   cache_static_manifest: "priv/static/manifest.json",
   server: true,
   root: ".",
