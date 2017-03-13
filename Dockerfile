@@ -2,18 +2,36 @@ FROM elixir:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+ENV GOLOS_URL=wss://ws.golos.io
+ENV STEEM_URL=wss://steemd.steemit.com
+
+RUN curl -sL https://deb.nodesource.com/setup_7.x | bash -
+RUN apt-get install -y nodejs
+
 ADD . /glasnost_app
 WORKDIR /glasnost_app
 
 RUN mix local.hex --force
 RUN mix local.rebar --force
-RUN mix deps.get --all
+RUN mix deps.update --all
 
 ENV MIX_ENV prod
 ENV PORT 80
 
-RUN mix compile
-RUN mix release
-RUN rm -rf deps lib config
+WORKDIR /glasnost_app/assets
+RUN npm install
+RUN node node_modules/brunch/bin/brunch build
 
-ENTRYPOINT _build/prod/rel/glasnost/releases/0.1.0/glasnost.sh foreground
+WORKDIR /glasnost_app
+RUN rm -r /glasnost_app/priv/data/mnesia
+RUN mkdir -p /glasnost_app/priv/data/mnesia
+
+RUN mix compile
+RUN mix ecto.create
+RUN mix ecto.migrate
+
+RUN mix phx.digest
+
+# RUN rm -rf deps lib config assets/node_modules
+
+ENTRYPOINT mix phx.server

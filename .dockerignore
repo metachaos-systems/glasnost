@@ -1,0 +1,4 @@
+deps/
+_build/
+.git/
+test/
