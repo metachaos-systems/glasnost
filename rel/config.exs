@@ -40,4 +40,7 @@ end
 
 release :glasnost do
   set version: current_version(:glasnost)
+  set commands: [
+    "migrate": "rel/commands/migrate.sh"
+  ]
 end
