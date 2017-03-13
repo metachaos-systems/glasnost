@@ -40,6 +40,7 @@ defmodule Glasnost.Mixfile do
      {:steemex, ">= 0.0.0"},
      {:calendar, ">= 0.16.0"},
      {:ecto_mnesia, "~> 0.7.1"},
+     {:distillery, ">= 0.0.0"},
      {:cowboy, "~> 1.0"},
      {:credo, ">= 0.0.0", only: :dev},
      {:earmark, ">= 0.0.0"}]
