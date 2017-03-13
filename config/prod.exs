@@ -18,13 +18,14 @@ config :glasnost, Glasnost.Web.Endpoint,
   url: [host: "localhost", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
-config :phoenix_distillery, PhoenixDistillery.Endpoint,
-  http: [port: {:system, "PORT"}],
-  url: [host: "example.com", port: {:system, "PORT"}], # This is critical for ensuring web-sockets properly authorize.
-  cache_static_manifest: "priv/static/manifest.json",
-  server: true,
-  root: ".",
-  version: Mix.Project.config[:version]
+# Disabled until mnesia issue is fixes
+# config :phoenix_distillery, PhoenixDistillery.Endpoint,
+#   http: [port: {:system, "PORT"}],
+#   url: [host: "example.com", port: {:system, "PORT"}], # This is critical for ensuring web-sockets properly authorize.
+#   cache_static_manifest: "priv/static/manifest.json",
+#   server: true,
+#   root: ".",
+#   version: Mix.Project.config[:version]
 
 
 # Do not print debug messages in production

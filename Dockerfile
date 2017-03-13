@@ -19,8 +19,9 @@ ENV MIX_ENV prod
 ENV PORT 80
 
 WORKDIR /glasnost_app/assets
-RUN npm install
-RUN node node_modules/brunch/bin/brunch build
+RUN npm install && \
+ node node_modules/brunch/bin/brunch build && \
+ rm -rf ./assets
 
 WORKDIR /glasnost_app
 RUN rm -r /glasnost_app/priv/data/mnesia
@@ -32,6 +33,5 @@ RUN mix ecto.migrate
 
 RUN mix phx.digest
 
-# RUN rm -rf deps lib config assets/node_modules
 
 ENTRYPOINT mix phx.server
