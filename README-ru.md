@@ -1,11 +1,14 @@
-# Деплоймент и запуск
+# Простой запуск Glasnost с помощью Docker
 
-На сервере должен быть установлен erlang/OTP, elixir и nodejs. В следующих версиях Glasnost будет упакована в удобный для использования докер имидж.
-
-Пошаговый код [деплоймента](https://github.com/cyberpunk-ventures/glasnost/blob/master/DEPLOYMENT.md) статического блога на своем домене.
-
-## Пример конфигурации
 ```
-export GLASNOST_SOURCE_BLOCKCHAIN=golos
-export GLASNOST_BLOG_AUTHOR=ontofractal
+docker run -it -e "GLASNOST_SOURCE_BLOCKCHAIN=..." -e "GLASNOST_BLOG_AUTHOR=..." --restart always ontofractal/glasnost:0.1
 ```
+
+## Настройки
+
+Для выбора блокчейна и блога используются переменные пространства докер контейнера.
+
+* `GLASNOST_SOURCE_BLOCKCHAIN`: `steem` или `golos`
+* "GLASNOST_BLOG_AUTHOR": имя аккаунта в steem или golo
+
+Такие переменные пространства, как `PORT`, `STEEM_URL` и GOLOS_URL могут быть изменены в Dockerfile для создания нового докер имиджа.
