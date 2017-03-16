@@ -7,7 +7,7 @@ defmodule Glasnost.Web.PageController do
   def index(conn, _params) do
     blog_author = RuntimeConfig.blog_author
     posts = Glasnost.Repo.all(from c in Glasnost.Post, order_by: [desc: c.id])
-    render conn, "index.html", posts: posts, blog_author: blog_author
+    render conn, "posts.html", posts: posts, blog_author: blog_author
   end
 
   def show(conn, %{"permlink" => permlink}) do
@@ -21,7 +21,7 @@ defmodule Glasnost.Web.PageController do
   def tag(conn, %{"tag" => tag}) do
     blog_author = RuntimeConfig.blog_author
     posts = Glasnost.Repo.all(from c in Glasnost.Post, where: ^tag in c.tags)
-    render conn, "tag.html", posts: posts
+    render conn, "posts.html", posts: posts
   end
 
   def put_lang(conn, _) do
