@@ -1,7 +1,7 @@
 <div class="ui link stackable three cards">
 <%= for post <- @posts do %>
 <% img_src = hd(post.json_metadata["image"]) %>
-<a class="ui card" href="<%= post.permlink %>">
+<a class="ui card" href="/post/<%= post.permlink %>">
   <div class="image">
     <img src="<%= img_src %>">
   </div>
