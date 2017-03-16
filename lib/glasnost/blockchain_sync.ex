@@ -21,7 +21,9 @@ defmodule Golos.Sync do
      utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> String.replace(~r/\..+/, "")
      {:ok, posts} = state.client_mod.get_discussions_by_author_before_date(state.blog_author, state.current_cursor, utc_now_str, 100)
      for post <- posts do
+      #  IO.inspect post
        post = update_in(post["json_metadata"], &Poison.Parser.parse!(&1))
+       post = put_in(post, ["tags"], post["json_metadata"]["tags"])
        result =
          case Repo.get(Glasnost.Post, post["id"]) do
            nil  -> %Glasnost.Post{}
