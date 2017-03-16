@@ -20,7 +20,7 @@ defmodule Glasnost.Web.PageController do
 
   def tag(conn, %{"tag" => tag}) do
     blog_author = RuntimeConfig.blog_author
-    posts = Glasnost.Repo.all(from c in Glasnost.Post, where: ^tag in c.tags)
+    posts = Glasnost.Repo.all(from c in Glasnost.Post, where: ^tag in c.tags, order_by: [desc: c.id])
     render conn, "posts.html", posts: posts
   end
 
