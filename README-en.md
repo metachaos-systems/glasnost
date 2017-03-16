@@ -12,3 +12,19 @@ Configuration settings are:
 * "GLASNOST_BLOG_AUTHOR": your steem/golos account name
 
 Other settings like PORT, STEEM_URL and GOLOS_URL can be configured in the Dockerfile.
+
+
+# Stoping Glasnost
+
+```
+docker ps 
+```
+find a container name `CONTAINER_NAME` (in the `NAMES` column)
+
+```
+docker stop CONTAINER_NAME
+```
+```
+docker rm CONTAINER_NAME
+```
+
