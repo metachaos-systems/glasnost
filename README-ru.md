@@ -15,5 +15,7 @@ docker run -it -e "GLASNOST_SOURCE_BLOCKCHAIN=..." -e "GLASNOST_BLOG_AUTHOR=..."
 
 # Остановка Glasnost с помощью Docker
 1 docker ps и найти имя контейнера CONTAINER_NAME (в колонке NAMES)
+
 2 docker stop CONTAINER_NAME
+
 3 docker rm CONTAINER_NAME
