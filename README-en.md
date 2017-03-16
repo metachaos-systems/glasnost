@@ -14,7 +14,7 @@ Configuration settings are:
 Other settings like PORT, STEEM_URL and GOLOS_URL can be configured in the Dockerfile.
 
 
-# Stoping Glasnost
+# Stoping and removing Glasnost container
 
 ```
 docker ps 
