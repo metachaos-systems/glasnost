@@ -17,8 +17,8 @@ defmodule Glasnost.Web.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    get "/:permlink", PageController, :show
-    get "/tag/:tag", TagController, :show
+    get "/tag/:tag", PageController, :tag
+    get "/post/:permlink", PageController, :show
   end
 
   # Other scopes may use custom stacks.
