@@ -13,6 +13,7 @@ defmodule Glasnost.Application do
       # Start the endpoint when the application starts
       supervisor(Glasnost.Web.Endpoint, []),
       worker(Golos.Sync, []),
+      worker(Exos.Proc, [{"node port.js",0,cd: "./lib/ports/js"}] )
       # Start your own worker by calling: Glasnost.Worker.start_link(arg1, arg2, arg3)
       # worker(Glasnost.Worker, [arg1, arg2, arg3]),
     ]
