@@ -9,9 +9,9 @@ docker run -it -e "GLASNOST_SOURCE_BLOCKCHAIN=..." -e "GLASNOST_BLOG_AUTHOR=..."
 Configuration settings are:
 
 * `GLASNOST_SOURCE_BLOCKCHAIN`: `steem` or `golos`
-* "GLASNOST_BLOG_AUTHOR": your steem/golos account name
+* `GLASNOST_BLOG_AUTHOR`: your `steem`/`golos` account name
 
-Other settings like PORT, STEEM_URL and GOLOS_URL can be configured in the Dockerfile.
+Other settings like `PORT`, `STEEM_URL` and `GOLOS_URL` can be configured in the Dockerfile.
 
 
 # Stoping and removing the Glasnost container
