@@ -19,7 +19,7 @@ docker run -it -e "GLASNOST_SOURCE_BLOCKCHAIN=..." -e "GLASNOST_BLOG_AUTHOR=..."
 docker ps 
 ```
 
-и найти имя контейнера CONTAINER_NAME (в колонке NAMES)
+и найти имя контейнера `CONTAINER_NAME` (в колонке `NAMES`)
 
 ```
 docker stop CONTAINER_NAME
