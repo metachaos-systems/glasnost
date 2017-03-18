@@ -8,20 +8,17 @@
       <div class="content">
         <a class="header"> <%= post.title %> </a>
         <div class="meta"> </div>
-        <div class="description">
-
-        </div>
+        <div class="description"> </div>
       </div>
       <div class="extra content">
-      <div class="ui labels">
+        <div class="ui labels">
             <%= for tag <- post.tags do %>
               <a class="ui small label" href="/tag/<%=tag%>">
                 <%= format_tag(tag, @conn.assigns.lang) %>
               </a>
             <% end %>
           </div>
-      </div>
-
+        </div>
     </div>
   <% end %>
 </div>
