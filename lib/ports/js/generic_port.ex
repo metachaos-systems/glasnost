@@ -6,6 +6,7 @@ defmodule Exos.Proc do
     cast and call encode and decode erlang binary format
   """
   def start_link(args, options \\ []) do
+    # FIXME GolosJS name should be configured in the supervisor
     GenServer.start_link(__MODULE__, args, name: GolosJS)
   end
   def init({cmd,init,opts}) do

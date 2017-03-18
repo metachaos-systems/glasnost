@@ -14,7 +14,7 @@
       <div class="ui labels">
       <%= for tag <- post.tags do %>
       <div class="ui small label">
-        <%= tag %>
+        <%= format_tag(tag, @conn.assigns.lang) %>
       </div>
       <% end %>
     </div>
