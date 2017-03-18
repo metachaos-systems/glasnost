@@ -1,25 +1,23 @@
-<div class="ui link stackable three cards">
-<%= for post <- @posts do %>
-<% img_src = hd(post.json_metadata["image"]) %>
-<a class="ui card" href="/post/<%= post.permlink %>">
-  <div class="image">
-    <img src="<%= img_src %>">
-  </div>
-  <div class="content">
-    <div class="header"> <%= post.title %> </div>
-    <div class="meta">
-        <!-- <% IO.inspect(post) %> -->
-    </div>
-    <div class="description">
-      <div class="ui labels">
-      <%= for tag <- post.tags do %>
-      <div class="ui small label">
-        <%= format_tag(tag, @conn.assigns.lang) %>
+<div class="ui stackable three cards">
+  <%= for post <- @posts do %>
+  <% img_src = hd(post.json_metadata["image"]) %>
+    <div class="ui card" href="/post/<%= post.permlink %>">
+      <div class="image">
+        <img src="<%= img_src %>">
       </div>
-      <% end %>
+      <div class="content">
+        <a class="header"> <%= post.title %> </a>
+        <div class="meta"> </div>
+        <div class="description">
+            <div class="ui labels">
+            <%= for tag <- post.tags do %>
+              <a class="ui small label" href="/tag/<%=tag%>">
+                <%= format_tag(tag, @conn.assigns.lang) %>
+              </a>
+            <% end %>
+          </div>
+        </div>
+      </div>
     </div>
-    </div>
-  </div>
-</a>
-<% end %>
+  <% end %>
 </div>
