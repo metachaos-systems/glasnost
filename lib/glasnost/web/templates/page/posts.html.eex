@@ -1,19 +1,19 @@
 <div class="ui stackable three cards">
   <%= for post <- @posts do %>
   <% img_src = hd(post.json_metadata["image"]) %>
-    <div class="ui card" href="/post/<%= post.permlink %>">
+    <div class="ui card" >
       <div class="image">
         <img src="<%= img_src %>">
       </div>
       <div class="content">
-        <a class="header"> <%= post.title %> </a>
+        <a class="header" href="/post/<%= post.permlink %>"> <%= post.title %> </a>
         <div class="meta"> </div>
         <div class="description"> </div>
       </div>
       <div class="extra content">
-        <div class="ui labels">
+        <div class="ui large labels">
             <%= for tag <- post.tags do %>
-              <a class="ui small label" href="/tag/<%=tag%>">
+              <a class="ui  label" href="/tag/<%=tag%>">
                 <%= format_tag(tag, @conn.assigns.lang) %>
               </a>
             <% end %>
