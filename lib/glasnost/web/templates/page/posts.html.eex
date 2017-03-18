@@ -8,8 +8,16 @@
   <div class="content">
     <div class="header"> <%= post.title %> </div>
     <div class="meta">
+        <!-- <% IO.inspect(post) %> -->
     </div>
     <div class="description">
+      <div class="ui labels">
+      <%= for tag <- post.tags do %>
+      <div class="ui small label">
+        <%= tag %>
+      </div>
+      <% end %>
+    </div>
     </div>
   </div>
 </a>
