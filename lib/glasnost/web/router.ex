@@ -18,7 +18,7 @@ defmodule Glasnost.Web.Router do
 
     get "/", PageController, :index
     get "/tags/:tag", PageController, :tag
-    get "/post/:permlink", PageController, :show
+    get "/posts/:permlink", PageController, :show
   end
 
   # Other scopes may use custom stacks.

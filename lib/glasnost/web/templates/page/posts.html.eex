@@ -6,7 +6,7 @@
         <img src="<%= img_src %>">
       </div>
       <div class="content">
-        <a class="header" href="/post/<%= post.permlink %>"> <%= post.title %> </a>
+        <a class="header" href="/posts/<%= post.permlink %>"> <%= post.title %> </a>
         <div class="meta"> </div>
         <div class="description"> </div>
       </div>
