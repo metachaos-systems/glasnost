@@ -13,7 +13,7 @@
       <div class="extra content">
         <div class="ui large labels">
             <%= for tag <- post.tags do %>
-              <a class="ui  label" href="/tag/<%=tag%>">
+              <a class="ui  label" href="/tags/<%=tag%>">
                 <%= format_tag(tag, @conn.assigns.lang) %>
               </a>
             <% end %>
