@@ -6,12 +6,14 @@ defmodule Glasnost.Web.PageController do
   plug :put_lang, []
   plug :put_author, []
 
-  def index(conn, _params) do
+  def index(conn, params) do
+    page_num = Map.get(params, "page", "0")
     q = from c in Glasnost.Post,
       where: c.author == ^conn.assigns.blog_author,
       order_by: [desc: c.id]
     posts = q
       |> Glasnost.Repo.all()
+      |> paginate_naively(page_num)
     render conn, "posts.html", posts: posts, blog_author: conn.assigns.blog_author
   end
 
@@ -24,13 +26,15 @@ defmodule Glasnost.Web.PageController do
     render conn, "post.html", post: post
   end
 
-  def tag(conn, %{"tag" => tag}) do
+  def tag(conn, params = %{"tag" => tag}) do
+    page_num = Map.get(params, "page", "0")
     q = from c in Glasnost.Post,
       where: c.author == ^conn.assigns.blog_author,
       order_by: [desc: c.id]
     posts = q
       |> Glasnost.Repo.all()
       |> Enum.filter(& tag in &1.tags)
+      |> paginate_naively(page_num)
     render conn, "posts.html", posts: posts
   end
 
@@ -43,6 +47,6 @@ defmodule Glasnost.Web.PageController do
   end
 
   def paginate_naively(xs, page_num) do
-    Enum.slice(xs, @posts_per_page*page_num, @posts_per_page)
+    Enum.slice(xs, @posts_per_page*String.to_integer(page_num), @posts_per_page)
   end
 end
