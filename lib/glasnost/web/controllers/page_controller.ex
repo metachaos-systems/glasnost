@@ -1,6 +1,7 @@
 defmodule Glasnost.Web.PageController do
   use Glasnost.Web, :controller
   import Ecto.Query
+  @posts_per_page 25
 
   plug :put_lang, []
   plug :put_author, []
@@ -39,5 +40,9 @@ defmodule Glasnost.Web.PageController do
 
   def put_author(conn, _) do
     assign(conn, :blog_author, RuntimeConfig.blog_author)
+  end
+
+  def paginate_naively(xs, page_num) do
+    Enum.slice(xs, @posts_per_page*page_num, @posts_per_page)
   end
 end
