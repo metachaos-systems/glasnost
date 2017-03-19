@@ -3,25 +3,33 @@ defmodule Glasnost.Web.PageController do
   import Ecto.Query
 
   plug :put_lang, []
+  plug :put_author, []
 
   def index(conn, _params) do
-    blog_author = RuntimeConfig.blog_author
-    posts = Glasnost.Repo.all(from c in Glasnost.Post, order_by: [desc: c.id])
-    render conn, "posts.html", posts: posts, blog_author: blog_author
+    q = from c in Glasnost.Post,
+      where: c.author == ^conn.assigns.blog_author,
+      order_by: [desc: c.id]
+    posts = q
+      |> Glasnost.Repo.all()
+    render conn, "posts.html", posts: posts, blog_author: conn.assigns.blog_author
   end
 
   def show(conn, %{"permlink" => permlink}) do
-    blog_author = RuntimeConfig.blog_author
-    post = Glasnost.Repo.one(from c in Glasnost.Post, where: c.author == ^blog_author and c.permlink == ^permlink)
+    q = from c in Glasnost.Post,
+     where: c.author == ^conn.assigns.blog_author and c.permlink == ^permlink
+    post = Glasnost.Repo.one(q)
     {_, body, _} = Earmark.as_html(post.body)
     post = put_in(post.body, body)
     render conn, "post.html", post: post
   end
 
   def tag(conn, %{"tag" => tag}) do
-    blog_author = RuntimeConfig.blog_author
-    posts = Glasnost.Repo.all(from c in Glasnost.Post, order_by: [desc: c.id])
-    posts = Enum.filter(posts, & tag in &1.tags)
+    q = from c in Glasnost.Post,
+      where: c.author == ^conn.assigns.blog_author,
+      order_by: [desc: c.id]
+    posts = q
+      |> Glasnost.Repo.all()
+      |> Enum.filter(& tag in &1.tags)
     render conn, "posts.html", posts: posts
   end
 
@@ -29,4 +37,7 @@ defmodule Glasnost.Web.PageController do
     assign(conn, :lang, RuntimeConfig.language)
   end
 
+  def put_author(conn, _) do
+    assign(conn, :blog_author, RuntimeConfig.blog_author)
+  end
 end
