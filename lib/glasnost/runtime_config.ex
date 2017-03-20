@@ -21,4 +21,13 @@ defmodule RuntimeConfig do
       "steem" -> "en"
     end
   end
+
+  def fetch_external_config do
+    url = System.get_env("GLASNOST_CONFIG_URL") || throw("GLASNOST_CONFIG_URL is NOT configured")
+    with {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.get(url),
+      {:ok, config} <- Poison.Parser.parse(body)
+    do
+      config
+    end
+  end
 end
