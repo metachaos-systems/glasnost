@@ -10,6 +10,11 @@ defmodule RuntimeConfig do
     |> Map.get(:source_blockchain)
   end
 
+  def about_blog_url do
+    get_cached_config()
+    |> Map.get(:about_blog_url)
+  end
+
   def blockchain_client_mod do
     case String.downcase(source_blockchain()) do
       "golos" -> Golos

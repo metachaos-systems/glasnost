@@ -3,8 +3,7 @@ defmodule Glasnost.Web.PageController do
   import Ecto.Query
   @posts_per_page 24
 
-  plug :put_lang, []
-  plug :put_author, []
+  plug :put_config, []
 
   def index(conn, params) do
     page_num = extract_page_num(params)
@@ -38,12 +37,11 @@ defmodule Glasnost.Web.PageController do
     render conn, "posts.html", posts: posts, current_page: page_num
   end
 
-  def put_lang(conn, _) do
-    assign(conn, :lang, RuntimeConfig.language)
-  end
-
-  def put_author(conn, _) do
-    assign(conn, :blog_author, RuntimeConfig.blog_author)
+  def put_config(conn, _) do
+    conn
+      |> assign(:lang, RuntimeConfig.language)
+      |> assign(:blog_author, RuntimeConfig.blog_author)
+      |> assign(:about_blog_url, RuntimeConfig.about_blog_url)
   end
 
   def extract_page_num(params) do
