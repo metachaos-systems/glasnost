@@ -26,7 +26,7 @@ defmodule Glasnost.Web.PageController do
     render conn, "post.html", post: post
   end
 
-  def tag(conn, params = %{"tag" => tag}) do
+  def tags(conn, params = %{"tag" => tag}) do
     page_num = extract_page_num(params)
     q = from c in Glasnost.Post,
       where: c.author == ^conn.assigns.blog_author,
