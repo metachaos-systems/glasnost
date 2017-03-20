@@ -7,14 +7,14 @@ defmodule Glasnost.Web.PageController do
   plug :put_author, []
 
   def index(conn, params) do
-    page_num = Map.get(params, "page", "0")
+    page_num = extract_page_num(params)
     q = from c in Glasnost.Post,
       where: c.author == ^conn.assigns.blog_author,
       order_by: [desc: c.id]
     posts = q
       |> Glasnost.Repo.all()
       |> paginate_naively(page_num)
-    render conn, "posts.html", posts: posts, blog_author: conn.assigns.blog_author
+    render conn, "posts.html", posts: posts, blog_author: conn.assigns.blog_author, current_page: page_num
   end
 
   def show(conn, %{"permlink" => permlink}) do
@@ -27,7 +27,7 @@ defmodule Glasnost.Web.PageController do
   end
 
   def tag(conn, params = %{"tag" => tag}) do
-    page_num = Map.get(params, "page", "0")
+    page_num = extract_page_num(params)
     q = from c in Glasnost.Post,
       where: c.author == ^conn.assigns.blog_author,
       order_by: [desc: c.id]
@@ -35,7 +35,7 @@ defmodule Glasnost.Web.PageController do
       |> Glasnost.Repo.all()
       |> Enum.filter(& tag in &1.tags)
       |> paginate_naively(page_num)
-    render conn, "posts.html", posts: posts
+    render conn, "posts.html", posts: posts, current_page: page_num
   end
 
   def put_lang(conn, _) do
@@ -46,7 +46,19 @@ defmodule Glasnost.Web.PageController do
     assign(conn, :blog_author, RuntimeConfig.blog_author)
   end
 
+  def extract_page_num(params) do
+    res = params
+     |> Map.get("page", "")
+     |> Integer.parse()
+
+    case res do
+      {int, _} -> int
+      :error -> 1
+    end
+  end
+
   def paginate_naively(xs, page_num) do
-    Enum.slice(xs, @posts_per_page*String.to_integer(page_num), @posts_per_page)
+    amount = @posts_per_page*(page_num - 1)
+    Enum.slice(xs, amount, @posts_per_page)
   end
 end
