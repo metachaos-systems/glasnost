@@ -16,7 +16,7 @@
               <a class="ui  label" href="/tag/<%=tag%>">
                 <%= format_tag(tag, @conn.assigns.lang) %>
               </a>
-            <% end %Б
+            <% end %>
           </div>
         </div>
     </div>
