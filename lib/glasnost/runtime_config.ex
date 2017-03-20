@@ -1,11 +1,11 @@
 defmodule RuntimeConfig do
 
   def blog_author do
-    System.get_env("GLASNOST_BLOG_AUTHOR") || throw("GLASNOST_BLOG_AUTHOR is NOT configured")
+    Map.get(fetch_external_config(), "blog_author")
   end
 
   def source_blockchain do
-    System.get_env("GLASNOST_SOURCE_BLOCKCHAIN") || throw("GLASNOST_SOURCE_BLOCKCHAIN is NOT configured")
+    Map.get(fetch_external_config(), "source_blockchain")
   end
 
   def blockchain_client_mod do
