@@ -3,7 +3,7 @@
   <% img_src = hd(post.json_metadata["image"]) %>
     <div class="ui card" >
       <div class="image">
-        <img src="<%= img_src %>">
+        <a class="header" href="/post/<%= post.permlink %>"> <img src="<%= img_src %>"> </a>
       </div>
       <div class="content">
         <a class="header" href="/post/<%= post.permlink %>"> <%= post.title %> </a>
@@ -16,7 +16,7 @@
               <a class="ui  label" href="/tag/<%=tag%>">
                 <%= format_tag(tag, @conn.assigns.lang) %>
               </a>
-            <% end %>
+            <% end %Б
           </div>
         </div>
     </div>
