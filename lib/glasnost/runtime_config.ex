@@ -1,11 +1,12 @@
 defmodule RuntimeConfig do
 
   def blog_author do
-    Map.get(fetch_external_config(), :blog_author)
+    get_cached_config()
+    |> Map.get(:blog_author)
   end
 
   def source_blockchain do
-    fetch_external_config()
+    get_cached_config()
     |> Map.get(:source_blockchain)
   end
 
@@ -21,6 +22,12 @@ defmodule RuntimeConfig do
       "golos" -> "ru"
       "steem" -> "en"
     end
+  end
+
+  def get_cached_config do
+    ConCache.get_or_store(:config_cache, :data, fn() ->
+      fetch_external_config()
+    end)
   end
 
   def fetch_external_config do

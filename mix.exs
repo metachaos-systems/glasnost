@@ -42,6 +42,7 @@ defmodule Glasnost.Mixfile do
      {:ecto_mnesia, "~> 0.7.1"},
      {:distillery, ">= 0.0.0"},
      {:httpoison, ">= 0.0.0"},
+     {:con_cache, "~> 0.12.0"},
      {:cowboy, "~> 1.0"},
      {:credo, ">= 0.0.0", only: :dev},
      {:earmark, ">= 0.0.0"}]
