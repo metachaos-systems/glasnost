@@ -3,7 +3,7 @@
   <% img_src = hd(post.json_metadata["image"]) %>
     <div class="ui card" >
       <div class="image">
-        <a href="/post/<%= post.permlink %>"> <img src="<%= img_src %>"> </a>
+        <a href="/posts/<%= post.permlink %>"> <img src="<%= img_src %>"> </a>
       </div>
       <div class="content">
         <a class="header" href="/posts/<%= post.permlink %>"> <%= post.title %> </a>
