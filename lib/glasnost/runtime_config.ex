@@ -10,9 +10,9 @@ defmodule RuntimeConfig do
     |> Map.get(:source_blockchain)
   end
 
-  def about_blog_url do
+  def about_blog_permlink do
     get_cached_config()
-    |> Map.get(:about_blog_url)
+    |> Map.get(:about_blog_permlink)
   end
 
   def blockchain_client_mod do
