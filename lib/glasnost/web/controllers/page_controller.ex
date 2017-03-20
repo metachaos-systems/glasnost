@@ -1,7 +1,7 @@
 defmodule Glasnost.Web.PageController do
   use Glasnost.Web, :controller
   import Ecto.Query
-  @posts_per_page 25
+  @posts_per_page 24
 
   plug :put_lang, []
   plug :put_author, []
