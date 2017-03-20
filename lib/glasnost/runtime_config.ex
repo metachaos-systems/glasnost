@@ -1,11 +1,12 @@
 defmodule RuntimeConfig do
 
   def blog_author do
-    Map.get(fetch_external_config(), "blog_author")
+    Map.get(fetch_external_config(), :blog_author)
   end
 
   def source_blockchain do
-    Map.get(fetch_external_config(), "source_blockchain")
+    fetch_external_config()
+    |> Map.get(:source_blockchain)
   end
 
   def blockchain_client_mod do
@@ -27,7 +28,7 @@ defmodule RuntimeConfig do
     with {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.get(url),
       {:ok, config} <- Poison.Parser.parse(body)
     do
-      config
+      for {k,v} <- config, do: {String.to_atom(k),v},into: %{}
     end
   end
 end
