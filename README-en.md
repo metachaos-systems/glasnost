@@ -3,7 +3,7 @@
 Deployment is simple if you use Docker:
 
 ```
-docker run -it -e "GLASNOST_CONFIG_URL=..."  --restart on-failure:10 ontofractal/glasnost:latest
+docker run -it -p 80:80 -e "GLASNOST_CONFIG_URL=..."  --restart on-failure:10 ontofractal/glasnost:latest
 ```
 
 You can also a service like [hyper.sh](https://hyper.sh/) for managed Docker container hosting.
