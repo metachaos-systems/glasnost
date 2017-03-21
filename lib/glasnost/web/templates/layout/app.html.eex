@@ -9,7 +9,7 @@
 
   <title><%= naive_translate("head title", @conn.assigns.lang)%></title>
   <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css"></link>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css"></link>
 
 </head>
 
