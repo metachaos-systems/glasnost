@@ -9,7 +9,7 @@ defmodule Golos.Sync do
   def init(args) do
     import Ecto.Query
     Repo.delete_all(from c in Glasnost.Post)
-    blog_author = RuntimeConfig.blog_author
+    blog_author = RuntimeConfig.get(:blog_author)
 
     state = %{current_cursor: "", blog_author: blog_author, client_mod: RuntimeConfig.blockchain_client_mod}
 
@@ -21,7 +21,7 @@ defmodule Golos.Sync do
      utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> String.replace(~r/\..+/, "")
      {:ok, posts} = state.client_mod.get_discussions_by_author_before_date(state.blog_author, state.current_cursor, utc_now_str, 100)
      posts = posts
-      |> Enum.map(fn post -> update_in(post["json_metadata"], &Poison.Parser.parse!(&1)) end )
+      |> Enum.map(fn post -> update_in(post["json_metadata"], &Poison.Parser.parse! &1) end )
       |> Enum.map(fn post -> put_in(post, ["tags"], post["json_metadata"]["tags"]) end)
       |> filter_whitelisted(RuntimeConfig.get(:tags_whitelist))
       |> filter_blacklisted(RuntimeConfig.get(:tags_blacklist))
