@@ -7,7 +7,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title><%= naive_translate("head title", @conn.assigns.lang)%></title>
+  <title>Glasnost: <%= naive_translate("head title", @conn.assigns.lang)%></title>
   <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css"></link>
 
