@@ -26,7 +26,12 @@ defmodule Golos.Sync do
        post = put_in(post, ["tags"], post["json_metadata"]["tags"])
        save_to_db(post)
      end
-     state = if length(posts) == 100 do
+     state = iterate(posts, state)
+     {:noreply, state}
+  end
+
+  def iterate(posts, state) do
+    if length(posts) == 100 do
        Process.send_after(self(), :tick, 100, [])
        next_permlink = posts |> List.last() |> Map.get("permlink")
        put_in(state.current_cursor, next_permlink)
@@ -34,7 +39,6 @@ defmodule Golos.Sync do
        Process.send_after(self(), :tick, :timer.minutes(60), [])
        put_in(state.current_cursor, "")
      end
-     {:noreply, state}
   end
 
   def save_to_db(post) do
