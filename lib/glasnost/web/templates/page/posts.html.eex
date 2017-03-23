@@ -4,7 +4,7 @@
     <div class="ui card" >
       <div class="image">
         <a href="/posts/<%= post.permlink %>"> <img src="<%= img_src %>"> </a>
-        <a class="ui blue ribbon label"><%= post.category %></a>
+        <div class="ui blue ribbon label"><%= post.category %></div>
       </div>
       <div class="content">
 
