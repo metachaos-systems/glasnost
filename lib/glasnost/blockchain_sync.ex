@@ -20,10 +20,12 @@ defmodule Golos.Sync do
   def handle_info(:tick, state) do
      utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> String.replace(~r/\..+/, "")
      {:ok, posts} = state.client_mod.get_discussions_by_author_before_date(state.blog_author, state.current_cursor, utc_now_str, 100)
+     posts = posts
+      |> Enum.map(fn post -> update_in(post["json_metadata"], &Poison.Parser.parse!(&1)) end )
+      |> Enum.map(fn post -> put_in(post, ["tags"], post["json_metadata"]["tags"]) end)
+      |> filter_blacklisted(RuntimeConfig.tags(:blacklist))
+
      for post <- posts do
-      #  IO.inspect post
-       post = update_in(post["json_metadata"], &Poison.Parser.parse!(&1))
-       post = put_in(post, ["tags"], post["json_metadata"]["tags"])
        save_to_db(post)
      end
      state = iterate(posts, state)
@@ -56,7 +58,7 @@ defmodule Golos.Sync do
      end
   end
 
-  def not_in_blacklist?(posts, tags) do
+  def filter_blacklisted(posts, tags) do
     for post <- posts,
       disjoint_tags?(post["tags"], tags),
       do: post
