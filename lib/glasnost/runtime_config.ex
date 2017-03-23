@@ -1,7 +1,7 @@
 defmodule RuntimeConfig do
 
   def get(key) when is_atom(key) do
-     Map.get(get_cached_config(), key)
+     Map.get(get_cached_config(), key) || throw("#{key} is NOT present in the remote config")
   end
 
   def blog_author do
