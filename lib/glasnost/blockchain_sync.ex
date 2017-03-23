@@ -24,18 +24,7 @@ defmodule Golos.Sync do
       #  IO.inspect post
        post = update_in(post["json_metadata"], &Poison.Parser.parse!(&1))
        post = put_in(post, ["tags"], post["json_metadata"]["tags"])
-       result =
-         case Repo.get(Glasnost.Post, post["id"]) do
-           nil  -> %Glasnost.Post{}
-           comment -> comment
-         end
-         |> Glasnost.Post.changeset(post)
-         |> Repo.insert_or_update
-
-       case result do
-         {:ok, struct}       -> :ok
-         {:error, changeset} -> :error
-       end
+       save_to_db(post)
      end
      state = if length(posts) == 100 do
        Process.send_after(self(), :tick, 100, [])
@@ -46,6 +35,21 @@ defmodule Golos.Sync do
        put_in(state.current_cursor, "")
      end
      {:noreply, state}
+  end
+
+  def save_to_db(post) do
+     result =
+       case Repo.get(Glasnost.Post, post["id"]) do
+         nil  -> %Glasnost.Post{}
+         comment -> comment
+       end
+       |> Glasnost.Post.changeset(post)
+       |> Repo.insert_or_update
+
+     case result do
+       {:ok, struct}       -> :ok
+       {:error, changeset} -> :error
+     end
   end
 
 
