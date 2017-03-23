@@ -56,6 +56,16 @@ defmodule Golos.Sync do
      end
   end
 
+  def not_in_blacklist?(posts, tags) do
+    for post <- posts,
+      disjoint_tags?(post["tags"], tags),
+      do: post
+  end
 
+  def disjoint_tags?(tags1, tags2) do
+    tags1_set = Enum.into(tags1, MapSet.new)
+    tags2_set = Enum.into(tags2, MapSet.new)
+    MapSet.disjoint?(tags1_set, tags2_set)
+  end
 
 end
