@@ -1,5 +1,9 @@
 defmodule RuntimeConfig do
 
+  def get(key) when is_atom(key) do
+     Map.get(get_cached_config(), key)
+  end
+
   def blog_author do
     get_cached_config()
     |> Map.get(:blog_author)
@@ -15,7 +19,7 @@ defmodule RuntimeConfig do
     |> Map.get(:about_blog_permlink)
   end
 
-  def blockchain_client_mod do
+  def blockchain_client_mod() do
     case String.downcase(source_blockchain()) do
       "golos" -> Golos
       "steem" -> Steemex

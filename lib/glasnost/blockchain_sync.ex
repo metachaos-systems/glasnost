@@ -23,7 +23,8 @@ defmodule Golos.Sync do
      posts = posts
       |> Enum.map(fn post -> update_in(post["json_metadata"], &Poison.Parser.parse!(&1)) end )
       |> Enum.map(fn post -> put_in(post, ["tags"], post["json_metadata"]["tags"]) end)
-      |> filter_blacklisted(RuntimeConfig.tags(:blacklist))
+      |> filter_whitelisted(RuntimeConfig.get(:tags_whitelist))
+      |> filter_blacklisted(RuntimeConfig.get(:tags_blacklist))
 
      for post <- posts do
        save_to_db(post)
@@ -56,6 +57,12 @@ defmodule Golos.Sync do
        {:ok, struct}       -> :ok
        {:error, changeset} -> :error
      end
+  end
+
+  def filter_whitelisted(posts, tags) do
+    for post <- posts,
+      !disjoint_tags?(post["tags"], tags),
+      do: post
   end
 
   def filter_blacklisted(posts, tags) do
