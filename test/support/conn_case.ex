@@ -28,10 +28,10 @@ defmodule Glasnost.Web.ConnCase do
 
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Glasnost.Repo)
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Glasnost.Repo, {:shared, self()})
-    end
+    # :ok = Ecto.Adapters.SQL.Sandbox.checkout(Glasnost.Repo)
+    # unless tags[:async] do
+    #   Ecto.Adapters.SQL.Sandbox.mode(Glasnost.Repo, {:shared, self()})
+    # end
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 

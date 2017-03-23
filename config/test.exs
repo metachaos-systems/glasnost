@@ -11,9 +11,9 @@ config :logger, level: :warn
 
 # Configure your database
 config :glasnost, Glasnost.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "glasnost_test",
-  hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  adapter: Ecto.Adapters.Mnesia
+  # username: "postgres",
+  # password: "postgres",
+  # database: "glasnost_test",
+  # hostname: "localhost",
+  # pool: Ecto.Adapters.SQL.Sandbox
