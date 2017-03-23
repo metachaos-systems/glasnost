@@ -5,18 +5,15 @@ defmodule RuntimeConfig do
   end
 
   def blog_author do
-    get_cached_config()
-    |> Map.get(:blog_author)
+    get(:blog_author)
   end
 
   def source_blockchain do
-    get_cached_config()
-    |> Map.get(:source_blockchain)
+    get(:source_blockchain)
   end
 
   def about_blog_permlink do
-    get_cached_config()
-    |> Map.get(:about_blog_permlink)
+    get(:about_blog_permlink)
   end
 
   def blockchain_client_mod() do
@@ -44,7 +41,7 @@ defmodule RuntimeConfig do
     with {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.get(url),
       {:ok, config} <- Poison.Parser.parse(body)
     do
-      for {k,v} <- config, do: {String.to_atom(k),v},into: %{}
+      for {k,v} <- config, do: {String.to_atom(k), v},into: %{}
     end
   end
 end
