@@ -59,6 +59,10 @@ defmodule Golos.Sync do
      end
   end
 
+  def filter_whitelisted(posts, []) do
+    posts
+  end
+
   def filter_whitelisted(posts, tags) do
     for post <- posts,
       !disjoint_tags?(post["tags"], tags),
