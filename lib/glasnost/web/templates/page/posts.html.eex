@@ -7,10 +7,9 @@
         <div class="ui blue ribbon label"><%= post.category %></div>
       </div>
       <div class="content">
-
         <a class="header" href="/posts/<%= post.permlink %>"> <%= post.title %> </a>
-        <div class="meta"> </div>
-        <div class="description"> </div>
+        <!-- <div class="meta"> </div> -->
+        <!-- <div class="description"> </div> -->
       </div>
       <div class="extra content">
         <div class="ui large labels">
