@@ -54,8 +54,8 @@ defmodule Golos.Sync do
        |> Repo.insert_or_update
 
      case result do
-       {:ok, struct}       -> :ok
-       {:error, changeset} -> :error
+       {:ok, _}       -> :ok
+       {:error, _} -> :error
      end
   end
 
