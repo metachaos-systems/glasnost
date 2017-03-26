@@ -4,7 +4,7 @@
   <div class="ui card" >
 
     <div class="image">
-      <a href="/posts/<%= post.permlink %>"> <img src="<%= img_src %>"> </a>
+      <a href="/authors/<%= post.author %>/<%= post.permlink %>"> <img src="<%= img_src %>"> </a>
         <a class="ui large blue ribbon label" href="/authors/<%= post.author %>">  @<%= post.author  %></a>
       </div>
       <div class="content">
