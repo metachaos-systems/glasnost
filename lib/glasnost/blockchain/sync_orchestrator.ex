@@ -1,15 +1,15 @@
-defmodule Glasnost.Orchestrator.BlockchainSync do
-  use GenServer
-  @moduledoc """
-  Executes a sync strategy based on the developer preferences in config.
-  For example, a parallel import of blogs of multiple authors
-  """
+defmodule Glasnost.Orchestrator.AuthorSyncSup do
+  use Supervisor
 
-  def start_link(args \\ [], options \\ []) do
-    GenServer.start_link(__MODULE__, args, options)
+  def start_link(arg) do
+    Supervisor.start_link(__MODULE__, arg)
   end
 
-  def init(state) do
-     {:ok, state}
+  def init(arg) do
+    children = [
+      worker(MyWorker, [arg], restart: :temporary)
+    ]
+
+    supervise(children, strategy: :simple_one_for_one)
   end
 end

@@ -1,4 +1,4 @@
-defmodule Golos.Sync do
+defmodule Glasnost.Worker.AuthorSync do
   use GenServer
   alias Glasnost.Repo
 
