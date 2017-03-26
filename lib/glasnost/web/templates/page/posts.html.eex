@@ -5,8 +5,7 @@
 
     <div class="image">
       <a href="/posts/<%= post.permlink %>"> <img src="<%= img_src %>"> </a>
-      <div class="ui large blue ribbon label">
-        @<%= post.author  %></div>
+        <a class="ui large blue ribbon label" href="/authors/<%= post.author %>">  @<%= post.author  %></a>
       </div>
       <div class="content">
         <a class="header" href="/posts/<%= post.permlink %>"> <%= post.title %> </a>
