@@ -2,3 +2,4 @@ deps/
 _build/
 .git/
 test/
+priv/glasnost-runtime-config.json
