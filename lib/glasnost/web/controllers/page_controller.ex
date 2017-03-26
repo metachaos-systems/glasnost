@@ -8,12 +8,11 @@ defmodule Glasnost.Web.PageController do
   def index(conn, params) do
     page_num = extract_page_num(params)
     q = from c in Glasnost.Post,
-      where: c.author == ^conn.assigns.blog_author,
       order_by: [desc: c.id]
     posts = q
       |> Glasnost.Repo.all()
       |> paginate_naively(page_num)
-    render conn, "posts.html", posts: posts, blog_author: conn.assigns.blog_author, current_page: page_num
+    render conn, "posts.html", posts: posts, current_page: page_num
   end
 
   def show(conn, %{"permlink" => permlink}) do
@@ -28,7 +27,6 @@ defmodule Glasnost.Web.PageController do
   def tags(conn, params = %{"tag" => tag}) do
     page_num = extract_page_num(params)
     q = from c in Glasnost.Post,
-      where: c.author == ^conn.assigns.blog_author,
       order_by: [desc: c.id]
     posts = q
       |> Glasnost.Repo.all()
@@ -40,7 +38,7 @@ defmodule Glasnost.Web.PageController do
   def put_config(conn, _) do
     conn
       |> assign(:lang, RuntimeConfig.language)
-      |> assign(:blog_author, RuntimeConfig.blog_author)
+      |> assign(:blog_authors, RuntimeConfig.get(:authors))
       |> assign(:about_blog_permlink, RuntimeConfig.about_blog_permlink)
   end
 
