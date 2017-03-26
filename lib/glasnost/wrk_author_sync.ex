@@ -8,9 +8,10 @@ defmodule Glasnost.Worker.AuthorSync do
   end
 
   def init(config) do
-    Logger.info("AuthorSync GenServer process for #{config.account_name} is being initialized...")
+    %{account_name: account_name} = config
+    Logger.info("AuthorSync GenServer process for #{account_name} is being initialized...")
     import Ecto.Query
-    Repo.delete_all(from c in Glasnost.Post, where: c.author == config.account_name)
+    Repo.delete_all(from c in Glasnost.Post, where: c.author == ^account_name)
 
     config = %{current_cursor: "",
       account_name: config.account_name,
