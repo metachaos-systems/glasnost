@@ -18,8 +18,9 @@ defmodule Golos.Sync do
   end
 
   def handle_info(:tick, state) do
-     utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> String.replace(~r/\..+/, "")
-     {:ok, posts} = state.client_mod.get_discussions_by_author_before_date(state.blog_author, state.current_cursor, utc_now_str, 100)
+     utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> trim_trailing_ms
+     %{blog_author: blog_author, current_cursor: current_cursor, client_mod: client_mod} = state
+     {:ok, posts} = client_mod.get_discussions_by_author_before_date(blog_author, current_cursor, utc_now_str, 100)
      posts = posts
       |> Enum.map(&parse_json_metadata/1)
       |> Enum.map(&extract_put_tags/1)
@@ -31,6 +32,10 @@ defmodule Golos.Sync do
      end
      state = iterate(posts, state)
      {:noreply, state}
+  end
+
+  def trim_trailing_ms(date) when is_bitstring(date) do
+     String.replace(date, ~r/\..+/, "")
   end
 
   def parse_json_metadata(post) do
