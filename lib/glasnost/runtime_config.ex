@@ -1,12 +1,11 @@
 defmodule RuntimeConfig do
   @mix_env Mix.env
 
-  def get(:authors) do
+  def get(:author_account_names) do
     get_cached_config()
       |> Map.get(:authors)
       |> Enum.map(& &1.account_name)
   end
-
 
   def get(key) when is_atom(key) do
      Map.get(get_cached_config(), key) || throw("#{key} is NOT present in the remote config")
