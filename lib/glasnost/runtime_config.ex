@@ -1,4 +1,5 @@
 defmodule RuntimeConfig do
+  @mix_env Mix.env
 
   def get(key) when is_atom(key) do
      Map.get(get_cached_config(), key) || throw("#{key} is NOT present in the remote config")
@@ -31,9 +32,14 @@ defmodule RuntimeConfig do
   end
 
   def get_cached_config do
-    ConCache.get_or_store(:config_cache, :data, fn() ->
-      fetch_external_config()
-    end)
+    case @mix_env do
+      :dev ->
+        File.read!("priv/dev_config.json") |> Poison.Parser.parse!()
+      :prod ->
+        ConCache.get_or_store(:config_cache, :data, fn() ->
+          fetch_external_config()
+        end)
+    end
   end
 
   def fetch_external_config do
