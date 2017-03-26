@@ -13,7 +13,7 @@ defmodule Glasnost.Application do
       # Start the endpoint when the application starts
       supervisor(Glasnost.Web.Endpoint, []),
       supervisor(ConCache, [[ ttl_check: :timer.minutes(1), ttl: :timer.minutes(30) ], [name: :config_cache]]),
-      worker(Golos.Sync, []),
+      supervisor(Glasnost.Orchestrator.AuthorSyncSup, []),
       worker(Exos.Proc, [{"node port.js",0,cd: "./lib/ports/js"}] )
       # Start your own worker by calling: Glasnost.Worker.start_link(arg1, arg2, arg3)
       # worker(Glasnost.Worker, [arg1, arg2, arg3]),
