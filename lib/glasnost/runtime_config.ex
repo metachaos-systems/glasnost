@@ -41,7 +41,7 @@ defmodule RuntimeConfig do
     case @mix_env do
       :dev ->
         config = File.read!("priv/glasnost-runtime-config.json") |> Poison.Parser.parse!()
-        AtomicMap.convert(config, safe: true)
+        AtomicMap.convert(config, safe: false)
       :prod ->
         ConCache.get_or_store(:config_cache, :data, fn() ->
           fetch_external_config()
@@ -54,7 +54,7 @@ defmodule RuntimeConfig do
     with {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.get(url),
       {:ok, config} <- Poison.Parser.parse(body)
     do
-        AtomicMap.convert(config, safe: true)
+        AtomicMap.convert(config, safe: false)
     end
   end
 end
