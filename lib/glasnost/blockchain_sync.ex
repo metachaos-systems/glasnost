@@ -21,8 +21,8 @@ defmodule Golos.Sync do
      utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> String.replace(~r/\..+/, "")
      {:ok, posts} = state.client_mod.get_discussions_by_author_before_date(state.blog_author, state.current_cursor, utc_now_str, 100)
      posts = posts
-      |> Enum.map(fn post -> update_in(post["json_metadata"], &Poison.Parser.parse! &1) end )
-      |> Enum.map(fn post -> put_in(post, ["tags"], post["json_metadata"]["tags"]) end)
+      |> Enum.map(&parse_json_metadata/1)
+      |> Enum.map(&extract_put_tags/1)
       |> filter_whitelisted(RuntimeConfig.get(:tags_whitelist))
       |> filter_blacklisted(RuntimeConfig.get(:tags_blacklist))
 
@@ -31,6 +31,14 @@ defmodule Golos.Sync do
      end
      state = iterate(posts, state)
      {:noreply, state}
+  end
+
+  def parse_json_metadata(post) do
+     update_in(post["json_metadata"], &Poison.Parser.parse!/1)
+  end
+
+  def extract_put_tags(post) do
+     put_in(post, ["tags"], post["json_metadata"]["tags"])
   end
 
   def iterate(posts, state) do
