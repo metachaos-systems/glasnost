@@ -2,19 +2,16 @@
   <%= for post <- @posts do %>
   <% img_src = hd(post.json_metadata["image"]) %>
   <div class="ui card" >
+
     <div class="image">
       <a href="/posts/<%= post.permlink %>"> <img src="<%= img_src %>"> </a>
-      <div class="ui large blue ribbon label"><%= format_tag(post.category, @conn.assigns.lang) %></div>
-    </div>
-    <div class="content">
-      <a class="header" href="/posts/<%= post.permlink %>"> <%= post.title %> </a>
-      <!-- <div class="description"> </div> -->
-    </div>
-    <div class="extra content">
-      <div class="meta">
-        <span>
-          <i class="circular inverted blue user icon"></i> Author </span>
-        </div>
+      <div class="ui large blue ribbon label">
+        @<%= post.author  %></div>
+      </div>
+      <div class="content">
+        <a class="header" href="/posts/<%= post.permlink %>"> <%= post.title %> </a>
+
+        <!-- <div class="description"> </div> -->
       </div>
       <div class="extra content">
         <div class="ui large labels">
@@ -25,6 +22,7 @@
           <% end %>
         </div>
       </div>
+
     </div>
     <% end %>
   </div>
