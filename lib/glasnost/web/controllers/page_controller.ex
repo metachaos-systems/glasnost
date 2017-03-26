@@ -15,9 +15,9 @@ defmodule Glasnost.Web.PageController do
     render conn, "posts.html", posts: posts, current_page: page_num
   end
 
-  def show(conn, %{"permlink" => permlink}) do
+  def show(conn, %{"permlink" => permlink, "author" => author }) do
     q = from c in Glasnost.Post,
-     where: c.author == ^conn.assigns.blog_author and c.permlink == ^permlink
+     where: c.author == ^author and c.permlink == ^permlink
     post = Glasnost.Repo.one(q)
     {_, body, _} = Earmark.as_html(post.body)
     post = put_in(post.body, body)
@@ -35,7 +35,7 @@ defmodule Glasnost.Web.PageController do
     render conn, "posts.html", posts: posts, current_page: page_num
   end
 
-  def authors(conn, params = %{"name" => author_name}) do
+  def authors(conn, params = %{"author" => author_name}) do
     page_num = extract_page_num(params)
     q = from c in Glasnost.Post,
       where: c.author == ^author_name,
