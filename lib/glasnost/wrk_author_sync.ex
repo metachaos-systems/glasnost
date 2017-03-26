@@ -1,32 +1,35 @@
 defmodule Glasnost.Worker.AuthorSync do
   use GenServer
   alias Glasnost.Repo
+  import Logger
 
-  def start_link(args \\ %{}) do
-    GenServer.start_link(__MODULE__, args, [])
+  def start_link(args, opts \\ []) do
+    GenServer.start_link(__MODULE__, args, opts)
   end
 
-  def init(args) do
+  def init(config) do
+    Logger.info("AuthorSync GenServer process for #{config.account_name} is being initialized...")
     import Ecto.Query
     Repo.delete_all(from c in Glasnost.Post)
-    blog_author = RuntimeConfig.get(:blog_author)
 
-    state = %{current_cursor: "", blog_author: blog_author, client_mod: RuntimeConfig.blockchain_client_mod}
+    config = %{current_cursor: "",
+      account_name: config.account_name,
+      tags: config.tags,
+      client_mod: RuntimeConfig.blockchain_client_mod}
 
     Process.send_after(self(), :tick, 1_000)
-    {:ok, state}
+    {:ok, config}
   end
 
   def handle_info(:tick, state) do
      utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> trim_trailing_ms
-     %{blog_author: blog_author, current_cursor: current_cursor, client_mod: client_mod} = state
-     {:ok, posts} = client_mod.get_discussions_by_author_before_date(blog_author, current_cursor, utc_now_str, 100)
+     %{account_name: account_name, current_cursor: current_cursor, client_mod: client_mod} = state
+     {:ok, posts} = client_mod.get_discussions_by_author_before_date(account_name, current_cursor, utc_now_str, 100)
      posts = posts
       |> Enum.map(&parse_json_metadata/1)
       |> Enum.map(&extract_put_tags/1)
-      |> filter_whitelisted(RuntimeConfig.get(:tags_whitelist))
-      |> filter_blacklisted(RuntimeConfig.get(:tags_blacklist))
-
+      |> filter_whitelisted(state.tags.whitelist)
+      |> filter_blacklisted(state.tags.blacklist)
      for post <- posts do
        save_to_db(post)
      end

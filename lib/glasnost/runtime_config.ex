@@ -34,7 +34,8 @@ defmodule RuntimeConfig do
   def get_cached_config do
     case @mix_env do
       :dev ->
-        File.read!("priv/glasnost-runtime-config.json") |> Poison.Parser.parse!()
+        config = File.read!("priv/glasnost-runtime-config.json") |> Poison.Parser.parse!()
+        for {k,v} <- config, do: {String.to_atom(k), v},into: %{}
       :prod ->
         ConCache.get_or_store(:config_cache, :data, fn() ->
           fetch_external_config()
