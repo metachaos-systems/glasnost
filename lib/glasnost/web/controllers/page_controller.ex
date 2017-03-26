@@ -35,6 +35,18 @@ defmodule Glasnost.Web.PageController do
     render conn, "posts.html", posts: posts, current_page: page_num
   end
 
+  def authors(conn, params = %{"name" => author_name}) do
+    page_num = extract_page_num(params)
+    q = from c in Glasnost.Post,
+      where: c.author == ^author_name,
+      order_by: [desc: c.id]
+
+    posts = q
+      |> Glasnost.Repo.all()
+      |> paginate_naively(page_num)
+    render conn, "posts.html", posts: posts, current_page: page_num
+  end
+
   def put_config(conn, _) do
     conn
       |> assign(:lang, RuntimeConfig.language)
