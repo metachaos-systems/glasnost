@@ -51,7 +51,8 @@ defmodule Glasnost.Web.PageController do
     conn
       |> assign(:lang, RuntimeConfig.language)
       |> assign(:blog_authors, RuntimeConfig.get(:authors))
-      |> assign(:about_blog_permlink, RuntimeConfig.about_blog_permlink)
+      |> assign(:about_blog_permlink, RuntimeConfig.get(:about_blog_permlink))
+      |> assign(:about_blog_author, RuntimeConfig.get(:about_blog_author))
   end
 
   def extract_page_num(params) do
