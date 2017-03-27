@@ -1,10 +1,15 @@
 <div class="ui stackable three cards">
   <%= for post <- @posts do %>
-  <% img_src = hd(post.json_metadata["image"]) %>
+  <!-- TODO: extract image detection into view -->
+  <% img_src = hd(post.json_metadata["image"] || [false] ) %>
   <div class="ui card" >
-
     <div class="image">
-      <a href="/authors/<%= post.author %>/<%= post.permlink %>"> <img src="<%= img_src %>"> </a>
+      <a href="/authors/<%= post.author %>/<%= post.permlink %>">
+        <!-- TODO  extract image selection into view -->
+        <%= if img_src do %>
+          <img src="<%= img_src %>">
+        <% end %>
+      </a>
         <a class="ui large blue ribbon label" href="/authors/<%= post.author %>">  @<%= post.author  %></a>
       </div>
       <div class="content">
