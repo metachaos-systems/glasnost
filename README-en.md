@@ -34,8 +34,10 @@ You can also use a service like [hyper.sh](https://hyper.sh/) for managed Docker
 ```
 
 * `"source_blockchain"`: `steem` or `golos`
-* `"about_blog_author"`: "about blog" post author name on steem or golos
-* `"about_blog_permlink"`: "about blog" post permlink on steem or golos
+* `"about_blog_author"`:  post author steem or golos
+* `"about_blog_permlink"`: post permlink on steem or golos
+
+Other settings like `PORT`, `STEEM_URL` and `GOLOS_URL` can be configured in the Dockerfile.
 
 # Tag filtering
 
@@ -45,8 +47,6 @@ If `tags_whitelist` value is an empty list `[]` Whitelisting rules do *NOT* appl
 Blacklisting rules are applied afterwards: all posts with blacklisted tags are removed.
 
 
-
-Other settings like `PORT`, `STEEM_URL` and `GOLOS_URL` can be configured in the Dockerfile.
 
 # Stopping and removing the Glasnost container
 
