@@ -1,12 +1,13 @@
 defmodule Glasnost.Orchestrator.AuthorSyncSup do
   use Supervisor
-  alias Glasnost.Worker
+  alias Glasnost.{Worker,Repo}
 
   def start_link(arg \\ []) do
     Supervisor.start_link(__MODULE__, arg)
   end
 
   def init(arg) do
+    Repo.delete_all(from c in Glasnost.Post)
     children = :authors
       |> RuntimeConfig.get()
       |> AtomicMap.convert(safe: true)
