@@ -23,6 +23,7 @@ defmodule Glasnost.Worker.AuthorSync do
   end
 
   def handle_info(:tick, state) do
+    IO.inspect state
      utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> trim_trailing_ms
      %{account_name: account_name, current_cursor: current_cursor, client_mod: client_mod} = state
      {:ok, posts} = client_mod.get_discussions_by_author_before_date(account_name, current_cursor, utc_now_str, 100)
@@ -86,6 +87,10 @@ defmodule Glasnost.Worker.AuthorSync do
       do: post
   end
 
+  def filter_blacklisted(posts, []) do
+    posts
+  end
+  
   def filter_blacklisted(posts, tags) do
     for post <- posts,
       disjoint_tags?(post["tags"], tags),

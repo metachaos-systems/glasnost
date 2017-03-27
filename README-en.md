@@ -8,11 +8,34 @@ docker run -it -p 80:80 -e "GLASNOST_CONFIG_URL=..."  --restart on-failure:10 on
 
 You can also use a service like [hyper.sh](https://hyper.sh/) for managed Docker container hosting.
 
-Docker container configuration settings are:
+# Example configuration JSON file
+
+```
+{
+  "authors": [{
+    "account_name": "ontofractal",
+    "tags": {
+      "blacklist": [],
+      "whitelist": []
+    }
+  }, {
+    "account_name": "...",
+    "tags": {
+      "blacklist": [],
+      "whitelist": []
+    }
+  }
+],
+  "about_blog_permlink": "ann-introducing-glasnost-alpha-open-source-blog-and-app-server-for-steem-golos-blockchains",
+  "about_blog_author": "ontofractal",
+  "source_blockchain": "steem"
+}
+
+```
 
 * `"source_blockchain"`: `steem` or `golos`
-* `"blog_author"`: account name on steem or golos
-* `"about_blog_permlink"`: permlink of any post by blog author
+* `"about_blog_author"`: "about blog" post author name on steem or golos
+* `"about_blog_permlink"`: "about blog" post permlink on steem or golos
 
 # Tag filtering
 
@@ -22,21 +45,6 @@ If `tags_whitelist` value is an empty list `[]` Whitelisting rules do *NOT* appl
 Blacklisting rules are applied afterwards: all posts with blacklisted tags are removed.
 
 
-# Example configuration JSON file
-
-```
-{
-  "blog_author": "ontofractal",
-  "source_blockchain": "steem",
-  "about_blog_permlink": "ann-introducing-glasnost-alpha-open-source-blog-and-app-server-for-steem-golos-blockchains",
-  "tags_whitelist": [],
-  "tags_blacklist": [
-    "statistics",
-    "stats"
-  ]
-}
-
-```
 
 Other settings like `PORT`, `STEEM_URL` and `GOLOS_URL` can be configured in the Dockerfile.
 
