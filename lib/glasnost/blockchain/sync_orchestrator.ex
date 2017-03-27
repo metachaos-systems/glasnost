@@ -1,6 +1,7 @@
 defmodule Glasnost.Orchestrator.AuthorSyncSup do
   use Supervisor
   alias Glasnost.{Worker,Repo}
+  import Ecto.Query
 
   def start_link(arg \\ []) do
     Supervisor.start_link(__MODULE__, arg)
