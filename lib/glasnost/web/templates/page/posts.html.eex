@@ -19,6 +19,7 @@
       </div>
       <div class="extra content">
         <div class="ui large labels">
+          <!-- FIXME some old posts don't have any tags -->
           <%= for tag <- post.tags do %>
           <a class="ui  label" href="/tags/<%=tag%>">
             <%= format_tag(tag, @conn.assigns.lang) %>
