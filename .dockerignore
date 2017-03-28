@@ -3,3 +3,4 @@ _build/
 .git/
 test/
 priv/glasnost-runtime-config.json
+priv/glasnost-test-config.json

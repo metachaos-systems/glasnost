@@ -42,6 +42,9 @@ defmodule RuntimeConfig do
       :dev ->
         config = File.read!("priv/glasnost-runtime-config.json") |> Poison.Parser.parse!()
         AtomicMap.convert(config, safe: false)
+      :test ->
+        config = File.read!("priv/glasnost-runtime-config.json") |> Poison.Parser.parse!()
+        AtomicMap.convert(config, safe: false)
       :prod ->
         ConCache.get_or_store(:config_cache, :data, fn() ->
           fetch_external_config()

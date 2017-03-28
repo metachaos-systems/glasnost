@@ -13,16 +13,15 @@ defmodule Glasnost.Worker.AuthorSync do
     import Ecto.Query
     Repo.delete_all(from c in Glasnost.Post, where: c.author == ^account_name)
 
-    config = %{current_cursor: "",
-      account_name: config.account_name,
-      tags: config.tags,
-      client_mod: RuntimeConfig.blockchain_client_mod}
-
+    config = config
+      |> put_in([:client_mod], RuntimeConfig.blockchain_client_mod)
+      |> put_in([:current_cursor], "")
     Process.send_after(self(), :tick, 1_000)
     {:ok, config}
   end
 
   def handle_info(:tick, state) do
+    #  IO.inspect state
      utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> trim_trailing_ms
      %{account_name: account_name, current_cursor: current_cursor, client_mod: client_mod} = state
      {:ok, posts} = client_mod.get_discussions_by_author_before_date(account_name, current_cursor, utc_now_str, 100)
@@ -31,11 +30,45 @@ defmodule Glasnost.Worker.AuthorSync do
       |> Enum.map(&extract_put_tags/1)
       |> filter_whitelisted(state.tags.whitelist)
       |> filter_blacklisted(state.tags.blacklist)
+      |> filter_by_title(state.title_filters)
+      |> List.flatten
+
      for post <- posts do
        save_to_db(post)
      end
      state = iterate(posts, state)
      {:noreply, state}
+  end
+
+  def filter_by_title(posts, %{whitelist: [], blacklist: []}) do
+    posts
+  end
+
+  def filter_by_title(posts, %{whitelist: whls, blacklist: blls}) do
+    regexes_compiler = &Enum.reduce(&1, [], fn regex_str, acc ->
+      case Regex.compile(regex_str) do
+         {:ok, regex} -> acc ++ [regex]
+         {:error, _} -> acc
+      end
+    end)
+    whls_regexes = regexes_compiler.(whls)
+    blls_regexes = regexes_compiler.(blls)
+
+    matches_any_wl_regex? = fn title ->
+      case whls_regexes do
+        [] -> true
+        _ -> Enum.reduce(whls_regexes, false, fn regex, acc ->
+        acc or String.match?(title, regex)
+      end)
+      end
+    end
+
+    matches_any_bl_regex? = fn title -> Enum.reduce(blls_regexes, true, fn regex, acc ->
+        acc and !String.match?(title, regex)
+      end)
+    end
+    posts = for post <- posts, matches_any_wl_regex?.(post["title"]), do: post
+    for post <- posts, matches_any_bl_regex?.(post["title"]), do: post
   end
 
   def trim_trailing_ms(date) when is_bitstring(date) do
@@ -65,7 +98,7 @@ defmodule Glasnost.Worker.AuthorSync do
      end
   end
 
-  def save_to_db(post) do
+  def save_to_db(post) when is_map(post) do
      result =
        case Repo.get(Glasnost.Post, post["id"]) do
          nil  -> %Glasnost.Post{}
