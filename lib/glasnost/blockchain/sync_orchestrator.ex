@@ -13,7 +13,7 @@ defmodule Glasnost.Orchestrator.AuthorSyncSup do
       |> RuntimeConfig.get()
       |> AtomicMap.convert(safe: false)
       |> Enum.map(&validate_author_config/1)
-      # |> IO.inspect 
+      # |> IO.inspect
       |> Enum.map(&put_in(&1,[:source_blockchain], RuntimeConfig.get(:source_blockchain)))
       |> Enum.map(&worker(Worker.AuthorSync, [&1], [id: "Wrk.AuthorSync:" <> &1.account_name]) )
 
@@ -23,7 +23,7 @@ defmodule Glasnost.Orchestrator.AuthorSyncSup do
   def validate_author_config(config) do
      # forcing a runtime pattern match exception if keys don't match
      # TODO: add value validation
-     %{tags: %{blacklist: _, whitelist: _}, account_name: _, title_filters: _} = config
+     %{account_name: _, filters: _} = config
      config
   end
 

@@ -23,14 +23,15 @@ defmodule Glasnost.Worker.AuthorSync do
   def handle_info(:tick, state) do
     #  IO.inspect state
      utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> trim_trailing_ms
-     %{account_name: account_name, current_cursor: current_cursor, client_mod: client_mod} = state
+     %{account_name: account_name, current_cursor: current_cursor,
+      client_mod: client_mod, filter: filters} = state
      {:ok, posts} = client_mod.get_discussions_by_author_before_date(account_name, current_cursor, utc_now_str, 100)
      posts = posts
       |> Enum.map(&parse_json_metadata/1)
       |> Enum.map(&extract_put_tags/1)
-      |> filter_whitelisted(state.tags.whitelist)
-      |> filter_blacklisted(state.tags.blacklist)
-      |> filter_by_title(state.title_filters)
+      |> filter_whitelisted(filters.tags.whitelist)
+      |> filter_blacklisted(filters.tags.blacklist)
+      |> filter_by_title(filters.title)
       |> List.flatten
 
      for post <- posts do
