@@ -8,9 +8,9 @@ defmodule Glasnost.Worker.AuthorSync do
   end
 
   def init(config) do
+    import Ecto.Query
     %{account_name: account_name} = config
     Logger.info("AuthorSync GenServer process for #{account_name} is being initialized...")
-    import Ecto.Query
     Repo.delete_all(from c in Glasnost.Post, where: c.author == ^account_name)
 
     config = config
@@ -21,10 +21,9 @@ defmodule Glasnost.Worker.AuthorSync do
   end
 
   def handle_info(:tick, state) do
-    #  IO.inspect state
      utc_now_str = NaiveDateTime.utc_now |> NaiveDateTime.to_iso8601 |> trim_trailing_ms
      %{account_name: account_name, current_cursor: current_cursor,
-      client_mod: client_mod, filter: filters} = state
+      client_mod: client_mod, filters: filters} = state
      {:ok, posts} = client_mod.get_discussions_by_author_before_date(account_name, current_cursor, utc_now_str, 100)
      posts = posts
       |> Enum.map(&parse_json_metadata/1)
@@ -64,12 +63,15 @@ defmodule Glasnost.Worker.AuthorSync do
       end
     end
 
-    matches_any_bl_regex? = fn title -> Enum.reduce(blls_regexes, true, fn regex, acc ->
-        acc and !String.match?(title, regex)
+    matches_any_bl_regex? = fn title -> Enum.reduce(blls_regexes, false, fn regex, acc ->
+        acc or String.match?(title, regex)
       end)
     end
-    posts = for post <- posts, matches_any_wl_regex?.(post["title"]), do: post
-    for post <- posts, matches_any_bl_regex?.(post["title"]), do: post
+
+    for post <- posts,
+      matches_any_wl_regex?.(post["title"]),
+      !matches_any_bl_regex?.(post["title"]),
+       do: post
   end
 
   def trim_trailing_ms(date) when is_bitstring(date) do
