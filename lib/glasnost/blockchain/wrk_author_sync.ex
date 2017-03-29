@@ -32,12 +32,30 @@ defmodule Glasnost.Worker.AuthorSync do
       |> filter_blacklisted(filters.tags.blacklist)
       |> filter_by_title(filters.title)
       |> List.flatten
+      |> filter_by_created(filters.created)
 
      for post <- posts do
        save_to_db(post)
      end
      state = iterate(posts, state)
      {:noreply, state}
+  end
+
+  def filter_by_created(posts, %{only_after: "", only_before: ""}) do
+    posts
+  end
+
+  def filter_by_created(posts, %{only_after: only_after, only_before: only_before}) do
+    # offset is always zero, but required by ISO standard
+    only_after = if only_after == "", do:  "1970-01-01", else: only_after
+    only_before = if only_before == "", do:  "2038-01-01", else: only_before
+    {:ok, only_after, 0} = DateTime.from_iso8601(only_after <> "T00:00:00Z")
+    {:ok, only_before, 0} = DateTime.from_iso8601(only_before <> "T00:00:00Z")
+    for post <- posts,
+    {:ok, created, 0} = DateTime.from_iso8601(post["created"] <> "Z"),
+      DateTime.compare(created, only_after) === :gt,
+      DateTime.compare(created, only_before) === :lt,
+      do: post
   end
 
   def filter_by_title(posts, %{whitelist: [], blacklist: []}) do
