@@ -2,6 +2,7 @@
   <%= for post <- @posts do %>
   <!-- TODO: extract image detection into view -->
   <!-- metadata images property varies from post to post: BOTH "images" and "images" are seen in the wild -->
+  <!-- FIXME: mage property is non-standard and should be removed at some time in the future -->
   <% img_src = hd(post.json_metadata["image"] || post.json_metadata["images"] || [false] ) %>
   <div class="ui card" >
     <div class="image">
