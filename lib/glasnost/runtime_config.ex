@@ -40,7 +40,7 @@ defmodule RuntimeConfig do
   def get_cached_config do
     case @mix_env do
       :dev ->
-        config = File.read!("priv/glasnost-runtime-config.json") |> Poison.Parser.parse!()
+        config = File.read!("priv/glasnost-dev-config.json") |> Poison.Parser.parse!()
         AtomicMap.convert(config, safe: false)
       :test ->
         config = File.read!("priv/glasnost-test-config.json") |> Poison.Parser.parse!()
