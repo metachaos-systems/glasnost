@@ -119,7 +119,8 @@ defmodule Glasnost.Worker.AuthorSync do
   end
 
   def iterate(posts, state) do
-    if length(posts) == 100 do
+    # for reasons unknown get_discussions_by_current_date returns variable number of posts, not a max of 100
+    if length(posts) > 1 do
        Process.send_after(self(), :tick, 100, [])
        next_permlink = posts |> List.last() |> Map.get("permlink")
        put_in(state.current_cursor, next_permlink)
