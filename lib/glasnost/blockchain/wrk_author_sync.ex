@@ -25,7 +25,6 @@ defmodule Glasnost.Worker.AuthorSync do
      %{account_name: account_name, current_cursor: current_cursor,
       client_mod: client_mod, filters: filters} = state
      {:ok, posts} = client_mod.get_discussions_by_author_before_date(account_name, current_cursor, utc_now_str, 100)
-     IO.inspect "fetched #{length(posts)}"
      posts = posts
       |> Enum.map(&parse_json_metadata/1)
       |> Enum.map(&extract_put_tags/1)
@@ -33,7 +32,7 @@ defmodule Glasnost.Worker.AuthorSync do
       |> Enum.reject(&matches_tag_rule?(&1, filters.tags.blacklist))
       |> filter_by_title(filters.title)
       |> List.flatten
-      |> filter_by_created(filters.created)
+      |> Enum.filter(&matches_created_rule?(&1, filters.created))
 
      for post <- posts do
        save_to_db(post)
@@ -50,22 +49,16 @@ defmodule Glasnost.Worker.AuthorSync do
     !MapSet.disjoint?(tags_set, filter_set)
   end
 
-
-  def filter_by_created(posts, %{only_after: "", only_before: ""}) do
-    posts
-  end
-
-  def filter_by_created(posts, %{only_after: only_after, only_before: only_before}) do
+  def matches_created_rule?(_, nil), do: true
+  def matches_created_rule?(_, %{only_after: "", only_before: ""}), do: true
+  def mtaches_created_rule?(post, %{only_after: only_after, only_before: only_before}) do
     # offset is always zero, but required by ISO standard
     only_after = if only_after == "", do:  "1970-01-01", else: only_after
     only_before = if only_before == "", do:  "2038-01-01", else: only_before
     {:ok, only_after, 0} = DateTime.from_iso8601(only_after <> "T00:00:00Z")
     {:ok, only_before, 0} = DateTime.from_iso8601(only_before <> "T00:00:00Z")
-    for post <- posts,
-    {:ok, created, 0} = DateTime.from_iso8601(post["created"] <> "Z"),
-      DateTime.compare(created, only_after) === :gt,
-      DateTime.compare(created, only_before) === :lt,
-      do: post
+    {:ok, created, 0} = DateTime.from_iso8601(post["created"] <> "Z")
+    DateTime.compare(created, only_after) === :gt and DateTime.compare(created, only_before) === :lt
   end
 
   def filter_by_title(posts, %{whitelist: [], blacklist: []}) do
