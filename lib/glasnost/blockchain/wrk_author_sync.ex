@@ -25,11 +25,12 @@ defmodule Glasnost.Worker.AuthorSync do
      %{account_name: account_name, current_cursor: current_cursor,
       client_mod: client_mod, filters: filters} = state
      {:ok, posts} = client_mod.get_discussions_by_author_before_date(account_name, current_cursor, utc_now_str, 100)
+     IO.inspect "fetched #{length(posts)}"
      posts = posts
       |> Enum.map(&parse_json_metadata/1)
       |> Enum.map(&extract_put_tags/1)
-      |> filter_whitelisted(filters.tags.whitelist)
-      |> filter_blacklisted(filters.tags.blacklist)
+      |> Enum.filter(&matches_tag_rule?(&1, filters.tags.whitelist))
+      |> Enum.reject(&matches_tag_rule?(&1, filters.tags.blacklist))
       |> filter_by_title(filters.title)
       |> List.flatten
       |> filter_by_created(filters.created)
@@ -40,6 +41,15 @@ defmodule Glasnost.Worker.AuthorSync do
      state = iterate(posts, state)
      {:noreply, state}
   end
+
+  def matches_tag_rule?(_, []), do: true
+
+  def matches_tag_rule?(post, list) when is_list(list)  do
+    tags_set = Enum.into(post["tags"], MapSet.new)
+    filter_set = Enum.into(list, MapSet.new)
+    !MapSet.disjoint?(tags_set, filter_set)
+  end
+
 
   def filter_by_created(posts, %{only_after: "", only_before: ""}) do
     posts
@@ -132,32 +142,6 @@ defmodule Glasnost.Worker.AuthorSync do
        {:ok, _}       -> :ok
        {:error, _} -> :error
      end
-  end
-
-  def filter_whitelisted(posts, []) do
-    posts
-  end
-
-  def filter_whitelisted(posts, tags) do
-    for post <- posts,
-      !disjoint_tags?(post["tags"], tags),
-      do: post
-  end
-
-  def filter_blacklisted(posts, []) do
-    posts
-  end
-
-  def filter_blacklisted(posts, tags) do
-    for post <- posts,
-      disjoint_tags?(post["tags"], tags),
-      do: post
-  end
-
-  def disjoint_tags?(tags1, tags2) do
-    tags1_set = Enum.into(tags1, MapSet.new)
-    tags2_set = Enum.into(tags2, MapSet.new)
-    MapSet.disjoint?(tags1_set, tags2_set)
   end
 
 end
