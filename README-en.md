@@ -14,18 +14,21 @@ You can also use a service like [hyper.sh](https://hyper.sh/) for managed Docker
 {
   "authors": [{
     "account_name": "ontofractal",
-    "tags": {
-      "blacklist": [],
-      "whitelist": []
+    "filters": {
+      "tags": {
+        "blacklist": ["stats"],
+        "whitelist": ["open-source", "glasnost"]
+      },
+      "title": {
+        "blacklist": [],
+        "whitelist": ["elixir"]
+      },
+      "created": {
+        "only_after": "2017-01-01",
+        "only_before": ""
+      }
     }
-  }, {
-    "account_name": "...",
-    "tags": {
-      "blacklist": [],
-      "whitelist": []
-    }
-  }
-],
+  }],
   "about_blog_permlink": "ann-introducing-glasnost-alpha-open-source-blog-and-app-server-for-steem-golos-blockchains",
   "about_blog_author": "ontofractal",
   "source_blockchain": "steem"
@@ -39,7 +42,7 @@ You can also use a service like [hyper.sh](https://hyper.sh/) for managed Docker
 
 Other settings like `PORT`, `STEEM_URL` and `GOLOS_URL` can be configured in the Dockerfile.
 
-# Tag filtering
+# Filtering rules
 
 Whitelisting rules are applied first: only posts with whitelisted tags are downloaded from the blockchain.
 If `tags_whitelist` value is an empty list `[]` Whitelisting rules do *NOT* apply.
