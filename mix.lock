@@ -36,6 +36,6 @@
   "ranch": {:hex, :ranch, "1.3.2", "e4965a144dc9fbe70e5c077c65e73c57165416a901bd02ea899cfd95aa890986", [:rebar3], []},
   "russian": {:hex, :russian, "0.1.0", "9137b1b93ae39fc87d8e361b7ae273deebcb1927df2ccb1e358cffcf3ffe03a8", [:mix], []},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.1", "28a4d65b7f59893bc2c7de786dec1e1555bd742d336043fe644ae956c3497fbe", [:make, :rebar], []},
-  "steemex": {:hex, :steemex, "0.9.0", "30d73b8573351495c21fe4223652b28875abf69eb1bee8cbf27c36c56d0be327", [:mix], [{:atomic_map, "~> 0.9.0", [hex: :atomic_map, optional: false]}, {:poison, "~> 2.0", [hex: :poison, optional: false]}, {:websocket_client, "~> 1.2.0", [hex: :websocket_client, optional: false]}]},
+  "steemex": {:hex, :steemex, "0.9.1", "1cff2b05aef38aae8756d949880dc5590e30bd7a6092d20f0085b8a1ba567439", [:mix], [{:atomic_map, "~> 0.9.0", [hex: :atomic_map, optional: false]}, {:poison, "~> 2.0", [hex: :poison, optional: false]}, {:websocket_client, "~> 1.2.0", [hex: :websocket_client, optional: false]}]},
   "tzdata": {:hex, :tzdata, "0.5.11", "3d5469a9f46bdf4a8760333dbdabdcc4751325035c454b10521f71e7c611ae50", [:mix], [{:hackney, "~> 1.0", [hex: :hackney, optional: false]}]},
   "websocket_client": {:hex, :websocket_client, "1.2.1", "a965ce0be5583c90347400bceca66629e4debd5feb9bd516107e2924bdf39dad", [:rebar3], []}}
