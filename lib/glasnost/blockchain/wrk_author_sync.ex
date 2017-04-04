@@ -51,7 +51,7 @@ defmodule Glasnost.Worker.AuthorSync do
 
   def matches_created_rule?(_, nil), do: true
   def matches_created_rule?(_, %{only_after: "", only_before: ""}), do: true
-  def mtaches_created_rule?(post, %{only_after: only_after, only_before: only_before}) do
+  def matches_created_rule?(post, %{only_after: only_after, only_before: only_before}) do
     # offset is always zero, but required by ISO standard
     only_after = if only_after == "", do:  "1970-01-01", else: only_after
     only_before = if only_before == "", do:  "2038-01-01", else: only_before
