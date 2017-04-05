@@ -26,7 +26,7 @@ RUN npm install && \
  rm -rf ./assets
 
 WORKDIR /glasnost_app
-RUN rm -r /glasnost_app/priv/data/mnesia
+RUN rm -r /glasnost_app/priv/data/mnesia || true
 RUN mkdir -p /glasnost_app/priv/data/mnesia
 
 RUN mix compile
