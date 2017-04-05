@@ -21,34 +21,37 @@ docker run -it -p 80:80 -e "GLASNOST_CONFIG_URL=..."  --restart on-failure:10 on
 {
   "authors": [{
     "account_name": "ontofractal",
-    "tags": {
-      "blacklist": ["ru--statistika"],
-      "whitelist": []
-    },
-    "title": {
-      "blacklist": [],
-      "whitelist": []
-    },
-    "created": {
-      "only_after": "2017-01-01",
-      "only_before": ""
+    "filters": {
+      "tags": {
+        "blacklist": ["ru--statistika"],
+        "whitelist": []
+      },
+      "title": {
+        "blacklist": [],
+        "whitelist": ["Урок \\d"]
+      },
+      "created": {
+        "only_after": "2017-01-01",
+        "only_before": ""
+      }
     }
   }, {
     "account_name": "glasnost",
-    "tags": {
-      "blacklist": [],
-      "whitelist": []
-    },
-    "title": {
-      "blacklist": [],
-      "whitelist": []
-    },
-    "created": {
-      "only_after": "2017-01-01",
-      "only_before": ""
+    "filters": {
+      "tags": {
+        "blacklist": [],
+        "whitelist": []
+      },
+      "title": {
+        "blacklist": [],
+        "whitelist": []
+      },
+      "created": {
+        "only_after": "2017-01-01",
+        "only_before": ""
+      }
     }
-  }
-],
+  }],
   "about_blog_permlink": "anons-open-sors-platformy-dlya-razrabotki-prilozhenii-na-blokcheine-golos-fidbek-privetstvuetsya",
   "about_blog_author": "ontofractal",
   "source_blockchain": "golos"
