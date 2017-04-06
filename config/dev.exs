@@ -37,7 +37,7 @@ config :glasnost, Glasnost.Web.Endpoint,
       ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
       ~r{lib/glasnost/web/views/.*(ex)$},
-      ~r{lib/glasnost/web/templates/.*(eex)$}
+      ~r{lib/glasnost/web/templates/.*(eex|pug)$}
     ]
   ]
 

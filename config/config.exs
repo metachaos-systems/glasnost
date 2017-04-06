@@ -22,6 +22,9 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :phoenix, :template_engines,
+  pug: PhoenixExpug.Engine
+
 
 config :ex_golos,
   url: System.get_env("GOLOS_URL")

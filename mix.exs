@@ -38,6 +38,8 @@ defmodule Glasnost.Mixfile do
      {:gettext, "~> 0.11"},
      {:ex_golos, ">= 0.5.0"},
      {:steemex, ">= 0.0.0"},
+     {:expug, ">= 0.0.0"},
+     {:phoenix_expug, ">= 0.0.0"},
      {:calendar, ">= 0.16.0"},
      {:ecto_mnesia, "~> 0.7.1"},
      {:distillery, ">= 0.0.0"},
