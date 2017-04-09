@@ -57,7 +57,7 @@ defmodule RuntimeConfig do
     with {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.get(url),
       {:ok, config} <- Poison.Parser.parse(body)
     do
-        AtomicMap.convert(config, safe: false)
+      AtomicMap.convert(config, safe: false)
     end
   end
 end
