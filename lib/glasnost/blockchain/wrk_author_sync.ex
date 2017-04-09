@@ -28,11 +28,11 @@ defmodule Glasnost.Worker.AuthorSync do
      posts = posts
       |> Enum.map(&parse_json_metadata/1)
       |> Enum.map(&extract_put_tags/1)
-      |> Enum.filter(&matches_tag_rule?(&1, filters.tags.whitelist))
-      |> Enum.reject(&matches_tag_rule?(&1, filters.tags.blacklist))
-      |> filter_by_title(filters.title)
-      |> List.flatten
-      |> Enum.filter(&matches_created_rule?(&1, filters.created))
+      |> Enum.filter(&matches_tag_rule?(&1, :whitelist, filters[:tags][:whitelist]))
+      |> Enum.reject(&matches_tag_rule?(&1, :blacklist, filters[:tags][:blacklist]))
+      |> Enum.filter(&matches_title_rule?(&1, :whitelist, filters[:title][:whitelist]))
+      |> Enum.reject(&matches_title_rule?(&1, :blacklist, filters[:title][:blacklist]))
+      |> Enum.filter(&matches_created_rule?(&1, filters[:created]))
 
      for post <- posts do
        save_to_db(post)
@@ -41,11 +41,13 @@ defmodule Glasnost.Worker.AuthorSync do
      {:noreply, state}
   end
 
-  def matches_tag_rule?(_, []), do: true
-
-  def matches_tag_rule?(post, list) when is_list(list)  do
+  def matches_tag_rule?(_, :whitelist,  []), do: true
+  def matches_tag_rule?(_, :whitelist,  nil), do: true
+  def matches_tag_rule?(_, :blacklist,  []), do: false
+  def matches_tag_rule?(_, :blacklist,  nil), do: false
+  def matches_tag_rule?(post, _, rules) when is_list(rules)  do
     tags_set = Enum.into(post["tags"], MapSet.new)
-    filter_set = Enum.into(list, MapSet.new)
+    filter_set = Enum.into(rules, MapSet.new)
     !MapSet.disjoint?(tags_set, filter_set)
   end
 
@@ -61,38 +63,19 @@ defmodule Glasnost.Worker.AuthorSync do
     DateTime.compare(created, only_after) === :gt and DateTime.compare(created, only_before) === :lt
   end
 
-  def filter_by_title(posts, %{whitelist: [], blacklist: []}) do
-    posts
-  end
-
-  def filter_by_title(posts, %{whitelist: whls, blacklist: blls}) do
-    regexes_compiler = &Enum.reduce(&1, [], fn regex_str, acc ->
+  def matches_title_rule?(_, :whitelist, nil), do: true
+  def matches_title_rule?(_, :whitelist, []), do: true
+  def matches_title_rule?(_, :blacklist, nil), do: false
+  def matches_title_rule?(_, :blacklist, []), do: false
+  def matches_title_rule?(post, _, regex_strings) when is_list(regex_strings) do
+    regexes = Enum.reduce(regex_strings, [], fn regex_str, acc ->
       case Regex.compile(regex_str) do
          {:ok, regex} -> acc ++ [regex]
          {:error, _} -> acc
       end
     end)
-    whls_regexes = regexes_compiler.(whls)
-    blls_regexes = regexes_compiler.(blls)
-
-    matches_any_wl_regex? = fn title ->
-      case whls_regexes do
-        [] -> true
-        _ -> Enum.reduce(whls_regexes, false, fn regex, acc ->
-        acc or String.match?(title, regex)
-      end)
-      end
-    end
-
-    matches_any_bl_regex? = fn title -> Enum.reduce(blls_regexes, false, fn regex, acc ->
-        acc or String.match?(title, regex)
-      end)
-    end
-
-    for post <- posts,
-      matches_any_wl_regex?.(post["title"]),
-      !matches_any_bl_regex?.(post["title"]),
-       do: post
+    title = post["title"]
+    Enum.reduce(regexes, false, fn regex, acc -> acc or String.match?(title, regex) end)
   end
 
   def trim_trailing_ms(date) when is_bitstring(date) do
