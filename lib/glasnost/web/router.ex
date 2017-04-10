@@ -7,6 +7,7 @@ defmodule Glasnost.Web.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug Glasnost.Plugs.PutConfig
   end
 
   pipeline :api do
@@ -21,6 +22,7 @@ defmodule Glasnost.Web.Router do
     get "/posts/:permlink", PageController, :show
     get "/authors/:author", PageController, :authors
     get "/authors/:author/:permlink", PageController, :show
+    get "/admin", AdminController, :index
   end
 
   # Other scopes may use custom stacks.

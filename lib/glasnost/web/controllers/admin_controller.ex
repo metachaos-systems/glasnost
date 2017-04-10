@@ -1,6 +1,7 @@
 defmodule Glasnost.Web.AdminController do
   use Glasnost.Web, :controller
-
+  alias Glasnost.SimpleAuthenticator
+  
   def index(conn, _params) do
     password_saved = SimpleAuthenticator.password_saved?
     password = SimpleAuthenticator.get_password
