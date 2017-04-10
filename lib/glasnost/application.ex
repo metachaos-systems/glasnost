@@ -12,6 +12,7 @@ defmodule Glasnost.Application do
       supervisor(Glasnost.Repo, []),
       # Start the endpoint when the application starts
       supervisor(Glasnost.Web.Endpoint, []),
+      supervisor(Glasnost.SimpleAuthenticator, []),
       supervisor(ConCache, [[ ttl_check: :timer.minutes(1), ttl: :timer.minutes(30) ], [name: :config_cache]]),
       supervisor(Glasnost.Orchestrator.AuthorSyncSup, []),
       worker(Exos.Proc, [{"node port.js",0,cd: "./lib/ports/js"}] )
