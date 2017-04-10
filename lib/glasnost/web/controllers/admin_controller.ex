@@ -2,7 +2,12 @@ defmodule Glasnost.Web.AdminController do
   use Glasnost.Web, :controller
 
   def index(conn, _params) do
-    render conn, "index.html"
+    password_saved = SimpleAuthenticator.password_saved?
+    password = SimpleAuthenticator.get_password
+    render conn, "index.html", password: password, password_saved: password_saved
   end
 
+  def remove_password_from_index do
+    SimpleAuthenticator.mark_password_as_saved()
+  end
 end

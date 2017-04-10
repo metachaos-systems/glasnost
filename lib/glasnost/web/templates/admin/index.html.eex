@@ -1,2 +1,7 @@
 <div class="">
+  <%= if @password_saved do %>
+  <p> Visit your admin link </p>
+  <% else %>
+  <p> Your password is: <%= @password %> </p>
+  <% end %>
 </div>
