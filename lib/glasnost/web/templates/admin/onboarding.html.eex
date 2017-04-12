@@ -1,0 +1,13 @@
+<div class="" >
+
+    <div class="ui header">
+      Password
+    </div>
+  <div class="ui red segment">
+    <p><%= @password %></p>
+  </div>
+      <%= form_tag "/admin/mark_password_as_saved", [csrf_token: true] do %>
+      <%= submit "I've saved this password", class: "ui submit button" %>
+      </div>
+  <% end %>
+</div>

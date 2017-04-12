@@ -4,10 +4,20 @@ defmodule Glasnost.Web.AdminController do
 
   def index(conn, _params) do
     password_saved = SimpleAuthenticator.password_saved?
-    password = if password_saved,
-      do: "Login using your no-configuration password or restart Glasnost app",
-      else: SimpleAuthenticator.get_password
-    render conn, "index.html", password: password, password_saved: password_saved
+    if password_saved do
+      render conn, "index.html"
+    else
+      redirect conn, to: "/admin/onboarding"
+    end
+  end
+
+  def onboarding(conn, _params) do
+    password_saved = SimpleAuthenticator.password_saved?
+    if password_saved do
+      redirect conn, to: "/admin"
+    else
+      render conn, "onboarding.html", password: SimpleAuthenticator.get_password, password_saved: password_saved
+    end
   end
 
   def mark_password_as_saved(conn, _params)  do

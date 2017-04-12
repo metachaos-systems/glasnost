@@ -1,16 +1,13 @@
 <div class="" >
-  <%= if @password_saved do %>
-      <p> Visit your admin link </p>
-    <% else %>
-      <div class="ui massive form">
-          <div class="field">
-            <label>Password</label>
-            <input placeholder="<%= @password %>" readonly="" type="text">
-          </div>
-      <%= form_tag "/admin/mark_password_as_saved", [csrf_token: true] do %>
-      <%= submit "Submit", class: "ui submit button" %>
+  <%= form_tag "/admin/command_and_control", [csrf_token: true, class: "ui massive form"] do %>
+      <div class="field">
+        <%= label(:admin, :config_url, "New Config URL") %>
+        <%= text_input(:admin, :config_url, class: "field" ) %>
       </div>
-
-    <% end %>
+      <div class="field">
+        <%= label(:admin, :password, "Password") %>
+        <%= text_input(:admin, :password, class: "field" ) %>
+      </div>
+      <%= submit "Resync", class: "ui submit button" %>
   <% end %>
 </div>
