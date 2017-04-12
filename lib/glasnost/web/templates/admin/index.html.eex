@@ -1,10 +1,16 @@
-<div class="">
+<div class="" >
   <%= if @password_saved do %>
       <p> Visit your admin link </p>
     <% else %>
-      <p> Your password is: <%= @password %> </p>
+      <div class="ui massive form">
+          <div class="field">
+            <label>Password</label>
+            <input placeholder="<%= @password %>" readonly="" type="text">
+          </div>
       <%= form_tag "/admin/mark_password_as_saved", [csrf_token: true] do %>
-      <%= submit "Submit" %>
+      <%= submit "Submit", class: "ui submit button" %>
+      </div>
+
     <% end %>
   <% end %>
 </div>
