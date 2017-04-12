@@ -1,7 +1,10 @@
 <div class="">
   <%= if @password_saved do %>
-  <p> Visit your admin link </p>
-  <% else %>
-  <p> Your password is: <%= @password %> </p>
+      <p> Visit your admin link </p>
+    <% else %>
+      <p> Your password is: <%= @password %> </p>
+      <%= form_tag "/admin/mark_password_as_saved", [csrf_token: true] do %>
+      <%= submit "Submit" %>
+    <% end %>
   <% end %>
 </div>

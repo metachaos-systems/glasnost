@@ -33,7 +33,7 @@ defmodule Glasnost.SimpleAuthenticator do
 
 
   def handle_cast(:mark_password_as_saved, state) do
-    put_in(state.password_saved, true)
+    state = put_in(state.password_saved, true)
     {:noreply, state}
   end
 

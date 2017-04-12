@@ -23,6 +23,7 @@ defmodule Glasnost.Web.Router do
     get "/authors/:author", PageController, :authors
     get "/authors/:author/:permlink", PageController, :show
     get "/admin", AdminController, :index
+    post "/admin/mark_password_as_saved", AdminController, :mark_password_as_saved
   end
 
   # Other scopes may use custom stacks.
