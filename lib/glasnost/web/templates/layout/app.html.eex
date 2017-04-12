@@ -26,7 +26,8 @@
     </div>
     </div>
   </header>
-  <div class="ui container">
+  <!-- FIXME: needs a sticky footer instread of 100vh -->
+  <div class="ui container" style="min-height:100vh;">
     <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
     <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
     <main role="main">
