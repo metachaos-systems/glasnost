@@ -1,10 +1,14 @@
 # Запуск Glasnost с помощью Docker
 
 ```
-docker run -it -p 80:80 -e "GLASNOST_CONFIG_URL=..."  --restart on-failure:10 ontofractal/glasnost:latest
+docker run -it -p 80:80 --restart on-failure:10 ontofractal/glasnost:latest
 ```
 
-## Настройки
+# Админка
+
+Теперь в Glasnost можно обновлять конфигурацию без перезагрузки. Сразу после запуска Glasnost перенаправляет запросы на страницу с ключом админа. После подтверждения сохранения ключа, для сохранения или обновления конфига нужно зайти на страницу `/admin`, куда нужно ввести новый URL конфига и сохраненный пароль. После обновления конфига Glasnost нужно от нескольких секунд до нескольких минут для синхронизации данных с блокчейном.
+
+## Настройки конфига
 
 Для выбора блокчейна и страницы "о блоге" используются следующие свойства JSON конфига.
 
@@ -15,60 +19,66 @@ docker run -it -p 80:80 -e "GLASNOST_CONFIG_URL=..."  --restart on-failure:10 on
 Как правило конфигурация приложений на Elixir происходит на этапе компиляции. Это означает, что
 для изменений такие переменных пространства, как `PORT`, `STEEM_URL` и `GOLOS_URL` необходимо внести новые значения в Dockerfile и создать новый имидж с обновленными переменными среды.
 
-# Пример конфига
+# Минимальный конфиг
 
 ```
 {
   "authors": [{
     "account_name": "ontofractal",
-    "filters": {
-      "tags": {
-        "blacklist": ["ru--statistika"],
-        "whitelist": []
-      },
-      "title": {
-        "blacklist": [],
-        "whitelist": ["Урок \\d"]
-      },
-      "created": {
-        "only_after": "2017-01-01",
-        "only_before": ""
-      }
-    }
-  }, {
-    "account_name": "glasnost",
-    "filters": {
-      "tags": {
-        "blacklist": [],
-        "whitelist": []
-      },
-      "title": {
-        "blacklist": [],
-        "whitelist": []
-      },
-      "created": {
-        "only_after": "2017-01-01",
-        "only_before": ""
-      }
-    }
-  }],
+    "filters": {}
+  ],
   "about_blog_permlink": "anons-open-sors-platformy-dlya-razrabotki-prilozhenii-na-blokcheine-golos-fidbek-privetstvuetsya",
   "about_blog_author": "ontofractal",
   "source_blockchain": "golos"
 }
 ```
 
-# Остановка докер контейнера Glasnost
+## Настройки фильтров
+
+В объектах `authors` должно присутстовать свойство `filters`, но свойства для индивидуальных фильтра могут отсутствовать.
+
+Для фильтров тэгов и заглавий существует общее правило: сначала исключаются посты, которые не попадают в белый список, потом исключается посты, которые попадают в черный список.
+
+### Пример фильтров
 
 ```
-docker ps
+{
+  "account_name": "ontofractal",
+  "filters": {
+    "tags": {
+      "blacklist": ["ru--statistika"],
+      "whitelist": []
+    },
+    "title": {
+      "blacklist": [],
+      "whitelist": ["Урок \\d"]
+    },
+    "created": {
+      "only_after": "2017-01-01",
+      "only_before": ""
+    }
+  }
+}
 ```
+
+### Настройка тегов
+
+Теги должны быть указаны в транслитерированном формате: "ru--statistika", а не "статистика".
+
+### Настройка даты публикации
+
+Формат даты (без времени) должен использовать стандарт ISO 8601.
+
+### Настройка заглавия
+
+Строки в черном и белом списке должны быть валидными регулярными выражениями без открывающих и закрывающих `/`.
+
+
+# Остановка докер контейнера Glasnost
+
+`docker ps`
 
 и найти имя контейнера `CONTAINER_NAME` (в колонке `NAMES`)
 
-```
-docker stop CONTAINER_NAME
-```
-```
-docker rm CONTAINER_NAME
-```
+`docker stop CONTAINER_NAME`
+`docker rm CONTAINER_NAME`
