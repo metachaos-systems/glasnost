@@ -1,12 +1,12 @@
 <div class="" >
   <%= form_tag "/admin/command_and_control", [csrf_token: true, class: "ui massive form"] do %>
       <div class="field">
-        <%= label(:admin, :config_url, "New Config URL") %>
-        <%= text_input(:admin, :config_url, class: "field" ) %>
+        <%= label(:admin_ops, :config_url, "New Config URL") %>
+        <%= text_input(:admin_ops, :config_url, class: "field" ) %>
       </div>
       <div class="field">
-        <%= label(:admin, :password, "Password") %>
-        <%= text_input(:admin, :password, class: "field" ) %>
+        <%= label(:admin_ops, :password, "Password") %>
+        <%= text_input(:admin_ops, :password, class: "field" ) %>
       </div>
       <%= submit "Resync", class: "ui submit button" %>
   <% end %>

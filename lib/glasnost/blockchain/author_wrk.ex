@@ -1,6 +1,6 @@
 defmodule Glasnost.Worker.AuthorSync do
   use GenServer
-  alias Glasnost.Repo
+  alias Glasnost.{Repo, RuntimeConfig}
   import Logger
 
   def start_link(args, opts \\ []) do

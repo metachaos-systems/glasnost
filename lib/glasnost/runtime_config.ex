@@ -1,5 +1,48 @@
-defmodule RuntimeConfig do
+defmodule Glasnost.RuntimeConfig do
+  use GenServer
+  require Logger
+  @process_name :runtime_config
   @mix_env Mix.env
+
+  def start_link(args \\ %{}, options \\ []) do
+     GenServer.start_link(__MODULE__, args, options)
+  end
+
+  def init(args) do
+     args = Map.put_new(args, :config, %{})
+     {:ok, args}
+  end
+
+  def handle_call({:update_config, url}, _from, state) do
+    Logger.info("Starting config update...")
+      {result, state} = case fetch_external_config(url) do
+          {:ok, data} ->
+            GenServer.cast(self(), :restart_orchestrator)
+            {{:ok, data}, put_in(state, [:config], data)}
+          {:error, reason } ->
+            {{:error, reason}, state}
+      end
+    Logger.info("Finishing config update...")
+    {:reply, result, state}
+  end
+
+  def handle_call(:get_config, _from, state), do: {:reply, state.config, state}
+
+  def handle_call(:exists, _from, state), do: {:reply, state.config != %{}, state}
+
+  def handle_cast(:restart_orchestrator, state) do
+    spawn_link(fn ->
+      :ok = Supervisor.terminate_child(Glasnost.Supervisor, Glasnost.Orchestrator.AuthorSyncSup)
+      {:ok, _} = Supervisor.restart_child(Glasnost.Supervisor, Glasnost.Orchestrator.AuthorSyncSup)
+    end)
+    {:noreply, state}
+  end
+
+  def exists?, do: GenServer.call(@process_name, :exists)
+
+  def get_cached_config(), do: GenServer.call(@process_name, :get_config)
+
+  def update(url), do: GenServer.call(@process_name, {:update_config, url})
 
   def get(:author_account_names) do
     get_cached_config()
@@ -11,17 +54,11 @@ defmodule RuntimeConfig do
      Map.get(get_cached_config(), key) || throw("#{key} is NOT present in the remote config")
   end
 
-  def blog_author do
-    get(:blog_author)
-  end
+  def blog_author, do: get(:blog_author)
 
-  def source_blockchain do
-    get(:source_blockchain)
-  end
+  def source_blockchain, do: get(:source_blockchain)
 
-  def about_blog_permlink do
-    get(:about_blog_permlink)
-  end
+  def about_blog_permlink, do: get(:about_blog_permlink)
 
   def blockchain_client_mod() do
     case String.downcase(source_blockchain()) do
@@ -37,27 +74,24 @@ defmodule RuntimeConfig do
     end
   end
 
-  def get_cached_config do
+
+  def fetch_external_config(url) do
     case @mix_env do
       :dev ->
         config = File.read!("priv/glasnost-dev-config.json") |> Poison.Parser.parse!()
-        AtomicMap.convert(config, safe: false)
+        {:ok, AtomicMap.convert(config, safe: false)}
       :test ->
         config = File.read!("priv/glasnost-test-config.json") |> Poison.Parser.parse!()
-        AtomicMap.convert(config, safe: false)
+        {:ok, AtomicMap.convert(config, safe: false)}
       :prod ->
-        ConCache.get_or_store(:config_cache, :data, fn() ->
-          fetch_external_config()
-        end)
+        with {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.get(url),
+          {:ok, config} <- Poison.Parser.parse(body)
+        do
+          {:ok, AtomicMap.convert(config, safe: false)}
+        else
+          {:error, reason} -> {:error, reason}
+        end
     end
   end
 
-  def fetch_external_config do
-    url = System.get_env("GLASNOST_CONFIG_URL") || throw("GLASNOST_CONFIG_URL is NOT configured")
-    with {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.get(url),
-      {:ok, config} <- Poison.Parser.parse(body)
-    do
-      AtomicMap.convert(config, safe: false)
-    end
-  end
 end

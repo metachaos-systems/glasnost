@@ -1,17 +1,22 @@
 defmodule Glasnost.Web.PageController do
   use Glasnost.Web, :controller
+  alias Glasnost.RuntimeConfig
   import Ecto.Query
   @posts_per_page 24
 
 
   def index(conn, params) do
-    page_num = extract_page_num(params)
-    q = from c in Glasnost.Post,
-      order_by: [desc: c.id]
-    posts = q
-      |> Glasnost.Repo.all()
-      |> paginate_naively(page_num)
-    render conn, "posts.html", posts: posts, current_page: page_num
+    if RuntimeConfig.exists? do
+      page_num = extract_page_num(params)
+      q = from c in Glasnost.Post,
+        order_by: [desc: c.id]
+      posts = q
+        |> Glasnost.Repo.all()
+        |> paginate_naively(page_num)
+      render conn, "posts.html", posts: posts, current_page: page_num
+    else
+      redirect conn, to: "/admin"
+    end
   end
 
   def show(conn, %{"permlink" => permlink, "author" => author }) do

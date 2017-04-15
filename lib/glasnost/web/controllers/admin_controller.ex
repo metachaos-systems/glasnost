@@ -1,6 +1,6 @@
 defmodule Glasnost.Web.AdminController do
   use Glasnost.Web, :controller
-  alias Glasnost.SimpleAuthenticator
+  alias Glasnost.{SimpleAuthenticator,RuntimeConfig}
 
   def index(conn, _params) do
     password_saved = SimpleAuthenticator.password_saved?
@@ -9,6 +9,21 @@ defmodule Glasnost.Web.AdminController do
     else
       redirect conn, to: "/admin/onboarding"
     end
+  end
+
+  def command_and_control(conn, %{"admin_ops" => admin_ops}) do
+    authorized? = admin_ops["password"] == SimpleAuthenticator.get_password()
+    conn = if authorized? do
+      case RuntimeConfig.update(url: admin_ops["config_url"]) do
+        {:ok, _config} ->
+          put_flash(conn, :info, "Config updated")
+        {:error, reason} ->
+          put_flash(conn, :info, "Config wasn't updated: #{reason}")
+      end
+    else
+      put_flash(conn, :error, "Error: password doesn't match")
+    end
+    redirect(conn, to: "/admin")
   end
 
   def onboarding(conn, _params) do

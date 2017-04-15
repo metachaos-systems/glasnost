@@ -25,6 +25,7 @@ defmodule Glasnost.Web.Router do
     get "/admin", AdminController, :index
     get "/admin/onboarding", AdminController, :onboarding
     post "/admin/mark_password_as_saved", AdminController, :mark_password_as_saved
+    post "/admin/command_and_control", AdminController, :command_and_control
   end
 
   # Other scopes may use custom stacks.
