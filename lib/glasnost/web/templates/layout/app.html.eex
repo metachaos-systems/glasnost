@@ -31,10 +31,10 @@
     <main role="main">
       <div class="alert">
         <%= if get_flash(@conn, :info) do %>
-        <div class="ui yellow inverted segment"><%= get_flash(@conn, :info) %></div>
+        <div class="ui secondary yellow inverted segment"><%= get_flash(@conn, :info) %></div>
         <% end %>
         <%= if get_flash(@conn, :error) do %>
-        <div class="ui yellow inverted segment"><%= get_flash(@conn, :error) %></div>
+        <div class="ui secondary red inverted segment"><%= get_flash(@conn, :error) %></div>
         <% end %>
       </div>
       <%= render @view_module, @view_template, assigns %>
