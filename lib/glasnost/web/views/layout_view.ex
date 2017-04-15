@@ -26,6 +26,6 @@ defmodule Glasnost.Web.LayoutView do
     %{"logo" => %{
       "ru" => "golos-logo.png",
       "en" => "steem-logo.png",
-      }}[key][lang]
+      }}[key][lang] || "eye.png"
   end
 end
