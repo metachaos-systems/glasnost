@@ -14,7 +14,7 @@ defmodule Glasnost.Web.AdminController do
   def command_and_control(conn, %{"admin_ops" => admin_ops}) do
     authorized? = admin_ops["password"] == SimpleAuthenticator.get_password()
     conn = if authorized? do
-      case RuntimeConfig.update(url: admin_ops["config_url"]) do
+      case RuntimeConfig.update(admin_ops["config_url"]) do
         {:ok, _config} ->
           put_flash(conn, :info, "Config updated")
         {:error, reason} ->
