@@ -4,12 +4,8 @@ defmodule AdminWorkflowTest do
 
   hound_session()
 
-  test "the truth", meta do
-    navigate_to("http://localhost:4000")
-
-    password_element = find_element(:id, "password")
-    IO.inspect(password_element)
-
+  test "onboarding flow completes successfully", meta do
+    navigate_to("/admin")
     assert page_title() == "Thank you"
   end
 

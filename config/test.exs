@@ -9,6 +9,8 @@ config :glasnost, Glasnost.Web.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
+config :hound, driver: "phantomjs"
+
 # Configure your database
 config :glasnost, Glasnost.Repo,
   adapter: Ecto.Adapters.Mnesia
