@@ -5,7 +5,7 @@
         <%= text_input(:admin_ops, :config_url, class: "field" ) %>
       </div>
       <div class="field">
-        <%= label(:admin_ops, :password, "Password") %>
+        <%= label(:admin_ops, :password, "Admin key") %>
         <%= text_input(:admin_ops, :password, class: "field" ) %>
       </div>
       <%= submit "Resync", class: "ui submit button" %>
