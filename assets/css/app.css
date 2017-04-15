@@ -4,10 +4,16 @@ img {
   max-width: 100%;
 }
 
+
+
 ul {
   text-align: left;
 }
 
 main {
   margin-top: 80px;
+}
+
+main .alert {
+  margin-bottom: 10px;
 }
