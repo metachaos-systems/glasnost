@@ -1,3 +1,5 @@
+# OUTDATED: update coming soon
+
 # Deployment and configuration
 
 Deployment is simple if you use Docker:
