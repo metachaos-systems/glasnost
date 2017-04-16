@@ -1,6 +1,5 @@
 defmodule Glasnost.Web.PageController do
   use Glasnost.Web, :controller
-  alias Glasnost.RuntimeConfig
   import Ecto.Query
   @posts_per_page 24
 
@@ -45,9 +44,6 @@ defmodule Glasnost.Web.PageController do
       |> Glasnost.Repo.all()
       |> paginate_naively(page_num)
     render conn, "posts.html", posts: posts, current_page: page_num
-  end
-
-  def put_config(conn, _) do
   end
 
   def extract_page_num(params) do
