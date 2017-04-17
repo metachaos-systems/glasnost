@@ -21,7 +21,7 @@ docker run -it -p 80:80 --restart on-failure:10 ontofractal/glasnost:latest
 
 ## Проверка конфига
 
-Конфиг должен был валидным JSON, проверить на валидность можно на [jsonlink.com](http://jsonlint.com/).
+Конфиг должен был валидным JSON, проверить на валидность можно на [jsonlint.com](http://jsonlint.com/).
 
 # Минимальный конфиг
 
