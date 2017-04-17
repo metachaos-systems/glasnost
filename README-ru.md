@@ -13,7 +13,7 @@ docker run -it -p 80:80 --restart on-failure:10 ontofractal/glasnost:latest
 Для выбора блокчейна и страницы "о блоге" используются следующие свойства JSON конфига.
 
 * `"source_blockchain"`: `steem` или `golos`
-* `"about_blog_author"`: имя аккаунта в `steem` или `golos`, который опубликовал пост с описанием блога
+* `"about_blog_author"`: имя автора (одного из указаных в `authors: [...]`) в `steem` или `golos`, который опубликовал пост с описанием блога
 * `"about_blog_permlink"`: permlink (не полный урл) поста с описанием блога
 
 Как правило конфигурация приложений на Elixir происходит на этапе компиляции. Это означает, что
