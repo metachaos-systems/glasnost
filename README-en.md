@@ -1,68 +1,86 @@
-# OUTDATED: update coming soon
-
-# Deployment and configuration
-
-Deployment is simple if you use Docker:
+# Launching Glasnost with Docker
 
 ```
-docker run -it -p 80:80 -e "GLASNOST_CONFIG_URL=..."  --restart on-failure:10 ontofractal/glasnost:latest
+docker run -it -p 80:80 --restart on-failure:10 ontofractal/glasnost:latest
 ```
 
-You can also use a service like [hyper.sh](https://hyper.sh/) for managed Docker container hosting.
+# Admin interface
 
-# Example configuration JSON file
+Glasnost now has a basic admin interface to update configuration without rebooting your Glasnost instance.
+
+Glasnost does not load configuration at startup. Until it's confirmed as saved, an admin key (which changes after each Glasnost reload) is available on the `/admin` page. Save the admin key to use it later. After confirming that you've saved the key, visit `/admin` page and enter a configuration URL and the key to resync the data from Steem/Golos blockchains.You can reload the config at any time. After Glasnost configuration, it takes some time, usually a few seconds to several minutes to synchronize the data with the blockchain.
+
+## Configuration settings
+
+use the following properties of the JSON config object for blockchain selection and "about the blog" page:
+
+* `"source_blockchain"`: `steem` or `golos`
+* `"about_blog_author"`: account_name (needs to be included in `authors: [...]`) in `steem` or `golos`, who posted a post with a description of the blog
+* `"about_blog_permlink"`: post`s permlink (not full url) with the description of the blog
+
+Other settings like PORT, STEEM_URL and GOLOS_URL can be configured in the Dockerfile.
+
+## Validate configuration JSON
+
+Configuration should be valid JSON, check for validity it is possible on [jsonlint.com](http://jsonlint.com/).
+
+# Minimal config
 
 ```
 {
   "authors": [{
     "account_name": "ontofractal",
-    "filters": {
-      "tags": {
-        "blacklist": ["stats"],
-        "whitelist": ["open-source", "glasnost"]
-      },
-      "title": {
-        "blacklist": [],
-        "whitelist": ["elixir"]
-      },
-      "created": {
-        "only_after": "2017-01-01",
-        "only_before": ""
-      }
-    }
-  }],
-  "about_blog_permlink": "ann-introducing-glasnost-alpha-open-source-blog-and-app-server-for-steem-golos-blockchains",
+    "filters": {}
+  ],
+  "about_blog_permlink": "anons-open-sors-platformy-dlya-razrabotki-prilozhenii-na-blokcheine-golos-fidbek-privetstvuetsya",
   "about_blog_author": "ontofractal",
-  "source_blockchain": "steem"
+  "source_blockchain": "golos"
 }
-
 ```
 
-* `"source_blockchain"`: `steem` or `golos`
-* `"about_blog_author"`:  post author steem or golos
-* `"about_blog_permlink"`: post permlink on steem or golos
+## Filter`s settings
 
-Other settings like `PORT`, `STEEM_URL` and `GOLOS_URL` can be configured in the Dockerfile.
+In the `authors` objects, the` filters` property must exist even if it's an empty object `{}`, but the properties for  individual filters may be absent.
 
-# Filtering rules
+There is a general rule for tag and title filters: posts that do not have a whitelisted tag are removed from the set and afterwards posts that have a blacklisted tag are removed. Whitelist filter is not applied if `whitelist` property doesn't exist.  
 
-Whitelisting rules are applied first: only posts with whitelisted tags are downloaded from the blockchain.
-If `tags_whitelist` value is an empty list `[]` Whitelisting rules do *NOT* apply.
-
-Blacklisting rules are applied afterwards: all posts with blacklisted tags are removed.
-
-
-
-# Stopping and removing the Glasnost container
+### Example of filters for @ontofractal
 
 ```
-docker ps
+{
+  "account_name": "ontofractal",
+  "filters": {
+    "tags": {
+      "blacklist": ["ru--statistika"],
+      "whitelist": []
+    },
+    "title": {
+      "blacklist": [],
+      "whitelist": ["Lesson \\d"]
+    },
+    "created": {
+      "only_after": "2017-01-01",
+      "only_before": ""
+    }
+  }
+}
 ```
-find a container name `CONTAINER_NAME` (in the `NAMES` column)
 
-```
-docker stop CONTAINER_NAME
-```
-```
-docker rm CONTAINER_NAME
-```
+### Tags filter
+
+Use usual arrays to whitelist/blacklist tags.
+
+### Created date filter
+
+The date filter format (without time part) should conform to the ISO 8601 standard.
+
+### Title filter
+
+Strings should be valid regular expressions without opening and closing `/`. Invalid regular expressions will fail silently.
+
+# Stopping Glasnost docker container
+
+1. `docker ps`
+2.  find the container name `CONTAINER_NAME` (in the column` NAMES`)
+3. `docker stop CONTAINER_NAME`
+4. `docker rm CONTAINER_NAME`
