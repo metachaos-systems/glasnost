@@ -42,7 +42,7 @@ Configuration should be valid JSON, check for validity it is possible on [jsonli
 
 In the `authors` objects, the` filters` property must exist even if it's an empty object `{}`, but the properties for  individual filters may be absent.
 
-There is a general rule for tag and title filters: posts that do not have a whitelisted tag are removed from the set and afterwards posts that have a blacklisted tag are removed. Whitelist filter is not applied if `whitelist` property doesn't exist.  
+Whitelisting for tags and titles are applied first: all posts that do not match whitelisting rules are discarded. Whitelist filter is ignored if absent. Blacklist rules are applied next: all posts that match any of the blacklist rules are discarded. 
 
 ### Example of filters for @ontofractal
 
