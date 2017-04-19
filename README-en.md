@@ -42,7 +42,7 @@ Configuration should be valid JSON, check for validity it is possible on [jsonli
 
 In the `authors` objects, the` filters` property must exist even if it's an empty object `{}`, but the properties for  individual filters may be absent.
 
-Whitelisting for tags and titles are applied first: all posts that do not match whitelisting rules are discarded. Whitelist filter is ignored if absent. Blacklist rules are applied next: all posts that match any of the blacklist rules are discarded. 
+Whitelisting for tags and titles are applied first: all posts that do not match whitelisting rules are discarded. Whitelist filter is ignored if absent. Blacklist rules are applied next: all posts that match any of the blacklist rules are discarded.
 
 ### Example of filters for @ontofractal
 
@@ -72,7 +72,7 @@ Use usual arrays to whitelist/blacklist tags.
 
 ### Created date filter
 
-The date filter format (without time part) should conform to the ISO 8601 standard.
+Empty  `""` or non-existent values of `only_after` и `only_before` properties are ignored.  Date format should conform to the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) standard and contain only the date part (no time or offset). 
 
 ### Title filter
 
