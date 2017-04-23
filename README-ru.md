@@ -4,6 +4,13 @@
 docker run -it -p 80:80 --restart on-failure:10 ontofractal/glasnost:latest
 ```
 
+# Обновление образа Docker перед установкой новой версии Glasnost
+
+Если вы использовали более раннюю версию Glasnost, то перед запуском новой версии надо обновить Docker образ:
+```
+docker pull ontofractal/glasnost:latest
+```
+
 # Админка
 
 Теперь в Glasnost можно обновлять конфигурацию без перезагрузки. Glasnost не загружает конфинг при запуске. До подтверждения сохранения, ключ админа (меняющийся после перезагрузки приложения) находится на странице `/admin`. После этого в админке нужно ввести URL конфига и сохраненный ключ. Точно так же конфиг обновляется. После обновления конфига Glasnost нужно от нескольких секунд до нескольких минут для синхронизации данных с блокчейном.
@@ -30,7 +37,7 @@ docker run -it -p 80:80 --restart on-failure:10 ontofractal/glasnost:latest
   "authors": [{
     "account_name": "ontofractal",
     "filters": {}
-  ],
+  }],
   "about_blog_permlink": "anons-open-sors-platformy-dlya-razrabotki-prilozhenii-na-blokcheine-golos-fidbek-privetstvuetsya",
   "about_blog_author": "ontofractal",
   "source_blockchain": "golos"
@@ -85,4 +92,5 @@ docker run -it -p 80:80 --restart on-failure:10 ontofractal/glasnost:latest
 и найти имя контейнера `CONTAINER_NAME` (в колонке `NAMES`)
 
 `docker stop CONTAINER_NAME`
+
 `docker rm CONTAINER_NAME`
