@@ -13,11 +13,12 @@ defmodule Glasnost.Post do
     field :category, :string
     field :blockchain, :string
     field :created, :naive_datetime
+    field :unix_epoch, :integer
   end
 
   def changeset(comment, params) do
     comment
-    |> cast(params, [:id, :author, :title, :json_metadata, :permlink, :body, :tags, :category, :created])
+    |> cast(params, [:id, :author, :title, :json_metadata, :permlink, :body, :tags, :category, :created, :blockchain, :unix_epoch])
     |> unique_constraint(:id, name: :golos_comments_id_index)
   end
 
