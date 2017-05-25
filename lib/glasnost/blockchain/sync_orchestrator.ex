@@ -26,8 +26,8 @@ defmodule Glasnost.Orchestrator.AuthorSyncSup do
       |> RuntimeConfig.get()
       |> AtomicMap.convert(safe: false)
       |> Enum.map(&validate_author_config/1)
-      |> Enum.map(&put_in(&1,[:source_blockchain], RuntimeConfig.get(:source_blockchain)))
-      |> Enum.map(&worker(Worker.AuthorSync, [&1], [id: "Wrk.AuthorSync:" <> &1.account_name]) )
+      |> Enum.map(&Map.put_new(&1, :source_blockchain, RuntimeConfig.get(:default_blockchain)))
+      |> Enum.map(&worker(Worker.AuthorSync, [&1], [id: "Wrk.AuthorSync:" <> &1.account_name <> "/" <> &1.source_blockchain]) )
   end
 
   def validate_author_config(config) do
