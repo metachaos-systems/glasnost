@@ -9,12 +9,11 @@ defmodule Glasnost.Worker.AuthorSync do
 
   def init(config) do
     import Ecto.Query
-    %{account_name: account_name} = config
-    Logger.info("AuthorSync GenServer process for #{account_name} is being initialized...")
-    Repo.delete_all(from c in Glasnost.Post, where: c.author == ^account_name)
-
+    %{account_name: account_name, source_blockchain: source_blockchain} = config
+    Logger.info("AuthorSync GenServer process for #{account_name} and #{source_blockchain} is being initialized...")
+    Repo.delete_all(from c in Glasnost.Post, where: c.author == ^account_name and c.blockchain == ^source_blockchain)
     config = config
-      |> put_in([:client_mod], RuntimeConfig.blockchain_client_mod)
+      |> put_in([:client_mod], RuntimeConfig.blockchain_client_mod(config.source_blockchain))
       |> put_in([:current_cursor], "")
     Process.send_after(self(), :tick, 1_000)
     {:ok, config}
@@ -31,12 +30,14 @@ defmodule Glasnost.Worker.AuthorSync do
       |> Post.filter_by(:tags, filters[:tags])
       |> Post.filter_by(:title, filters[:title])
       |> Post.filter_by(:created, filters[:created])
+      |> Enum.map( &Map.update!(&1, "created",  fn created -> NaiveDateTime.from_iso8601!(created) end))
+      |> Enum.map( &Map.put(&1, "unix_epoch", &1["created"] |> DateTime.from_naive!("Etc/UTC") |> DateTime.to_unix()))
 
-     for post <- posts do
-       save_to_db(post)
-     end
-     state = iterate(posts, state)
-     {:noreply, state}
+    for post <- posts do
+         save_to_db(post, state.source_blockchain)
+    end
+    state = iterate(posts, state)
+    {:noreply, state}
   end
 
 
@@ -69,10 +70,11 @@ defmodule Glasnost.Worker.AuthorSync do
      end
   end
 
-  def save_to_db(post) when is_map(post) do
+  def save_to_db(post, source_blockchain) when is_map(post) do
+     import Ecto.Query
      result =
-       case Repo.get(Glasnost.Post, post["id"]) do
-         nil  -> %Glasnost.Post{}
+       case Repo.one(from p in Glasnost.Post, where: p.id == ^post["id"] and p.blockchain == ^source_blockchain) do
+         nil  -> %Glasnost.Post{blockchain: source_blockchain}
          comment -> comment
        end
        |> Glasnost.Post.changeset(post)
