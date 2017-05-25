@@ -12,7 +12,7 @@ defmodule Glasnost.Post do
     field :json_metadata, :map
     field :category, :string
     field :blockchain, :string
-    field :created, Ecto.DateTime
+    field :created, :naive_datetime
   end
 
   def changeset(comment, params) do
