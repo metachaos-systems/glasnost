@@ -11,6 +11,7 @@ defmodule Glasnost.Post do
     field :tags, {:array, :string}
     field :json_metadata, :map
     field :category, :string
+    field :blockchain, :string
     field :created, Ecto.DateTime
   end
 
