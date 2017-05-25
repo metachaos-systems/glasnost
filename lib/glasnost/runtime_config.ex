@@ -9,19 +9,20 @@ defmodule Glasnost.RuntimeConfig do
   end
 
   def init(args) do
+     :timer.apply_after(1_000, __MODULE__, :update, [""])
      args = Map.put_new(args, :config, %{})
      {:ok, args}
   end
 
   def handle_call({:update_config, url}, _from, state) do
     Logger.info("Starting config update...")
-      {result, state} = case fetch_external_config(url) do
-          {:ok, data} ->
-            GenServer.cast(self(), :restart_orchestrator)
-            {{:ok, data}, put_in(state, [:config], data)}
-          {:error, reason } ->
-            {{:error, reason}, state}
-      end
+    {result, state} = case fetch_external_config(url) do
+        {:ok, data} ->
+          GenServer.cast(self(), :restart_orchestrator)
+          {{:ok, data}, put_in(state, [:config], data)}
+        {:error, reason } ->
+          {{:error, reason}, state}
+    end
     Logger.info("Finishing config update...")
     {:reply, result, state}
   end
@@ -56,21 +57,19 @@ defmodule Glasnost.RuntimeConfig do
 
   def blog_author, do: get(:blog_author)
 
-  def source_blockchain, do: get(:source_blockchain)
-
   def about_blog_permlink, do: get(:about_blog_permlink)
 
-  def blockchain_client_mod() do
-    case String.downcase(source_blockchain()) do
+  def blockchain_client_mod(source_blockchain) do
+    case source_blockchain do
       "golos" -> Golos
       "steem" -> Steemex
     end
   end
 
   def language do
-    case source_blockchain() do
-      "golos" -> "ru"
-      "steem" -> "en"
+    case get(:language) do
+      "russian" -> "ru"
+      "english" -> "en"
     end
   end
 
