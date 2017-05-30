@@ -1,47 +1,53 @@
-<div class="ui stackable three cards">
+<div class="ui vertically divided streched stackable grid">
   <%= for post <- @posts do %>
   <!-- TODO: extract image detection into view -->
   <!-- metadata images property varies from post to post: BOTH "images" and "images" are seen in the wild -->
   <!-- FIXME: mage property is non-standard and should be removed at some time in the future -->
   <% img_src = hd(post.json_metadata["image"] || post.json_metadata["images"] || ["/images/"<> @conn.assigns.default_post_image] ) %>
-  <div class="ui card" >
-    <div class="image">
-      <a href="/authors/<%= post.author %>/<%= post.permlink %>">
-        <!-- TODO  extract image selection into view -->
-        <%= if img_src do %>
+  <div class="ui stretched row" >
+    <div class="ui seven wide column">
+      <div class="ui image">
+        <a href="/authors/<%= post.author %>/<%= post.permlink %>">
+          <!-- TODO  extract image selection into view -->
           <img src="<%= img_src %>">
-        <% end %>
-      </a>
+        </a>
         <a class="ui large blue ribbon label" href="/authors/<%= post.author %>">  @<%= post.author  %></a>
       </div>
-      <div class="content">
-        <a class="header" href="/authors/<%= post.author %>/<%= post.permlink %>"> <%= post.title %> </a>
+    </div>
+    <div class="ui nine wide column">
+      <a class="ui huge header" href="/authors/<%= post.author %>/<%= post.permlink %>"> <%= post.title %> </a>
+      <span style="margin-bottom: 12px;color: grey;"><%= hd(String.split(NaiveDateTime.to_string(post.created))) %></span>
+      <span style="font-size: 1.2em;font-family: 'Helvetica'; line-height: 1.3;">
+        <%= Floki.parse(Earmark.as_html!(post.body)) |> Floki.find("p") |> Floki.text |> String.slice(0..255)%>...
+      </span>
+      <h4 class="ui horizontal divider header">
+        <i class="tag grey icon"></i>
+        Tags
+      </h4>
 
-        <!-- <div class="description"> </div> -->
+      <div class="ui blue large labels">
+        <!-- FIXME some old posts don't have any tags -->
+        <%= for tag <- post.tags do %>
+        <a class="ui  label" href="/tags/<%=tag%>">
+          <%= format_tag(tag, @conn.assigns.lang) %>
+        </a>
+        <% end %>
       </div>
-      <div class="extra content">
-        <div class="ui large labels">
-          <!-- FIXME some old posts don't have any tags -->
-          <%= for tag <- post.tags do %>
-          <a class="ui  label" href="/tags/<%=tag%>">
-            <%= format_tag(tag, @conn.assigns.lang) %>
-          </a>
-          <% end %>
-        </div>
-      </div>
+      <div class="ui large header"> <%=  %> </div>
 
     </div>
+  </div>
+  <% end %>
+</div>
+
+<div class="ui basic center aligned segment">
+  <div class="ui pagination menu">
+    <%= for {v, i} <- generate_pagination_list(@current_page) do %>
+    <!-- FIXME: extract href generation to view -->
+    <a class="<%=if v == @current_page, do: "active" %> item"
+      href="<%= @conn.request_path <> "?" <> URI.encode_query(%{"page"=> v}) %>">
+      <%= v %>
+    </a>
     <% end %>
   </div>
-
-  <div class="ui basic center aligned segment">
-    <div class="ui pagination menu">
-      <%= for {v, i} <- generate_pagination_list(@current_page) do %>
-      <!-- FIXME: extract href generation to view -->
-      <a class="<%=if v == @current_page, do: "active" %> item"
-        href="<%= @conn.request_path <> "?" <> URI.encode_query(%{"page"=> v}) %>">
-        <%= v %>
-      </a>
-      <% end %>
-    </div>
-  </div>
+</div>

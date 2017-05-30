@@ -1,0 +1,43 @@
+<div class="ui stackable three cards">
+  <%= for post <- @posts do %>
+  <!-- TODO: extract image detection into view -->
+  <!-- metadata images property varies from post to post: BOTH "images" and "images" are seen in the wild -->
+  <!-- FIXME: mage property is non-standard and should be removed at some time in the future -->
+  <% img_src = hd(post.json_metadata["image"] || post.json_metadata["images"] || ["/images/"<> @conn.assigns.default_post_image] ) %>
+  <div class="ui card" >
+    <div class="ui image">
+      <a href="/authors/<%= post.author %>/<%= post.permlink %>">
+        <!-- TODO  extract image selection into view -->
+        <img src="<%= img_src %>">
+      </a>
+        <a class="ui large blue ribbon label" href="/authors/<%= post.author %>">  @<%= post.author  %></a>
+      </div>
+      <div class="content">
+        <a class="header" href="/authors/<%= post.author %>/<%= post.permlink %>"> <%= post.title %> </a>
+
+        <!-- <div class="description"> </div> -->
+      </div>
+        <div class="ui large labels">
+          <!-- FIXME some old posts don't have any tags -->
+          <%= for tag <- post.tags do %>
+          <a class="ui  label" href="/tags/<%=tag%>">
+            <%= format_tag(tag, @conn.assigns.lang) %>
+          </a>
+          <% end %>
+        </div>
+
+    </div>
+    <% end %>
+  </div>
+
+  <div class="ui basic center aligned segment">
+    <div class="ui pagination menu">
+      <%= for {v, i} <- generate_pagination_list(@current_page) do %>
+      <!-- FIXME: extract href generation to view -->
+      <a class="<%=if v == @current_page, do: "active" %> item"
+        href="<%= @conn.request_path <> "?" <> URI.encode_query(%{"page"=> v}) %>">
+        <%= v %>
+      </a>
+      <% end %>
+    </div>
+  </div>
