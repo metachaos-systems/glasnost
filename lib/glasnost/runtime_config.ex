@@ -9,6 +9,7 @@ defmodule Glasnost.RuntimeConfig do
   end
 
   def init(args) do
+      if @mix_env === :dev, do: :timer.send_after(1_000, :update_config)
      args = Map.put_new(args, :config, %{})
      {:ok, args}
   end
