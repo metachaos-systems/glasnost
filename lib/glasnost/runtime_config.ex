@@ -9,7 +9,6 @@ defmodule Glasnost.RuntimeConfig do
   end
 
   def init(args) do
-     :timer.apply_after(1_000, __MODULE__, :update, [""])
      args = Map.put_new(args, :config, %{})
      {:ok, args}
   end
