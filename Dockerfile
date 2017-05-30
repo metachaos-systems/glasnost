@@ -1,4 +1,4 @@
-FROM elixir:slim
+FROM elixir:1.4.4
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -34,6 +34,5 @@ RUN mix ecto.create
 RUN mix ecto.migrate
 
 RUN mix phx.digest
-
 
 ENTRYPOINT mix phx.server
