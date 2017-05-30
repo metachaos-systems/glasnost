@@ -51,6 +51,13 @@ defmodule Glasnost.RuntimeConfig do
       |> Enum.map(& &1.account_name)
   end
 
+  def get(:default_post_image) do
+    case get(:language) do
+      "russian" -> "default_img_golos.jpg"
+      "english" -> "default_img_steem.jpg"
+    end
+  end
+
   def get(key) when is_atom(key) do
      Map.get(get_cached_config(), key) || throw("#{key} is NOT present in the remote config")
   end
@@ -72,7 +79,6 @@ defmodule Glasnost.RuntimeConfig do
       "english" -> "en"
     end
   end
-
 
   def fetch_external_config(url) do
     case @mix_env do

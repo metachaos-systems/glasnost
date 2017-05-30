@@ -3,7 +3,7 @@
   <!-- TODO: extract image detection into view -->
   <!-- metadata images property varies from post to post: BOTH "images" and "images" are seen in the wild -->
   <!-- FIXME: mage property is non-standard and should be removed at some time in the future -->
-  <% img_src = hd(post.json_metadata["image"] || post.json_metadata["images"] || [false] ) %>
+  <% img_src = hd(post.json_metadata["image"] || post.json_metadata["images"] || ["/images/"<> @conn.assigns.default_post_image] ) %>
   <div class="ui card" >
     <div class="image">
       <a href="/authors/<%= post.author %>/<%= post.permlink %>">

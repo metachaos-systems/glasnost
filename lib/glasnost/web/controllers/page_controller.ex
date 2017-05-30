@@ -3,13 +3,12 @@ defmodule Glasnost.Web.PageController do
   import Ecto.Query
   @posts_per_page 24
 
-
   def index(conn, params) do
     page_num = extract_page_num(params)
-    q = from c in Glasnost.Post,
-      order_by: [desc: c.id]
+    q = from c in Glasnost.Post
     posts = q
       |> Glasnost.Repo.all()
+      |> Enum.sort(&(&1.unix_epoch >= &2.unix_epoch))
       |> paginate_naively(page_num)
     render conn, "posts.html", posts: posts, current_page: page_num
   end
@@ -61,4 +60,5 @@ defmodule Glasnost.Web.PageController do
     amount = @posts_per_page*(page_num - 1)
     Enum.slice(xs, amount, @posts_per_page)
   end
+
 end

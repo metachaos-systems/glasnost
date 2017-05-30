@@ -11,6 +11,7 @@ defmodule Glasnost.Plugs.PutConfig do
         |> assign(:blog_authors, RuntimeConfig.get(:authors))
         |> assign(:about_blog_permlink, RuntimeConfig.get(:about_blog_permlink))
         |> assign(:about_blog_author, RuntimeConfig.get(:about_blog_author))
+        |> assign(:default_post_image, RuntimeConfig.get(:default_post_image))
     else
       conn
     end
