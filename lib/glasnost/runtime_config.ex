@@ -9,7 +9,9 @@ defmodule Glasnost.RuntimeConfig do
   end
 
   def init(args) do
-      if @mix_env === :dev, do: :timer.send_after(1_000, :update_config)
+     if Mix.env === :dev do
+       spawn( fn -> :timer.apply_after(1_000, GenServer, :call, [@process_name, {:update_config, ""}]) end)
+     end
      args = Map.put_new(args, :config, %{})
      {:ok, args}
   end
