@@ -17,6 +17,8 @@ use the following properties of the JSON config object for blockchain selection 
 * `"source_blockchain"`: `steem` or `golos`
 * `"about_blog_author"`: account_name (needs to be included in `authors: [...]`) in `steem` or `golos`, who posted a post with a description of the blog
 * `"about_blog_permlink"`: post`s permlink (not full url) with the description of the blog
+* `"language"`: Glasnost website interface language
+* `"default_blockchain"`: default author's source blockchain
 
 Other settings like PORT, STEEM_URL and GOLOS_URL can be configured in the Dockerfile.
 
@@ -30,6 +32,7 @@ Configuration should be valid JSON, check for validity it is possible on [jsonli
 {
   "authors": [{
     "account_name": "ontofractal",
+    "source_blockchain": "steem",
     "filters": {}
   ],
   "about_blog_permlink": "anons-open-sors-platformy-dlya-razrabotki-prilozhenii-na-blokcheine-golos-fidbek-privetstvuetsya",
@@ -37,6 +40,8 @@ Configuration should be valid JSON, check for validity it is possible on [jsonli
   "source_blockchain": "golos"
 }
 ```
+
+`source_blockchain` has a higher priority than `default_blockchain`
 
 ## Filter`s settings
 
@@ -72,7 +77,7 @@ Use usual arrays to whitelist/blacklist tags.
 
 ### Created date filter
 
-Empty  `""` or non-existent values of `only_after` и `only_before` properties are ignored.  Date format should conform to the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) standard and contain only the date part (no time or offset). 
+Empty  `""` or non-existent values of `only_after` и `only_before` properties are ignored.  Date format should conform to the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) standard and contain only the date part (no time or offset).
 
 ### Title filter
 
