@@ -22,6 +22,8 @@ docker pull ontofractal/glasnost:latest
 * `"source_blockchain"`: `steem` или `golos`
 * `"about_blog_author"`: имя автора (одного из указаных в `authors: [...]`) в `steem` или `golos`, который опубликовал пост с описанием блога
 * `"about_blog_permlink"`: permlink (не полный урл) поста с описанием блога
+* `"language"`: язык интерфейса Glasnost
+* `"default_blockchain"`: блокчейн авторов по умолчанию
 
 Как правило конфигурация приложений на Elixir происходит на этапе компиляции. Это означает, что
 для изменений такие переменных пространства, как `PORT`, `STEEM_URL` и `GOLOS_URL` необходимо внести новые значения в Dockerfile и создать новый имидж с обновленными переменными среды.
@@ -36,17 +38,17 @@ docker pull ontofractal/glasnost:latest
 {
   "authors": [{
     "account_name": "ontofractal",
+    "source_blockchain": "golos",
     "filters": {}
   }],
   "about_blog_permlink": "anons-open-sors-platformy-dlya-razrabotki-prilozhenii-na-blokcheine-golos-fidbek-privetstvuetsya",
   "about_blog_author": "ontofractal",
-  "source_blockchain": "golos"
 }
 ```
 
 ## Настройки фильтров
 
-В объектах `authors` должно присутстовать свойство `filters`, но свойства для индивидуальных фильтра могут отсутствовать.
+В объектах `authors` должно присутстовать свойство `filters`, но свойства для индивидуальных фильтров могут отсутствовать. `source_blockchain` имеет более высокий приоритет по сравнию с `default_blockchain`.
 
 Для фильтров тэгов и заглавий существует общее правило: сначала исключаются посты, которые не попадают в белый список, потом исключается посты, которые попадают в черный список.
 
