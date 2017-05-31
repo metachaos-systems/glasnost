@@ -21,15 +21,15 @@
         <%= Floki.parse(Earmark.as_html!(post.body)) |> Floki.find("p") |> Floki.text |> String.slice(0..255)%>...
       </span>
       <h4 class="ui horizontal divider header">
-        <i class="tag grey icon"></i>
-        Tags
+        <!-- <i class="tag grey icon"></i> -->
+        tags
       </h4>
 
       <div class="ui blue large labels">
         <!-- FIXME some old posts don't have any tags -->
         <%= for tag <- post.tags do %>
-        <a class="ui  label" href="/tags/<%=tag%>">
-          <%= format_tag(tag, @conn.assigns.lang) %>
+        <a class="ui label" href="/tags/<%=tag%>">
+          <%= format_tag(tag, post.blockchain) %>
         </a>
         <% end %>
       </div>

@@ -1,10 +1,10 @@
 defmodule Glasnost.Web.PageView do
   use Glasnost.Web, :view
 
-  def format_tag(eng_tag, lang) do
-    case lang do
-      "ru" -> GenServer.call(GolosJS, {:detransliterate, eng_tag})
-      "en" -> eng_tag
+  def format_tag(eng_tag, blockchain) do
+    case blockchain do
+      "golos" -> GenServer.call(GolosJS, {:detransliterate, eng_tag})
+      "steem" -> eng_tag
     end
   end
 
