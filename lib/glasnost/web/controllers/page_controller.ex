@@ -17,14 +17,18 @@ defmodule Glasnost.Web.PageController do
     q = from c in Glasnost.Post,
      where: c.author == ^author and c.permlink == ^permlink
     post = Glasnost.Repo.one(q)
-    prepared = for line <- String.split(post.body, "\n") do
+    {_, body, _} = Earmark.as_html(post.body)
+    IO.inspect body
+    prepared = for line <- String.split(body, "\n") do
        cond do
-        String.match?(line, ~r"\.png$") -> "![](#{line})" 
+        String.match?(line, ~r/(\.png|\.jpg|\.gif)/) ->
+          line = String.replace(line, ~r/<\w+>/, "")
+          line = String.replace(line, ~r"</\w+>", "")
+          "<img src=\"#{line}\"></img>"
         true -> line
        end
     end |> Enum.join("\n")
-    {_, body, _} = Earmark.as_html(prepared)
-    post = put_in(post.body, body)
+    post = put_in(post.body, prepared)
     render conn, "post.html", post: post
   end
 
