@@ -22,7 +22,7 @@ defmodule Glasnost.Web.PageController do
     url_regex = ~r/(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/
     links = for word <- String.split(text) do
        cond do
-         String.match?(word, url_regex) -> word
+         String.match?(word, url_regex) and String.match?(word, ~r/(\.png|\.jpg|\.gif)/)-> Floki.text(word)
          true -> nil
        end
     end
