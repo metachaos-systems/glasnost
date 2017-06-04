@@ -17,18 +17,21 @@ defmodule Glasnost.Web.PageController do
     q = from c in Glasnost.Post,
      where: c.author == ^author and c.permlink == ^permlink
     post = Glasnost.Repo.one(q)
-    {_, body, _} = Earmark.as_html(post.body)
+    {_, html, _} = Earmark.as_html(post.body)
+    text = IO.inspect(Floki.text(html, sep: " "))
     url_regex = ~r/(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/
-    prepared = for line <- String.split(body, "\n") do
+    links = for word <- String.split(text) do
        cond do
-        String.match?(line, url_regex) and String.match?(line, ~r/(\.png|\.jpg|\.gif)/) ->
-          IO.inspect line
-          line = String.replace(line, ~r"https://imgp.golos.io/(\w\d)+/", "")
-          String.replace(line, url_regex, "<img src=\"\\0\"></img>")
-        true -> line
+         String.match?(word, url_regex) -> word
+         true -> nil
        end
-    end |> Enum.join("\n")
-    post = put_in(post.body, prepared)
+    end
+    links = Enum.filter(links, & &1)
+    html = Enum.reduce(links, html, fn link, html ->
+      String.replace(html, link, ~s(<img src="#{link}""></img>))
+    end)
+    IO.inspect links
+    post = put_in(post.body, html)
     render conn, "post.html", post: post
   end
 
