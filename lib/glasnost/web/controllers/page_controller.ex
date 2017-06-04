@@ -18,13 +18,13 @@ defmodule Glasnost.Web.PageController do
      where: c.author == ^author and c.permlink == ^permlink
     post = Glasnost.Repo.one(q)
     {_, body, _} = Earmark.as_html(post.body)
-    IO.inspect body
+    url_regex = ~r/(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/
     prepared = for line <- String.split(body, "\n") do
        cond do
-        String.match?(line, ~r/(\.png|\.jpg|\.gif)/) ->
-          line = String.replace(line, ~r/<\w+>/, "")
-          line = String.replace(line, ~r"</\w+>", "")
-          "<img src=\"#{line}\"></img>"
+        String.match?(line, url_regex) and String.match?(line, ~r/(\.png|\.jpg|\.gif)/) ->
+          IO.inspect line
+          line = String.replace(line, ~r"https://imgp.golos.io/(\w\d)+/", "")
+          String.replace(line, url_regex, "<img src=\"\\0\"></img>")
         true -> line
        end
     end |> Enum.join("\n")
