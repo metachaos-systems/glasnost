@@ -9,18 +9,17 @@
     <a href="/authors/<%=@conn.assigns[:about_blog_author]%>/<%=@conn.assigns[:about_blog_permlink]%>" class="item"><%=naive_translate("about", @conn.assigns[:lang])%></a>
     <a href="<%=if @conn.assigns[:lang] == "ru", do: "https://golos.io", else: "https://steemit.com"%>" class="item"><%=naive_translate("about_steemlike_chain", @conn.assigns[:lang])%></a>
     <% else %>
-    <%= for %{item: item, nested: nested} <- menu_placeholder() do %>
-  <div class="ui right dropdown item">
-    More
-    <i class="dropdown icon"></i>
-    <div class="menu">
-      <div class="item">Applications</div>
-      <div class="item">International Students</div>
-      <div class="item">Scholarships</div>
-    </div>
-  </div>
-    <!-- <%= item %> -->
-    <% end %>
+    <%= for %{item: item, dropdown_items: dropdown_items} <- menu_placeholder() do %>
+        <div class="ui dropdown item">
+          <%= item %>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <%= for [link, title] <- dropdown_items do %>
+              <a href="<%= link %>" class="item"><%= title %></a>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>
