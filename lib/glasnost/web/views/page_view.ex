@@ -10,7 +10,6 @@ defmodule Glasnost.Web.PageView do
 
   def format_excerpt(post) do
     post.body_html
-    |> Earmark.as_html!()
     |> Floki.text(sep: " ")
     |> String.slice(0..255)
   end
