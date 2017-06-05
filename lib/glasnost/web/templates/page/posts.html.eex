@@ -11,25 +11,38 @@
           <!-- TODO  extract image selection into view -->
           <img src="<%= img_src %>">
         </a>
-        <a class="ui large blue ribbon label" href="/authors/<%= post.author %>">  @<%= post.author  %></a>
       </div>
     </div>
     <div class="ui twelve wide column">
-      <a class="ui huge header" href="/authors/<%= post.author %>/<%= post.permlink %>"> <%= post.title %> </a>
-      <span style="margin-bottom: 12px;color: grey;"><%= hd(String.split(NaiveDateTime.to_string(post.created))) %></span>
-      <span style="font-size: 1.2em;font-family: 'Helvetica'; line-height: 1.3;">
-        <%= format_excerpt(post) %>...
-      </span>
-      <div style="margin-top: 20px;" class="ui blue large labels">
-        <!-- FIXME some old posts don't have any tags -->
-        <%= for tag <- post.tags do %>
-        <a class="ui label" href="/tags/<%=tag%>">
-          <%= format_tag(tag, post.blockchain) %>
-        </a>
-        <% end %>
+      <div class="ui items">
+      <div class="item">
+        <div class="content">
+          <a class="header" href="/authors/<%= post.author %>/<%= post.permlink %>"><%= post.title %></a>
+          <div class="meta">
+            <span class="author" href="/authors/<%= post.author %>">
+              <i class="user icon"></i>
+               @<%= post.author  %> </span>
+            <span class="created">
+              <i class="time icon"></i>
+              <%= hd(String.split(NaiveDateTime.to_string(post.created))) %>
+          </span>
+          </div>
+          <div style="font-size: 1.2em;" class="description">
+            <%= format_excerpt(post) %>...
+          </div>
+          <div class="tags">
+            <div style="margin-top: 20px;" class="ui grey large labels">
+            <!-- FIXME some old posts don't have any tags -->
+            <%= for tag <- post.tags do %>
+            <a class="ui label" href="/tags/<%=tag%>">
+              <%= format_tag(tag, post.blockchain) %>
+            </a>
+            <% end %>
+          </div>
+          </div>
+        </div>
       </div>
-      <div class="ui large header"> <%=  %> </div>
-
+      </div>
     </div>
   </div>
   <% end %>
