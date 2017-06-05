@@ -19,9 +19,10 @@
         <div class="content">
           <a class="header" href="/authors/<%= post.author %>/<%= post.permlink %>"><%= post.title %></a>
           <div class="meta">
-            <span class="author" href="/authors/<%= post.author %>">
+            <a style="font-size: 15px; color: rgba(0,0,0,0.6);" class="author" href="/author/<%=post.author%>">
               <i class="user icon"></i>
-               @<%= post.author  %> </span>
+              <%= post.author  %>
+            </a>
             <span class="created">
               <i class="time icon"></i>
               <%= hd(String.split(NaiveDateTime.to_string(post.created))) %>
