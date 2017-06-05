@@ -9,10 +9,10 @@ defmodule Glasnost.Web.PageView do
   end
 
   def format_excerpt(post) do
-    post.body
+    post.body_html
     |> Earmark.as_html!()
-    |> Floki.text
-    |> String.slice(0..255) 
+    |> Floki.text(sep: " ")
+    |> String.slice(0..255)
   end
 
   def generate_pagination_list(current_page) do
