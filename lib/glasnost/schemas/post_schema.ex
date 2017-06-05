@@ -31,7 +31,7 @@ defmodule Glasnost.Post do
     {_, html, _} = Earmark.as_html(post["body"], %Earmark.Options{gfm: false})
     text = Floki.text(html, sep: " ")
     url_regex = ~r/(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/
-    img_links = for word <- String.split(text," ") do
+    img_links = for word <- String.split(text, [" ", "\n"]) do
        cond do
          String.match?(word, url_regex) and String.match?(word, ~r/(\.png|\.jpg|\.gif)/) ->
            Floki.text(word)
