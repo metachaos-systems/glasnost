@@ -51,9 +51,9 @@
 
 <div class="ui basic center aligned segment">
   <div class="ui pagination menu">
-    <%= for {v, i} <- generate_pagination_list(@current_page) do %>
+    <%= for {v, i} <- generate_pagination_list(@conn.assigns.page_num) do %>
     <!-- FIXME: extract href generation to view -->
-    <a class="<%=if v == @current_page, do: "active" %> item"
+    <a class="<%=if v == @conn.assigns.page_num, do: "active" %> item"
       href="<%= @conn.request_path <> "?" <> URI.encode_query(%{"page"=> v}) %>">
       <%= v %>
     </a>
