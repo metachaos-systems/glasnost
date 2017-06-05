@@ -18,7 +18,7 @@
       <a class="ui huge header" href="/authors/<%= post.author %>/<%= post.permlink %>"> <%= post.title %> </a>
       <span style="margin-bottom: 12px;color: grey;"><%= hd(String.split(NaiveDateTime.to_string(post.created))) %></span>
       <span style="font-size: 1.2em;font-family: 'Helvetica'; line-height: 1.3;">
-        <%= Floki.parse(Earmark.as_html!(post.body)) |> Floki.find("p") |> Floki.text |> String.slice(0..255)%>...
+        <%= format_excerpt(post) %>...
       </span>
       <div style="margin-top: 20px;" class="ui blue large labels">
         <!-- FIXME some old posts don't have any tags -->
