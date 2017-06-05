@@ -5,7 +5,7 @@
   <!-- FIXME: mage property is non-standard and should be removed at some time in the future -->
   <% img_src = hd(post.json_metadata["image"] || post.json_metadata["images"] || ["/images/"<> @conn.assigns.default_post_image] ) %>
   <div class="ui stretched row" >
-    <div class="ui seven wide column">
+    <div class="ui four wide column">
       <div class="ui image">
         <a href="/authors/<%= post.author %>/<%= post.permlink %>">
           <!-- TODO  extract image selection into view -->
@@ -14,18 +14,13 @@
         <a class="ui large blue ribbon label" href="/authors/<%= post.author %>">  @<%= post.author  %></a>
       </div>
     </div>
-    <div class="ui nine wide column">
+    <div class="ui twelve wide column">
       <a class="ui huge header" href="/authors/<%= post.author %>/<%= post.permlink %>"> <%= post.title %> </a>
       <span style="margin-bottom: 12px;color: grey;"><%= hd(String.split(NaiveDateTime.to_string(post.created))) %></span>
       <span style="font-size: 1.2em;font-family: 'Helvetica'; line-height: 1.3;">
         <%= Floki.parse(Earmark.as_html!(post.body)) |> Floki.find("p") |> Floki.text |> String.slice(0..255)%>...
       </span>
-      <h4 class="ui horizontal divider header">
-        <!-- <i class="tag grey icon"></i> -->
-        tags
-      </h4>
-
-      <div class="ui blue large labels">
+      <div style="margin-top: 20px;" class="ui blue large labels">
         <!-- FIXME some old posts don't have any tags -->
         <%= for tag <- post.tags do %>
         <a class="ui label" href="/tags/<%=tag%>">
