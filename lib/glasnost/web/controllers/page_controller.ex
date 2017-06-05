@@ -17,22 +17,7 @@ defmodule Glasnost.Web.PageController do
     q = from c in Glasnost.Post,
      where: c.author == ^author and c.permlink == ^permlink
     post = Glasnost.Repo.one(q)
-    {_, html, _} = Earmark.as_html(post.body, %Earmark.Options{gfm: false})
-    text = Floki.text(html, sep: " ")
-    url_regex = ~r/(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/
-    img_links = for word <- String.split(text," ") do
-       cond do
-         String.match?(word, url_regex) and String.match?(word, ~r/(\.png|\.jpg|\.gif)/) ->
-           Floki.text(word)
-         true -> nil
-       end
-    end
-    img_links = Enum.filter(img_links, & &1) |> Enum.uniq
-    html = Enum.reduce(img_links, html, fn link, html ->
-      String.replace(html, link, ~s(<img src="#{link}""></img>))
-    end)
-    # IO.inspect links
-    post = put_in(post.body, html)
+      |> Glasnost.Post.prepare_post_for_publishing()
     render conn, "post.html", post: post
   end
 
