@@ -43,6 +43,32 @@ Configuration should be valid JSON, check for validity it is possible on [jsonli
 
 `source_blockchain` has a higher priority than `default_blockchain`
 
+## Custom menu configuration
+
+You can add several top level menu items and dropdown items for each of them At this moment top level items can't be configured to links. Use the following structure for dropdown items: `["title", "link"]`.
+```
+{
+  "menu": [{
+    "item": "Golos",
+    "dropdown_items": [
+      [
+        "Анонс Glasnost",
+        "https://golos.io/ru--otkrytyij-kod/@glasnost/glasnost-v0-1-zapusk-open-sors-servera-dlya-prilozhenii-na-platforme-golos"
+      ]
+    ]
+  }, {
+    "item": "Steem",
+    "dropdown_items": [
+      [
+        "Glasnost announcement",
+        "http://glasnost.steempunks.com/authors/ontofractal/ann-introducing-glasnost-alpha-open-source-blog-and-app-server-for-steem-golos-blockchains"
+      ]
+    ]
+  }],
+}
+
+```
+
 ## Filter`s settings
 
 In the `authors` objects, the` filters` property must exist even if it's an empty object `{}`, but the properties for  individual filters may be absent.
