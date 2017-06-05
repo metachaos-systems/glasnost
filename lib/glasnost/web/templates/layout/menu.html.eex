@@ -9,7 +9,7 @@
     <a href="/authors/<%=@conn.assigns[:about_blog_author]%>/<%=@conn.assigns[:about_blog_permlink]%>" class="item"><%=naive_translate("about", @conn.assigns[:lang])%></a>
     <a href="<%=if @conn.assigns[:lang] == "ru", do: "https://golos.io", else: "https://steemit.com"%>" class="item"><%=naive_translate("about_steemlike_chain", @conn.assigns[:lang])%></a>
     <% else %>
-    <%= for %{item: item, dropdown_items: dropdown_items} <- IO.inspect(@conn.assigns.menu) do %>
+    <%= for %{item: item, dropdown_items: dropdown_items} <- @conn.assigns.menu do %>
         <div class="ui dropdown item">
           <%= item %>
           <i class="dropdown icon"></i>
