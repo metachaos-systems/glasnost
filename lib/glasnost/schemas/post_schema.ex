@@ -8,6 +8,7 @@ defmodule Glasnost.Post do
     field :permlink, :string
     field :title, :string
     field :body, :string
+    field :body_html, :string
     field :tags, {:array, :string}
     field :json_metadata, :map
     field :category, :string
