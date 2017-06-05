@@ -32,7 +32,8 @@ defmodule Glasnost.Worker.AuthorSync do
       |> Post.filter_by(:created, filters[:created])
       |> Enum.map( &Map.update!(&1, "created",  fn created -> NaiveDateTime.from_iso8601!(created) end))
       |> Enum.map( &Map.put(&1, "unix_epoch", &1["created"] |> DateTime.from_naive!("Etc/UTC") |> DateTime.to_unix()))
-
+      |> Enum.map( &Glasnost.Post.prepare_post_for_publishing/1)
+      
     for post <- posts do
          save_to_db(post, state.source_blockchain)
     end

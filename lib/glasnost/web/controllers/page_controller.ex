@@ -17,7 +17,6 @@ defmodule Glasnost.Web.PageController do
     q = from c in Glasnost.Post,
      where: c.author == ^author and c.permlink == ^permlink
     post = Glasnost.Repo.one(q)
-      |> Glasnost.Post.prepare_post_for_publishing()
     render conn, "post.html", post: post
   end
 

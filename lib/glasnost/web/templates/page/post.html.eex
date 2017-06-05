@@ -1,6 +1,6 @@
 <div class="ui main text container">
     <h1 class="ui header"><%= @post.title %> </h1>
     <div class="">
-      <%= raw(@post.body) %>
+      <%= raw(@post.body_html) %>
     </div>
   </div>

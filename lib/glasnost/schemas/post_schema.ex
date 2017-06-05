@@ -19,7 +19,7 @@ defmodule Glasnost.Post do
 
   def changeset(comment, params) do
     comment
-    |> cast(params, [:id, :author, :title, :json_metadata, :permlink, :body, :tags, :category, :created, :blockchain, :unix_epoch])
+    |> cast(params, [:id, :author, :title, :json_metadata, :permlink, :body, :tags, :category, :created, :blockchain, :body_html, :unix_epoch])
     |> unique_constraint(:id, name: :golos_comments_id_index)
   end
 
@@ -28,7 +28,7 @@ defmodule Glasnost.Post do
   end
 
   def find_img_urls_and_replace_with_tags(post) do
-    {_, html, _} = Earmark.as_html(post.body, %Earmark.Options{gfm: false})
+    {_, html, _} = Earmark.as_html(post["body"], %Earmark.Options{gfm: false})
     text = Floki.text(html, sep: " ")
     url_regex = ~r/(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/
     img_links = for word <- String.split(text," ") do
@@ -42,6 +42,6 @@ defmodule Glasnost.Post do
     html = Enum.reduce(img_links, html, fn link, html ->
       String.replace(html, link, ~s(<img src="#{link}""></img>))
     end)
-    put_in(post.body, html)
+    put_in(post, ["body_html"], html)
   end
 end
