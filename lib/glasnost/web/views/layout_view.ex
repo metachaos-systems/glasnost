@@ -28,4 +28,11 @@ defmodule Glasnost.Web.LayoutView do
       "en" => "steem-logo.png",
       }}[key][lang] || "eye.png"
   end
+
+
+  def menu_placeholder do
+    [
+      %{item: "item 1", nested: [["link 1", "title 1"], ["link 2", "title 2"]]}
+    ]
+  end
 end

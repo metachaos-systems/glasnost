@@ -1,11 +1,26 @@
-    <div class="ui large fixed inverted menu">
-      <div class="ui container">
-        <a href="/" class="header item">
-          <img class="logo" src="/images/<%=naive_image_chooser("logo", @conn.assigns[:lang])%>">
-        </a>
-        <a href="/" class="item"><%=naive_translate("home", @conn.assigns[:lang])%></a>
-        <!-- FIXME extract to LayoutView -->
-        <a href="/authors/<%=@conn.assigns[:about_blog_author]%>/<%=@conn.assigns[:about_blog_permlink]%>" class="item"><%=naive_translate("about", @conn.assigns[:lang])%></a>
-        <a href="<%=if @conn.assigns[:lang] == "ru", do: "https://golos.io", else: "https://steemit.com"%>" class="item"><%=naive_translate("about_steemlike_chain", @conn.assigns[:lang])%></a>
-      </div>
+<div class="ui large fixed inverted menu">
+  <div class="ui container">
+    <a href="/" class="header item">
+      <img class="logo" src="/images/<%=naive_image_chooser("logo", @conn.assigns[:lang])%>">
+    </a>
+    <%= if false do %>
+    <a href="/" class="item"><%=naive_translate("home", @conn.assigns[:lang])%></a>
+    <!-- FIXME extract to LayoutView -->
+    <a href="/authors/<%=@conn.assigns[:about_blog_author]%>/<%=@conn.assigns[:about_blog_permlink]%>" class="item"><%=naive_translate("about", @conn.assigns[:lang])%></a>
+    <a href="<%=if @conn.assigns[:lang] == "ru", do: "https://golos.io", else: "https://steemit.com"%>" class="item"><%=naive_translate("about_steemlike_chain", @conn.assigns[:lang])%></a>
+    <% else %>
+    <%= for %{item: item, nested: nested} <- menu_placeholder() do %>
+  <div class="ui right dropdown item">
+    More
+    <i class="dropdown icon"></i>
+    <div class="menu">
+      <div class="item">Applications</div>
+      <div class="item">International Students</div>
+      <div class="item">Scholarships</div>
     </div>
+  </div>
+    <!-- <%= item %> -->
+    <% end %>
+    <% end %>
+  </div>
+</div>

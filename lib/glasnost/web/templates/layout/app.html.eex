@@ -9,7 +9,8 @@
   <title>Glasnost: <%= naive_translate("head title", @conn.assigns[:lang])%></title>
   <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css"></link>
-
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
 </head>
 
 <body>
