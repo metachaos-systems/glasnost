@@ -47,6 +47,7 @@ defmodule Glasnost.RuntimeConfig do
 
   def update(url), do: GenServer.call(@process_name, {:update_config, url})
 
+
   def get(:author_account_names) do
     get_cached_config()
       |> Map.get(:authors)
@@ -58,6 +59,12 @@ defmodule Glasnost.RuntimeConfig do
       "russian" -> "default_img_golos.jpg"
       "english" -> "default_img_steem.jpg"
     end
+  end
+
+  def get(key = :upgrade_insecure_requests) do
+    upgrade? = Map.get(get_cached_config(), key)
+    if is_nil(upgrade?), do: throw("#{key} is NOT present in the remote config")
+    upgrade?
   end
 
   def get(key) when is_atom(key) do

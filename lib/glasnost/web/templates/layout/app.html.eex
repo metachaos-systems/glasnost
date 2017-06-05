@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="">
+  <%= if @conn.assigns.upgrade_insecure_requests do %>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <% end %>
   <title>Glasnost: <%= naive_translate("head title", @conn.assigns[:lang])%></title>
   <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css"></link>

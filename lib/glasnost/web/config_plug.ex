@@ -13,6 +13,7 @@ defmodule Glasnost.Plugs.PutConfig do
         |> assign(:about_blog_author, RuntimeConfig.get(:about_blog_author))
         |> assign(:default_post_image, RuntimeConfig.get(:default_post_image))
         |> assign(:menu, RuntimeConfig.get(:menu))
+        |> assign(:upgrade_insecure_requests, RuntimeConfig.get(:upgrade_insecure_requests))
     else
       conn
     end
