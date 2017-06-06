@@ -24,6 +24,7 @@ docker pull ontofractal/glasnost:latest
 * `"about_blog_permlink"`: permlink (не полный урл) поста с описанием блога
 * `"language"`: язык интерфейса Glasnost
 * `"default_blockchain"`: блокчейн авторов по умолчанию
+*  `"upgrade_insecure_requests"`: true|false
 
 Как правило конфигурация приложений на Elixir происходит на этапе компиляции. Это означает, что
 для изменений такие переменных пространства, как `PORT`, `STEEM_URL` и `GOLOS_URL` необходимо внести новые значения в Dockerfile и создать новый имидж с обновленными переменными среды.
@@ -47,6 +48,33 @@ docker pull ontofractal/glasnost:latest
 ```
 
 `source_blockchain` имеет более высокий приоритет по сравнению с `default_blockchain`.
+
+## Конфигурация меню
+
+На данный момент в меню возможно настроить несколько (ограничение по ширине на мобильных устройствах) элементов верхнего уровня. Для каждого элемента верхнего уровня можно добавить элементы дропдауна. Верхний элемент не может быть ссылкой. Для элементов дропдауна используется следующий формат: `["title", "link"]`.
+Пример:
+```
+{
+  "menu": [{
+    "item": "Golos",
+    "dropdown_items": [
+      [
+        "Анонс Glasnost",
+        "https://golos.io/ru--otkrytyij-kod/@glasnost/glasnost-v0-1-zapusk-open-sors-servera-dlya-prilozhenii-na-platforme-golos"
+      ]
+    ]
+  }, {
+    "item": "Steem",
+    "dropdown_items": [
+      [
+        "Glasnost announcement",
+        "http://glasnost.steempunks.com/authors/ontofractal/ann-introducing-glasnost-alpha-open-source-blog-and-app-server-for-steem-golos-blockchains"
+      ]
+    ]
+  }],
+}
+
+```
 
 ## Настройки фильтров
 

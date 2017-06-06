@@ -19,6 +19,7 @@ use the following properties of the JSON config object for blockchain selection 
 * `"about_blog_permlink"`: post`s permlink (not full url) with the description of the blog
 * `"language"`: Glasnost website interface language
 * `"default_blockchain"`: default author's source blockchain
+*  `"upgrade_insecure_requests"`: true|false
 
 Other settings like PORT, STEEM_URL and GOLOS_URL can be configured in the Dockerfile.
 
