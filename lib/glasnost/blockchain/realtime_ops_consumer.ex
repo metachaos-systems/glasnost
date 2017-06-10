@@ -10,7 +10,8 @@ defmodule Glasnost.Prototypes.OpsConsumer do
     {:consumer, state, subscribe_to: state[:subscribe_to]}
   end
 
-  def handle_events(events, _from, blockchain: bl) do
+  def handle_events(events, _from, state ) do
+    bl = state[:blockchain]
     for op <- events do
       Glasnost.ChannelBroadcaster.send(op, blockchain: bl)
     end
