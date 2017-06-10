@@ -1,4 +1,5 @@
 defmodule Glasnost.Prototypes.RealtimeSup do
+  alias Glasnost.Prototypes
   use Supervisor
   require Logger
 
@@ -8,14 +9,16 @@ defmodule Glasnost.Prototypes.RealtimeSup do
 
   def init(arg) do
     Logger.info("Full chain sync supervisor is initializing... ")
-    client = Module.concat(
-      Steemex, Stage.StructuredOps.ProducerConsumer
-    )
-    ops_consumer_subs = [client]
+    struct_ops = Stage.StructuredOps.ProducerConsumer
+    steem_ops_prod = [Module.concat(Steemex, struct_ops)]
+    golos_ops_prod = [Module.concat(Golos, struct_ops)]
     children = [
-      worker(
-      Glasnost.Prototypes.OpsConsumer,
-        [[blockchain: :steem, subscribe_to: ops_consumer_subs], []])
+      worker(Prototypes.OpsConsumer, [
+          [blockchain: :steem, subscribe_to: steem_ops_prod], []
+        ], id: :steem_ops_cons),
+      worker(Prototypes.OpsConsumer, [
+          [blockchain: :golos, subscribe_to: golos_ops_prod], []
+        ],id: :golos_ops_cons)
     ]
     supervise(children, strategy: :one_for_one)
   end
