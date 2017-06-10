@@ -10,9 +10,9 @@ defmodule Glasnost.Prototypes.OpsConsumer do
     {:consumer, state, subscribe_to: state[:subscribe_to]}
   end
 
-  def handle_events(events, _from, state) do
+  def handle_events(events, _from, blockchain: bl) do
     for op <- events do
-      Glasnost.ChannelBroadcaster.send(op, blockchain: :steem)
+      Glasnost.ChannelBroadcaster.send(op, blockchain: bl)
     end
     {:noreply, [], state}
   end

@@ -15,7 +15,7 @@ defmodule Glasnost.Prototypes.RealtimeSup do
     children = [
       worker(
       Glasnost.Prototypes.OpsConsumer,
-        [[subscribe_to: ops_consumer_subs], []])
+        [[blockchain: :steem, subscribe_to: ops_consumer_subs], []])
     ]
     supervise(children, strategy: :one_for_one)
   end

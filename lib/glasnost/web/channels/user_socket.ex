@@ -3,6 +3,7 @@ defmodule Glasnost.Web.UserSocket do
 
   ## Channels
   channel "channel:steem_*", Glasnost.Web.SteemEventsChannel
+  channel "channel:golos_*", Glasnost.Web.GolosEventsChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
