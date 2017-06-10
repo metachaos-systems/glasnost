@@ -2,7 +2,7 @@ defmodule Glasnost.Web.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", Glasnost.Web.RoomChannel
+  channel "channel:steem_*", Glasnost.Web.SteemEventsChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
