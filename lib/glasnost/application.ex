@@ -16,6 +16,7 @@ defmodule Glasnost.Application do
       worker(Glasnost.RuntimeConfig, [%{},[name: :runtime_config]]),
       supervisor(Glasnost.SimpleAuthenticator, []),
       supervisor(Glasnost.Orchestrator.AuthorSyncSup, []),
+      supervisor(Glasnost.Prototypes.RealtimeSup, []),
       worker(Exos.Proc, [{"node port.js",0,cd: "./lib/ports/js"}] )
       # Start your own worker by calling: Glasnost.Worker.start_link(arg1, arg2, arg3)
       # worker(Glasnost.Worker, [arg1, arg2, arg3]),

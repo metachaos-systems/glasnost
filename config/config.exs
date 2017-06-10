@@ -27,10 +27,12 @@ config :phoenix, :template_engines,
 
 
 config :ex_golos,
-  url: System.get_env("GOLOS_URL")
+  url: System.get_env("GOLOS_URL"),
+  activate_stage_sup: true
 
 config :steemex,
-  url: System.get_env("STEEM_URL")
+  url: System.get_env("STEEM_URL"),
+  activate_stage_sup: true
 
 config :glasnost, Glasnost.Repo,
   adapter: Ecto.Adapters.Mnesia
