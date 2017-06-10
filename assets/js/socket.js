@@ -52,20 +52,43 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // from connect if you don't care about authentication.
 
 socket.connect()
-let streamContainer = $('#realtime-stream')
-let streamAuthor = $('#realtime-stream-author')
+let steemPostTitle = $('#steemPostTitle')
+let steemPostAuthor = $('#steemPostAuthor')
+
+let golosPostTitle = $('#golosPostTitle')
+let golosPostAuthor = $('#golosPostAuthor')
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("channel:steem_events", {})
-channel.join()
+const channelConfigs = {
+  steem: {channel: "channel:steem_events", baseUrl: "https://steemit.com"},
+  golos: {channel: "channel:golos_events", baseUrl: "https://golos.io"}
+}
+
+const selectedConfig = channelConfigs.steem
+let steemChannel = socket.channel(channelConfigs.steem.channel, {})
+let golosChannel = socket.channel(channelConfigs.golos.channel, {})
+
+steemChannel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
 
-channel.on("new_comment", (comment) =>  {
+steemChannel.on("new_comment", (comment) =>  {
+  if (comment.title && !comment.parent_author && comment.last_update === comment.created) {
+    steemPostTitle.text(comment.title)
+    steemPostTitle.attr('href', channelConfigs.steem.baseUrl + comment.url)
+    steemPostAuthor.text(comment.author)
+  }
+})
+
+golosChannel.join()
+  .receive("ok", resp => { console.log("Joined successfully", resp) })
+  .receive("error", resp => { console.log("Unable to join", resp) })
+
+golosChannel.on("new_comment", (comment) =>  {
   console.log(comment)
   if (comment.title && !comment.parent_author && comment.last_update === comment.created) {
-    streamContainer.text(comment.title)
-    streamContainer.attr('href', comment.url)
-    streamAuthor.text(comment.author)
+    golosPostTitle.text(comment.title)
+    golosPostTitle.attr('href', channelConfigs.golos.baseUrl + comment.url)
+    golosPostAuthor.text(comment.author)
   }
 })
 export default socket

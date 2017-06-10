@@ -1,70 +1,79 @@
-<div  class="ui one grid">
-  <div class="ui column">
-    <div class="ui header blue tall stacked segment">
-      @<span id="realtime-stream-author"></span> posted:
-    <a href="" id="realtime-stream">Waiting for the blockchain event...</a>
-    </div>
-    </div>
-  </div>
-<div class="ui vertically divided streched stackable grid">
-  <%= for post <- @posts do %>
-  <!-- TODO: extract image detection into view -->
-  <!-- metadata images property varies from post to post: BOTH "images" and "images" are seen in the wild -->
-  <!-- FIXME: mage property is non-standard and should be removed at some time in the future -->
-  <% img_src = hd(post.json_metadata["image"] || post.json_metadata["images"] || ["/images/"<> @conn.assigns.default_post_image] ) %>
-  <div class="ui stretched row" >
-    <div class="ui four wide column">
-      <div class="ui image">
-        <a href="/authors/<%= post.author %>/<%= post.permlink %>">
-          <!-- TODO  extract image selection into view -->
-          <img src="<%= img_src %>">
-        </a>
+<div  class="ui  grid">
+  <div class="row stretched">
+
+    <div class="eight wide column">
+      <div class="ui header blue tall stacked segment">
+        @<span id="steemPostAuthor"></span> posted:
+        <a href="" id="steemPostTitle">...</a>
       </div>
-    </div>
-    <div class="ui twelve wide column">
-      <div class="ui items">
-      <div class="item">
-        <div class="content">
-          <a class="header" href="/authors/<%= post.author %>/<%= post.permlink %>"><%= post.title %></a>
-          <div class="meta">
-            <a style="font-size: 15px; color: rgba(0,0,0,0.6);" class="author" href="/author/<%=post.author%>">
-              <i class="user icon"></i>
-              <%= post.author  %>
-            </a>
-            <span class="created">
-              <i class="time icon"></i>
-              <%= hd(String.split(NaiveDateTime.to_string(post.created))) %>
-          </span>
-          </div>
-          <div style="font-size: 1.2em;" class="description">
-            <%= format_excerpt(post) %>...
-          </div>
-          <div class="tags">
-            <div style="margin-top: 20px;" class="ui grey large labels">
-            <!-- FIXME some old posts don't have any tags -->
-            <%= for tag <- post.tags do %>
-            <a class="ui label" href="/tags/<%=tag%>">
-              <%= format_tag(tag, post.blockchain) %>
-            </a>
-            <% end %>
-          </div>
+    </div><div class="eight wide column">
+      <div class="ui header blue tall stacked segment">
+        @<span id="golosPostAuthor"></span> опубликовал:
+        <a href="" id="golosPostTitle">...</a>
+      </div>
+    </div>  </div>
+
+
+  </div>
+  <div class="ui vertically divided streched stackable grid">
+    <%= for post <- @posts do %>
+    <!-- TODO: extract image detection into view -->
+    <!-- metadata images property varies from post to post: BOTH "images" and "images" are seen in the wild -->
+    <!-- FIXME: mage property is non-standard and should be removed at some time in the future -->
+    <% img_src = hd(post.json_metadata["image"] || post.json_metadata["images"] || ["/images/"<> @conn.assigns.default_post_image] ) %>
+    <div class="ui stretched row" >
+      <div class="ui four wide column">
+        <div class="ui image">
+          <a href="/authors/<%= post.author %>/<%= post.permlink %>">
+            <!-- TODO  extract image selection into view -->
+            <img src="<%= img_src %>">
+          </a>
+        </div>
+      </div>
+      <div class="ui twelve wide column">
+        <div class="ui items">
+          <div class="item">
+            <div class="content">
+              <a class="header" href="/authors/<%= post.author %>/<%= post.permlink %>"><%= post.title %></a>
+              <div class="meta">
+                <a style="font-size: 15px; color: rgba(0,0,0,0.6);" class="author" href="/author/<%=post.author%>">
+                  <i class="user icon"></i>
+                  <%= post.author  %>
+                </a>
+                <span class="created">
+                  <i class="time icon"></i>
+                  <%= hd(String.split(NaiveDateTime.to_string(post.created))) %>
+                </span>
+              </div>
+              <div style="font-size: 1.2em;" class="description">
+                <%= format_excerpt(post) %>...
+              </div>
+              <div class="tags">
+                <div style="margin-top: 20px;" class="ui grey large labels">
+                  <!-- FIXME some old posts don't have any tags -->
+                  <%= for tag <- post.tags do %>
+                  <a class="ui label" href="/tags/<%=tag%>">
+                    <%= format_tag(tag, post.blockchain) %>
+                  </a>
+                  <% end %>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      </div>
     </div>
-  </div>
-  <% end %>
-</div>
-
-<div class="ui basic center aligned segment">
-  <div class="ui pagination menu">
-    <%= for {v, i} <- generate_pagination_list(@conn.assigns.page_num) do %>
-    <!-- FIXME: extract href generation to view -->
-    <a class="<%=if v == @conn.assigns.page_num, do: "active" %> item"
-      href="<%= @conn.request_path <> "?" <> URI.encode_query(%{"page"=> v}) %>">
-      <%= v %>
-    </a>
     <% end %>
   </div>
-</div>
+
+  <div class="ui basic center aligned segment">
+    <div class="ui pagination menu">
+      <%= for {v, i} <- generate_pagination_list(@conn.assigns.page_num) do %>
+      <!-- FIXME: extract href generation to view -->
+      <a class="<%=if v == @conn.assigns.page_num, do: "active" %> item"
+        href="<%= @conn.request_path <> "?" <> URI.encode_query(%{"page"=> v}) %>">
+        <%= v %>
+      </a>
+      <% end %>
+    </div>
+  </div>
