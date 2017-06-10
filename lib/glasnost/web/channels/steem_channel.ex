@@ -5,7 +5,7 @@ defmodule Glasnost.Web.SteemEventsChannel do
     {:ok, socket}
   end
 
-  def join("room:" <> _private_room_id, _params, _socket) do
+  def join("channel:" <> _private_room_id, _params, _socket) do
     {:error, %{reason: "unauthorized"}}
   end
 
