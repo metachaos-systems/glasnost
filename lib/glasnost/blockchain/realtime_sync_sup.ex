@@ -14,11 +14,11 @@ defmodule Glasnost.Prototypes.RealtimeSup do
     golos_ops_prod = [Module.concat(Golos, struct_ops)]
     children = [
       worker(Prototypes.OpsConsumer, [
-          [blockchain: :steem, subscribe_to: steem_ops_prod], []
-        ], id: :steem_ops_cons),
+          [blockchain: :steem, subscribe_to: steem_ops_prod], []],
+           id: :steem_ops_consumer),
       worker(Prototypes.OpsConsumer, [
-          [blockchain: :golos, subscribe_to: golos_ops_prod], []
-        ],id: :golos_ops_cons)
+          [blockchain: :golos, subscribe_to: golos_ops_prod], [] ],
+          id: :golos_ops_consumer)
     ]
     supervise(children, strategy: :one_for_one)
   end
