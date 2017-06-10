@@ -1,6 +1,11 @@
-<div id="realtime-stream" class="ui grid">
-
-</div>
+<div  class="ui one grid">
+  <div class="ui column">
+    <div class="ui header blue tall stacked segment">
+      @<span id="realtime-stream-author"></span> posted:
+    <a href="" id="realtime-stream">Waiting for the blockchain event...</a>
+    </div>
+    </div>
+  </div>
 <div class="ui vertically divided streched stackable grid">
   <%= for post <- @posts do %>
   <!-- TODO: extract image detection into view -->

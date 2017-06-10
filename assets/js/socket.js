@@ -53,15 +53,19 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 
 socket.connect()
 let streamContainer = $('#realtime-stream')
+let streamAuthor = $('#realtime-stream-author')
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("channel:golos_events", {})
+let channel = socket.channel("channel:steem_events", {})
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
 
 channel.on("new_comment", (comment) =>  {
-  if (comment.title) {
+  console.log(comment)
+  if (comment.title && !comment.parent_author && comment.last_update === comment.created) {
     streamContainer.text(comment.title)
+    streamContainer.attr('href', comment.url)
+    streamAuthor.text(comment.author)
   }
 })
 export default socket
