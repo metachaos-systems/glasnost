@@ -18,7 +18,7 @@
       <div class="ui four wide column">
         <div class="ui image">
           <a href="/authors/<%= post.author %>/<%= post.permlink %>">
-            <img src="<%= generate_img_for_post(@conn, post)) %>">
+            <img src="<%= generate_img_for_post(@conn, post) %>">
           </a>
         </div>
       </div>
@@ -43,7 +43,7 @@
               <div class="tags">
                 <div style="margin-top: 20px;" class="ui grey large labels">
                   <!-- FIXME some old posts don't have any tags -->
-                  <%= for tag <- post[:tags] || [] do %>
+                  <%= for tag <- post.tags || [] do %>
                   <a class="ui label" href="/tags/<%=tag%>">
                     <%= format_tag(tag, post.blockchain) %>
                   </a>
