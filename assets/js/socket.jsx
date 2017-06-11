@@ -119,7 +119,7 @@ const feedEvent = (comment, chain) => {
             return []
         }
     }
-    return <Feed.Event key={comment.id}>
+    return <Feed.Event style={{marginTop: "10px", marginBottom: "10px"}} key={comment.id}>
         <Feed.Label>
         </Feed.Label>
         <Feed.Content>
@@ -132,8 +132,9 @@ const feedEvent = (comment, chain) => {
             <Feed.Extra images>
                 {generateImages(comment)}
             </Feed.Extra>
+
+            <Divider/>
         </Feed.Content>
-        <Divider/>
     </Feed.Event>
 }
 
