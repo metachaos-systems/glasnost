@@ -43,7 +43,7 @@
               <div class="tags">
                 <div style="margin-top: 20px;" class="ui grey large labels">
                   <!-- FIXME some old posts don't have any tags -->
-                  <%= for tag <- post.tags do %>
+                  <%= for tag <- post[:tags] || [] do %>
                   <a class="ui label" href="/tags/<%=tag%>">
                     <%= format_tag(tag, post.blockchain) %>
                   </a>
