@@ -14,13 +14,11 @@
   </div>
   <div class="ui vertically divided streched stackable grid">
     <%= for post <- @posts do %>
-    <% img_src =  generate_img_for_post(@conn, post)) %>
     <div class="ui stretched row" >
       <div class="ui four wide column">
         <div class="ui image">
           <a href="/authors/<%= post.author %>/<%= post.permlink %>">
-            <!-- TODO  extract image selection into view -->
-            <img src="<%= img_src %>">
+            <img src="<%= generate_img_for_post(@conn, post)) %>">
           </a>
         </div>
       </div>
