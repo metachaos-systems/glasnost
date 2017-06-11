@@ -34,7 +34,7 @@
                 </a>
                 <span class="created">
                   <i class="time icon"></i>
-                  <%= hd(String.split(NaiveDateTime.to_string(post.created))) %>
+                  <%=  format_created(post) %>
                 </span>
               </div>
               <div style="font-size: 1.2em;" class="description">
