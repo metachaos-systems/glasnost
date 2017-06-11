@@ -16,6 +16,7 @@ use Mix.Config
 config :glasnost, Glasnost.Web.Endpoint,
   on_init: {Glasnost.Web.Endpoint, :load_from_system_env, []},
   url: [host: "localhost", port: 80],
+  check_origin: false, # TODO: use runtime configuration?
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Disabled until mnesia issue is fixes

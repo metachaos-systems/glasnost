@@ -3,12 +3,7 @@ defmodule Glasnost.Web.AdminController do
   alias Glasnost.{SimpleAuthenticator,RuntimeConfig}
 
   def index(conn, _params) do
-    password_saved = SimpleAuthenticator.password_saved?
-    if password_saved do
-      render conn, "index.html"
-    else
-      redirect conn, to: "/admin/onboarding"
-    end
+    render conn, "index.html"
   end
 
   def command_and_control(conn, %{"admin_ops" => admin_ops}) do
@@ -26,19 +21,19 @@ defmodule Glasnost.Web.AdminController do
     redirect(conn, to: "/admin")
   end
 
-  def onboarding(conn, _params) do
-    password_saved = SimpleAuthenticator.password_saved?
-    if password_saved do
-      redirect conn, to: "/admin"
-    else
-      render conn, "onboarding.html", password: SimpleAuthenticator.get_password, password_saved: password_saved
-    end
-  end
+  # def onboarding(conn, _params) do
+  #   password_saved = SimpleAuthenticator.password_saved?
+  #   if password_saved do
+  #     redirect conn, to: "/admin"
+  #   else
+  #     render conn, "onboarding.html", password: SimpleAuthenticator.get_password, password_saved: password_saved
+  #   end
+  # end
 
-  def mark_password_as_saved(conn, _params)  do
-    SimpleAuthenticator.mark_password_as_saved()
-    conn
-    |> put_flash(:info, "Password saved")
-    |> redirect(to: "/admin")
-  end
+  # def mark_password_as_saved(conn, _params)  do
+  #   SimpleAuthenticator.mark_password_as_saved()
+  #   conn
+  #   |> put_flash(:info, "Password saved")
+  #   |> redirect(to: "/admin")
+  # end
 end
