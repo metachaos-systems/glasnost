@@ -22,6 +22,7 @@ defmodule Glasnost.Web.Router do
     get "/posts/:permlink", PageController, :show
     get "/authors/:author", PageController, :authors
     get "/authors/:author/:permlink", PageController, :show
+    get "/streaming", PageController, :streaming_demo
     get "/admin", AdminController, :index
     get "/admin/onboarding", AdminController, :onboarding
     post "/admin/mark_password_as_saved", AdminController, :mark_password_as_saved

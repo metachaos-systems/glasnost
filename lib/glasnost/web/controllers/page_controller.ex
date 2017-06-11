@@ -5,6 +5,10 @@ defmodule Glasnost.Web.PageController do
 
   plug :extract_and_put_page_num
 
+  def streaming_demo(conn, _params) do
+    render conn, "streaming.html.eex"
+  end
+
   def index(conn, params) do
     q = from c in Glasnost.Post
     posts = q
