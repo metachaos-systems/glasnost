@@ -1,15 +1,2 @@
-<div  class="ui  grid">
-  <div class="row stretched">
-    <div class="eight wide column">
-      <div class="ui header blue tall stacked segment">
-        @<span id="steemPostAuthor"></span> posted:
-        <a href="" id="steemPostTitle">...</a>
-      </div>
-    </div><div class="eight wide column">
-      <div class="ui header blue tall stacked segment">
-        @<span id="golosPostAuthor"></span> опубликовал:
-        <a href="" id="golosPostTitle">...</a>
-      </div>
-    </div>
-  </div>
+<div id="realtime-demo" class="ui grid ">
 </div>

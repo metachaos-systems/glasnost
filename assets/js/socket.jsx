@@ -4,6 +4,8 @@
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/web/endpoint.ex":
 import {Socket} from "phoenix"
+import React, {Component} from "react"
+import ReactDOM from "react-dom"
 
 let socket = new Socket("/socket", {params: {token: window.userToken}})
 
@@ -52,17 +54,11 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // from connect if you don't care about authentication.
 
 socket.connect()
-let steemPostTitle = $('#steemPostTitle')
-let steemPostAuthor = $('#steemPostAuthor')
-
-let golosPostTitle = $('#golosPostTitle')
-let golosPostAuthor = $('#golosPostAuthor')
 // Now that you are connected, you can join channels with a topic:
 const channelConfigs = {
   steem: {channel: "channel:steem_events", baseUrl: "https://steemit.com"},
   golos: {channel: "channel:golos_events", baseUrl: "https://golos.io"}
 }
-
 const selectedConfig = channelConfigs.steem
 let steemChannel = socket.channel(channelConfigs.steem.channel, {})
 let golosChannel = socket.channel(channelConfigs.golos.channel, {})
@@ -71,24 +67,41 @@ steemChannel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
 
-steemChannel.on("new_comment", (comment) =>  {
-  if (comment.title && !comment.parent_author && comment.last_update === comment.created) {
-    steemPostTitle.text(comment.title)
-    steemPostTitle.attr('href', channelConfigs.steem.baseUrl + comment.url)
-    steemPostAuthor.text(comment.author)
-  }
-})
-
 golosChannel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
 
+let appData = {
+  steemEvents: [],
+  golosEvents: [],
+}
+
 golosChannel.on("new_comment", (comment) =>  {
-  console.log(comment)
-  if (comment.title && !comment.parent_author && comment.last_update === comment.created) {
-    golosPostTitle.text(comment.title)
-    golosPostTitle.attr('href', channelConfigs.golos.baseUrl + comment.url)
-    golosPostAuthor.text(comment.author)
-  }
+  appData.golosEvents.push(comment)
+  appData.golosEvents = appData.golosEvents.slice(0,25)
+  ReactDOM.render(
+    <App data={appData}/>,
+    document.getElementById('realtime-demo')
+  )
 })
+
+steemChannel.on("new_comment", (comment) =>  {
+  appData.steemEvents.push(comment)
+  appData.steemEvents = appData.steemEvents.slice(0,25)
+  ReactDOM.render(
+    <App data={appData}/>,
+    document.getElementById('realtime-demo')
+  )
+})
+
+class App extends React.Component {
+  render() {
+  }
+}
+
+ReactDOM.render(
+  <App data={appData}/>,
+  document.getElementById('realtime-demo')
+)
+
 export default socket
