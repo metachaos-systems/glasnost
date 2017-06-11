@@ -6,6 +6,7 @@
 import {Socket} from "phoenix"
 import React, {Component} from "react"
 import ReactDOM from "react-dom"
+import {Grid, Feed, Image, Divider, Icon} from "semantic-ui-react"
 
 let socket = new Socket("/socket", {params: {token: window.userToken}})
 
@@ -56,52 +57,103 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 socket.connect()
 // Now that you are connected, you can join channels with a topic:
 const channelConfigs = {
-  steem: {channel: "channel:steem_events", baseUrl: "https://steemit.com"},
-  golos: {channel: "channel:golos_events", baseUrl: "https://golos.io"}
+    steem: {channel: "channel:steem_events", baseUrl: "https://steemit.com"},
+    golos: {channel: "channel:golos_events", baseUrl: "https://golos.io"}
 }
-const selectedConfig = channelConfigs.steem
+
 let steemChannel = socket.channel(channelConfigs.steem.channel, {})
 let golosChannel = socket.channel(channelConfigs.golos.channel, {})
 
 steemChannel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+    .receive("ok", resp => {
+        console.log("Joined successfully", resp)
+    })
+    .receive("error", resp => {
+        console.log("Unable to join", resp)
+    })
 
 golosChannel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+    .receive("ok", resp => {
+        console.log("Joined successfully", resp)
+    })
+    .receive("error", resp => {
+        console.log("Unable to join", resp)
+    })
 
 let appData = {
-  steemEvents: [],
-  golosEvents: [],
+    steemEvents: [],
+    golosEvents: [],
 }
 
-golosChannel.on("new_comment", (comment) =>  {
-  appData.golosEvents.push(comment)
-  appData.golosEvents = appData.golosEvents.slice(0,25)
-  ReactDOM.render(
-    <App data={appData}/>,
-    document.getElementById('realtime-demo')
-  )
+const renderFeed = (comment, chainProp) => {
+    if (comment.created === comment.last_update && comment.author !== "" && comment.parent_author === "") {
+        console.log(comment)
+        appData[chainProp].unshift(comment)
+        appData[chainProp] = appData[chainProp].slice(0, 25)
+        ReactDOM.render(
+            <App data={appData}/>,
+            document.getElementById('realtime-demo')
+        )
+    }
+}
+
+golosChannel.on("new_comment", (comment) => {
+    renderFeed(comment, "golosEvents")
 })
 
-steemChannel.on("new_comment", (comment) =>  {
-  appData.steemEvents.push(comment)
-  appData.steemEvents = appData.steemEvents.slice(0,25)
-  ReactDOM.render(
-    <App data={appData}/>,
-    document.getElementById('realtime-demo')
-  )
+steemChannel.on("new_comment", (comment) => {
+    renderFeed(comment, "steemEvents")
 })
+
+const feedEvent = (comment, chain) => {
+    const defaultImage = (chain) => `/images/default_img_${chain}.jpg`
+    const postLink = (comment, chain) => {
+        const baseUrls = {steem: "https://steemit.com", golos: "https://golos.io"}
+        return baseUrls[chain] + comment.url
+    }
+    const generateImages = (comment) => {
+        const possibleImages = JSON.parse(comment.json_metadata).image
+        if (possibleImages) {
+            return possibleImages.map((image, n) => <img key={n} src={image}/>)
+        } else {
+            return []
+        }
+    }
+    return <Feed.Event key={comment.id}>
+        <Feed.Label>
+        </Feed.Label>
+        <Feed.Content>
+            <Feed.Summary>
+                <a href={postLink(comment, chain)}>{comment.title}</a>
+            </Feed.Summary>
+            <Feed.Meta>
+                <Feed.User>@{comment.author}</Feed.User>
+            </Feed.Meta>
+            <Feed.Extra images>
+                {generateImages(comment)}
+            </Feed.Extra>
+        </Feed.Content>
+        <Divider/>
+    </Feed.Event>
+}
 
 class App extends React.Component {
-  render() {
-  }
+    render() {
+        return <Grid columns="2" divided>
+            <Grid.Column textAlign="center">
+                <Image centered size="tiny" src="/images/steem-logo.png"/>
+                <Feed size="large">
+                    {this.props.data.steemEvents.map(comment => feedEvent(comment, "steem"))}
+                </Feed>
+            </Grid.Column>
+            <Grid.Column >
+                <Image centered size="tiny" src="/images/golos-logo.png"/>
+                <Feed size="large">
+                    {this.props.data.golosEvents.map(comment => feedEvent(comment, "golos"))}
+                </Feed>
+            </Grid.Column>
+        </Grid>
+    }
 }
-
-ReactDOM.render(
-  <App data={appData}/>,
-  document.getElementById('realtime-demo')
-)
 
 export default socket
