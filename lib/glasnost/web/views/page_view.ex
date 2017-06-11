@@ -21,4 +21,11 @@ defmodule Glasnost.Web.PageView do
     end
     |> Enum.with_index(1)
   end
+
+
+  def generate_img_for_post(conn, post) do
+    #  metadata images property varies from post to post: BOTH "image" and "images" are seen in the wild 
+    #  FIXME: image property is non-standard and should be removed at some time in the future
+    hd(post.json_metadata["image"] || post.json_metadata["images"] || ["/images/"<> conn.assigns.default_post_image]
+  end
 end

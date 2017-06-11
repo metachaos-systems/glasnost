@@ -1,6 +1,5 @@
 <div  class="ui  grid">
   <div class="row stretched">
-
     <div class="eight wide column">
       <div class="ui header blue tall stacked segment">
         @<span id="steemPostAuthor"></span> posted:
@@ -12,15 +11,10 @@
         <a href="" id="golosPostTitle">...</a>
       </div>
     </div>  </div>
-
-
   </div>
   <div class="ui vertically divided streched stackable grid">
     <%= for post <- @posts do %>
-    <!-- TODO: extract image detection into view -->
-    <!-- metadata images property varies from post to post: BOTH "images" and "images" are seen in the wild -->
-    <!-- FIXME: mage property is non-standard and should be removed at some time in the future -->
-    <% img_src = hd(post.json_metadata["image"] || post.json_metadata["images"] || ["/images/"<> @conn.assigns.default_post_image] ) %>
+    <% img_src =  generate_img_for_post(@conn, post)) %>
     <div class="ui stretched row" >
       <div class="ui four wide column">
         <div class="ui image">
