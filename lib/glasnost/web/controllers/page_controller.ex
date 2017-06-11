@@ -6,7 +6,7 @@ defmodule Glasnost.Web.PageController do
   plug :extract_and_put_page_num
 
   def streaming_demo(conn, _params) do
-    render conn, "streaming.html.eex"
+    render conn, "streaming_demo.html"
   end
 
   def index(conn, params) do
