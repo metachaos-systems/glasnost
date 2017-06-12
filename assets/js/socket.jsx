@@ -6,7 +6,7 @@
 import {Socket} from "phoenix"
 import React, {Component} from "react"
 import ReactDOM from "react-dom"
-import {Grid, Feed, Image, Divider, Icon} from "semantic-ui-react"
+import {Grid, Header, Comment, Image, Loader, Segment, Dimmer, Icon} from "semantic-ui-react"
 
 let socket = new Socket("/socket", {params: {token: window.userToken}})
 
@@ -119,42 +119,52 @@ const feedEvent = (comment, chain) => {
             return []
         }
     }
-    return <Feed.Event style={{marginTop: "10px", marginBottom: "10px"}} key={comment.id}>
-        <Feed.Label>
-        </Feed.Label>
-        <Feed.Content>
-            <Feed.Summary>
+    return <Comment  key={comment.author + "/" + comment.permlink}>
+        <Comment.Content>
+            <Comment.Author as='a'>@{comment.author}</Comment.Author>
+            <Comment.Metadata>
+                <div>{comment.created}</div>
+            </Comment.Metadata>
+            <Comment.Text>
                 <a href={postLink(comment, chain)}>{comment.title}</a>
-            </Feed.Summary>
-            <Feed.Meta>
-                <Feed.User>@{comment.author}</Feed.User>
-            </Feed.Meta>
-            <Feed.Extra images>
-                {generateImages(comment)}
-            </Feed.Extra>
+            </Comment.Text>
+            <Comment.Actions>
+                <Comment.Action>
+                    <Icon name='tag'/>
+                    {comment.category}
+                </Comment.Action>
+            </Comment.Actions>
+        </Comment.Content>
+    </Comment>
 
-            <Divider/>
-        </Feed.Content>
-    </Feed.Event>
+
 }
 
 class App extends React.Component {
     render() {
         return <Grid columns="2" divided>
-            <Grid.Column textAlign="center">
+            <Grid.Column >
                 <Image centered size="tiny" src="/images/steem-logo.png"/>
-                <Feed size="large">
+                <Comment.Group size="large">
                     {this.props.data.steemEvents.map(comment => feedEvent(comment, "steem"))}
-                </Feed>
+                </Comment.Group>
             </Grid.Column>
             <Grid.Column >
                 <Image centered size="tiny" src="/images/golos-logo.png"/>
-                <Feed size="large">
+                <Comment.Group size="large">
                     {this.props.data.golosEvents.map(comment => feedEvent(comment, "golos"))}
-                </Feed>
+                </Comment.Group>
             </Grid.Column>
         </Grid>
     }
 }
 
+ReactDOM.render(
+    <Segment style={{height: "100px"}}>
+        <Dimmer active inverted>
+            <Loader inverted>Waiting for new posts...</Loader>
+        </Dimmer>
+    </Segment>,
+    document.getElementById('realtime-demo')
+)
 export default socket
