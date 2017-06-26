@@ -1,4 +1,4 @@
-defmodule Glasnost.Post.Filters do
+defmodule Glasnost.Comment.Filters do
 
   def by(posts, _, rules) when is_nil(rules) or length(rules) === 0, do: posts
   def by(posts, filter, rules), do: apply_filter(posts, filter, rules)
