@@ -13,14 +13,13 @@ defmodule Glasnost.Golos.Comment do
     field :tags, {:array, :string}
     field :json_metadata, :map
     field :category, :string
-    field :blockchain, :string
     field :created, :naive_datetime
     field :unix_epoch, :integer
   end
 
   def changeset(comment, params) do
     comment
-    |> cast(params, [:id, :author, :title, :json_metadata, :permlink, :body, :tags, :category, :created, :blockchain, :body_html, :unix_epoch])
+    |> cast(params, [:id, :author, :title, :json_metadata, :permlink, :body, :tags, :category, :created, :body_html, :unix_epoch])
     |> unique_constraint(:id, name: :golos_comments_id_index)
   end
 
