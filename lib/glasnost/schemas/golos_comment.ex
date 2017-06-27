@@ -4,7 +4,7 @@ defmodule Glasnost.Golos.Comment do
   alias Glasnost.Comment
   defdelegate filter_by(posts, filter, rules), to: Comment.Filters, as: :by
 
-  schema "posts" do
+  schema "golos_comments" do
     field :author, :string
     field :permlink, :string
     field :title, :string

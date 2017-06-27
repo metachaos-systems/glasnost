@@ -4,7 +4,7 @@ defmodule Glasnost.Steem.Comment do
   alias Glasnost.Comment
   defdelegate filter_by(posts, filter, rules), to: Comment.Filters, as: :by
 
-  schema "posts" do
+  schema "steem_comments" do
     field :author, :string
     field :permlink, :string
     field :title, :string
