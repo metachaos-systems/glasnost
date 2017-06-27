@@ -14,13 +14,20 @@ defmodule Glasnost.Golos.Comment do
     field :json_metadata, :map
     field :category, :string
     field :created, :naive_datetime
-    field :unix_epoch, :integer
+    # field :unix_epoch, :integer
   end
 
   def changeset(comment, params) do
     comment
-    |> cast(params, [:id, :author, :title, :json_metadata, :permlink, :body, :tags, :category, :created, :body_html, :unix_epoch])
+    |> cast(params, [:id, :author, :title, :json_metadata, :permlink, :body, :tags, :category, :created, :body_html])
     |> unique_constraint(:id, name: :golos_comments_id_index)
+  end
+
+  def get_data_and_update(author, permlink) do
+    {:ok, comment} = Golos.get_content(author, permlink)
+    stored_comment = Glasnost.Repo.get(Glasnost.Golos.Comment, comment.id) || %Glasnost.Golos.Comment{}
+    changeset = changeset(stored_comment, comment)
+    Glasnost.Repo.update(changeset)
   end
 
 end

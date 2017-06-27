@@ -12,14 +12,13 @@ defmodule Glasnost.Application do
       supervisor(Glasnost.Repo, []),
       # Start the endpoint when the application starts
       supervisor(Glasnost.Web.Endpoint, []),
-      supervisor(ConCache, [[ ttl_check: :timer.minutes(1), ttl: :timer.minutes(30) ], [name: :config_cache]]),
-      worker(Glasnost.RuntimeConfig, [%{},[name: :runtime_config]]),
-      supervisor(Glasnost.SimpleAuthenticator, []),
-      supervisor(Glasnost.Orchestrator.AuthorSyncSup, []),
-      supervisor(Glasnost.Prototypes.RealtimeSup, []),
-      worker(Exos.Proc, [{"node port.js",0,cd: "./lib/ports/js"}] )
-      # Start your own worker by calling: Glasnost.Worker.start_link(arg1, arg2, arg3)
-      # worker(Glasnost.Worker, [arg1, arg2, arg3]),
+      supervisor(ConCache, [[ttl_check: :timer.minutes(1), ttl: :timer.minutes(30)], [name: :config_cache]]),
+      # worker(Glasnost.RuntimeConfig, [%{}, [name: :runtime_config]]),
+      # supervisor(Glasnost.SimpleAuthenticator, []),
+      # supervisor(Glasnost.Orchestrator.AuthorSyncSup, []),
+      # supervisor(Glasnost.Prototypes.RealtimeSup, []),
+      supervisor(Glasnost.Orchestrator.General, []),
+      worker(Exos.Proc, [{"node port.js", 0, cd: "./lib/ports/js"}])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
