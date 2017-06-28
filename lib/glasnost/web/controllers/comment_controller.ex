@@ -1,9 +1,10 @@
 defmodule Glasnost.Web.CommentController do
   use Glasnost.Web, :controller
+  alias Glasnost.Repo
   import Ecto.Query
   @posts_per_page 24
 
-  plug :choose_schema
+  plug :select_schema
 
   def index(conn, params) do
     q = from c in conn.assigns.comment_schema
@@ -13,9 +14,12 @@ defmodule Glasnost.Web.CommentController do
     json conn, comments
   end
 
-  def show(conn, %{"id" => id}) do
-    [author, permlink] = String.split(id, "/")
-    comment = Glasnost.Repo.get_by(conn.assigns.comment_schema, author: author, permlink: permlink)
+  def show(conn, %{"author" => a, "permlink" => p}) do
+    comment = Glasnost.Repo.get_by(
+      conn.assigns.comment_schema, author: a, permlink: p
+    )
+      |> Map.from_struct
+      |> Map.drop([:__meta__])
     if comment do
       json conn, comment
     else
@@ -23,8 +27,21 @@ defmodule Glasnost.Web.CommentController do
     end
   end
 
-  def choose_schema(conn, _params) do
-    schema = case String.slice(conn.request_path, 1, 5) do
+  def stats(conn, _params) do
+    q_posts = from c in conn.assigns.comment_schema,
+     where: not is_nil(c.title),
+     select: c.id
+    q_comments = from c in conn.assigns.comment_schema,
+     where: is_nil(c.title),
+     select: c.id
+    json conn, %{
+      post_count: length(Repo.all(q_posts)),
+      comment_count: length(Repo.all(q_comments)),
+    }
+  end
+
+  def select_schema(conn, _params) do
+    schema = case String.slice(conn.request_path, 5, 5) do
       "golos" -> Glasnost.Golos.Comment
       "steem" -> Glasnost.Steem.Comment
     end
