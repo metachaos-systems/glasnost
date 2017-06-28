@@ -41,7 +41,7 @@ defmodule Glasnost.Mixfile do
      {:expug, ">= 0.0.0"},
      {:phoenix_expug, ">= 0.0.0"},
      {:calendar, ">= 0.16.0"},
-     {:ecto_mnesia, "~> 0.7.1"},
+     {:ecto_mnesia, "~> 0.9.0"},
      {:distillery, ">= 0.0.0"},
      {:httpoison, ">= 0.0.0"},
      {:hound, ">= 0.0.0"},
