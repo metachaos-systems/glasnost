@@ -2,6 +2,7 @@ defmodule Glasnost.Golos.Comment do
   use Ecto.Schema
   import Ecto.Changeset
   alias Glasnost.Comment
+  require Logger
   defdelegate filter_by(posts, filter, rules), to: Comment.Filters, as: :by
 
   schema "golos_comments" do
@@ -24,10 +25,27 @@ defmodule Glasnost.Golos.Comment do
   end
 
   def get_data_and_update(author, permlink) do
-    {:ok, comment} = Golos.get_content(author, permlink)
-    stored_comment = Glasnost.Repo.get(__MODULE__, comment.id) || %__MODULE__{}
-    changeset = changeset(stored_comment, comment)
-    Glasnost.Repo.update(changeset)
+    {:ok, new_comment_data} = Golos.get_content(author, permlink)
+    new_comment_data = new_comment_data
+      |> Glasnost.Steemlike.Comment.parse_json_metadata
+      |> Glasnost.Steemlike.Comment.extract_put_tags
+    result =
+      case Glasnost.Repo.get(__MODULE__, new_comment_data.id) do
+          nil  -> %__MODULE__{id: new_comment_data.id}
+          comment -> comment
+        end
+        |> __MODULE__.changeset(new_comment_data)
+        |> Glasnost.Repo.insert_or_update
+
+    case result do
+      {:ok, struct}       ->
+        Logger.info("Inserted or update ok")
+        # Inserted or updated with success
+      {:error, changeset} ->
+        Logger.error("Persistence failed...")
+        Logger.error(changeset)
+        # Something went wrong
+    end
   end
 
 end

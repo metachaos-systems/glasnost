@@ -6,6 +6,9 @@ defmodule Glasnost.Web.CommentController do
   def index(conn, params) do
     q = from c in Glasnost.Golos.Comment
     comments = Glasnost.Repo.all(q)
+      |> Enum.map(&Map.from_struct/1)
+      |> Enum.map(&Map.drop(&1, [:__meta__]))
+    IO.inspect comments
     json conn, comments
   end
 
