@@ -12,6 +12,8 @@ defmodule Glasnost.Web.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    resources "/steem/comments", CommentController
+    resources "/golos/comments", CommentController
   end
 
   scope "/", Glasnost.Web do
