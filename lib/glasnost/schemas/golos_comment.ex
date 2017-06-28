@@ -25,7 +25,7 @@ defmodule Glasnost.Golos.Comment do
 
   def get_data_and_update(author, permlink) do
     {:ok, comment} = Golos.get_content(author, permlink)
-    stored_comment = Glasnost.Repo.get(Glasnost.Golos.Comment, comment.id) || %Glasnost.Golos.Comment{}
+    stored_comment = Glasnost.Repo.get(__MODULE__, comment.id) || %__MODULE__{}
     changeset = changeset(stored_comment, comment)
     Glasnost.Repo.update(changeset)
   end
