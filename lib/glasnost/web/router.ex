@@ -15,12 +15,13 @@ defmodule Glasnost.Web.Router do
   end
 
   scope "/api", Glasnost.Web do
-    pipe_through :api # Use the default browser stack
+    pipe_through :api
 
+    get "/golos/comments/search", CommentController, :search
     get "/golos/comments/stats", CommentController, :stats
     get "/golos/comments/:author/:permlink", CommentController, :show
-    resources "/steem/comments", CommentController
-    resources "/golos/comments", CommentController
+    # resources "/steem/comments", CommentController
+    # resources "/golos/comments", CommentController
   end
 
   scope "/", Glasnost.Web do

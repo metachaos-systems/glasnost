@@ -27,6 +27,18 @@ defmodule Glasnost.Web.CommentController do
     end
   end
 
+  def search(conn, params) do
+    author = params["author"]
+    category = params["category"]
+    q = from c in conn.assigns.comment_schema
+    q = if category, do: (from c in q, where: c.category == ^category), else: q
+    q = if author, do: (from c in q, where: c.author == ^author), else: q
+    comments = Repo.all(q)
+      |> Enum.map(&Map.from_struct/1)
+      |> Enum.map(&Map.drop(&1, [:__meta__]))
+    json conn, comments
+  end
+
   def stats(conn, _params) do
     q_posts = from c in conn.assigns.comment_schema,
      where: not is_nil(c.title),
