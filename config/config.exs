@@ -35,7 +35,7 @@ config :steemex,
   activate_stage_sup: true
 
 config :glasnost, Glasnost.Repo,
-  adapter: Ecto.Adapters.Mnesia
+  adapter: EctoMnesia.Adapter
 
 config :ecto_mnesia,
   host: {:system, :atom, "MNESIA_HOST", Kernel.node()},

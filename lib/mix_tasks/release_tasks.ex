@@ -42,7 +42,7 @@
 #
 #   defp run_migrations_for(app) do
 #     IO.puts "Running migrations for #{app}"
-#     IO.inspect Ecto.Mnesia.Storage.conf(app.config)
+#     IO.inspect EctoMnesia.Storage.conf(app.config)
 #    # TODO add  migrations_path(app) is a BUG, needs migrations_path(:glasnost), app == is Elixir.Glasnost.Repo
 #     Ecto.Migrator.run(app, migrations_path(:glasnost), :up, all: true)
 #   end
