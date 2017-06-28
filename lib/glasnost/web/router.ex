@@ -10,8 +10,13 @@ defmodule Glasnost.Web.Router do
     plug Glasnost.Plugs.PutConfig
   end
 
-  pipeline :api, Glasnost.Web do
+  pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  scope "/api", Glasnost.Web do
+    pipe_through :api # Use the default browser stack
+
     get "/golos/comments/stats", CommentController, :stats
     get "/golos/comments/:author/:permlink", CommentController, :show
     resources "/steem/comments", CommentController
