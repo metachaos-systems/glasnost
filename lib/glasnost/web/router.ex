@@ -10,10 +10,12 @@ defmodule Glasnost.Web.Router do
     plug Glasnost.Plugs.PutConfig
   end
 
-  pipeline :api do
+  pipeline :api, Glasnost.Web do
     plug :accepts, ["json"]
-    resources "/steem/comments", Glasnost.Web.CommentController
-    resources "/golos/comments", Glasnost.Web.CommentController
+    get "/golos/comments/stats", CommentController, :stats
+    get "/golos/comments/:author/:permlink", CommentController, :show
+    resources "/steem/comments", CommentController
+    resources "/golos/comments", CommentController
   end
 
   scope "/", Glasnost.Web do
