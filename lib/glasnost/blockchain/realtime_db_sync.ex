@@ -1,4 +1,4 @@
-defmodule Glasnost.Steemlike.OpsConsumer do
+defmodule Glasnost.Steemlike.RealtimeOpsSync do
   use GenStage
   require Logger
   alias Glasnost.Golos
@@ -18,7 +18,6 @@ defmodule Glasnost.Steemlike.OpsConsumer do
 
   def handle_events(events, _from, state) do
     Logger.info("events arrived...")
-    IO.inspect(events)
     comments_to_update_new = events
       |> Enum.filter(& &1.metadata.type === :comment)
       |> Enum.map(&Map.get(&1, :data))

@@ -3,11 +3,14 @@ defmodule Glasnost.Orchestrator.General do
   require Logger
   alias Glasnost.{AgentConfig}
   import Ecto.Query
+  @golos_lookback_blocks :golos_lookback_blocks
+  @golos_lookback_ops :golos_lookback_ops
+  @golos_lookback_munged_ops :golos_lookback_munged_ops
 
   @golos_config %AgentConfig{
       client: Golos,
       schema: Glasnost.Golos,
-      subscribe_to: [Golos.Stage.MungedOps],
+      subscribe_to: [@golos_lookback_munged_ops],
       token: :golos,
   }
 
@@ -24,12 +27,23 @@ defmodule Glasnost.Orchestrator.General do
 
   def init(arg) do
     Logger.info("Main orchestrator supervisor is initializing... ")
-
-    children = [
-      # worker(Glasnost.Steemlike.OpsConsumer, [%{config: @steem_config}], id: :steem),
-      worker(Glasnost.Steemlike.OpsConsumer, [%{config: @golos_config}], id: :golos),
-    ]
+    children = build_children(:golos) ++ build_children(:steem)
     supervise(children, strategy: :one_for_one)
+  end
+
+  def build_children(:golos) do
+    [
+      worker(Glasnost.Stage.LookbackBlocks, [@golos_config, [name: @golos_lookback_blocks]]),
+      worker(Golos.Stage.RawOps, [%{subscribe_to: [@golos_lookback_blocks]}, [name: @golos_lookback_ops]]),
+      worker(Golos.Stage.MungedOps, [%{subscribe_to: [@golos_lookback_ops]}, [name: @golos_lookback_munged_ops]]),
+      worker(Glasnost.Steemlike.RealtimeOpsSync, [%{config: @golos_config}], id: :golos),
+    ]
+  end
+
+  def build_children(:steem) do
+    [
+      # worker(Glasnost.Steemlike.OpsConsumer, [%{config: @golos_config}], id: :golos),
+    ]
   end
 
 end
