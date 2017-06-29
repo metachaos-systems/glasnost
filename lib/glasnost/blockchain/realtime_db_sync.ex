@@ -1,19 +1,19 @@
 defmodule Glasnost.Steemlike.RealtimeOpsSync do
   use GenStage
   require Logger
-  alias Glasnost.Golos
+  alias Glasnost.{Golos, AgentConfig}
 
   def start_link(args, options \\ []) do
     GenStage.start_link(__MODULE__, args, options)
   end
 
-  def init(%{config: config} = args \\ []) do
+  def init(config = %AgentConfig{} \\ []) do
     Logger.info("Ops consumer for #{config.token} is initializing...")
     schema = config.schema
     new_config = config
       |> Map.put(:vote_schema, Module.concat(schema, Vote))
       |> Map.put(:comment_schema, Module.concat(schema, Comment))
-    {:consumer, %{config: new_config}, subscribe_to: args.config.subscribe_to}
+    {:consumer, %{new_config}, subscribe_to: config.subscribe_to}
   end
 
   def handle_events(events, _from, state) do
@@ -32,7 +32,7 @@ defmodule Glasnost.Steemlike.RealtimeOpsSync do
       |> Enum.uniq
 
     for %{author: a, permlink: p} <- comments_to_update_new do
-      state.config.comment_schema.get_data_and_update(a, p)
+      state.comment_schema.get_data_and_update(a, p)
     end
 
     {:noreply, [], state}
