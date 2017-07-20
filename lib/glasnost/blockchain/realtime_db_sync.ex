@@ -13,7 +13,7 @@ defmodule Glasnost.Steemlike.RealtimeOpsSync do
     new_config = config
       |> Map.put(:vote_schema, Module.concat(schema, Vote))
       |> Map.put(:comment_schema, Module.concat(schema, Comment))
-    {:consumer, %{new_config}, subscribe_to: config.subscribe_to}
+    {:consumer, new_config, subscribe_to: config.subscribe_to}
   end
 
   def handle_events(events, _from, state) do

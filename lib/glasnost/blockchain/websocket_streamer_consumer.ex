@@ -11,7 +11,7 @@ defmodule Glasnost.Prototypes.OpsConsumer do
     {:consumer, state, subscribe_to: state[:subscribe_to]}
   end
 
-  def handle_events(events, _from, state ) do
+  def handle_events(events, _from, state) do
     bl = state[:blockchain]
     for op <- events do
       spawn(ChannelBroadcaster, :send, [op, [blockchain: bl]])

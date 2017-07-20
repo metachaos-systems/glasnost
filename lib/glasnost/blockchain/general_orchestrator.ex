@@ -36,7 +36,7 @@ defmodule Glasnost.Orchestrator.General do
       worker(Glasnost.Stage.LookbackBlocks, [@golos_config, [name: @golos_lookback_blocks]]),
       worker(Golos.Stage.RawOps, [%{subscribe_to: [@golos_lookback_blocks]}, [name: @golos_lookback_ops]]),
       worker(Golos.Stage.MungedOps, [%{subscribe_to: [@golos_lookback_ops]}, [name: @golos_lookback_munged_ops]]),
-      worker(Glasnost.Steemlike.RealtimeOpsSync, [%{config: @golos_config}], id: :golos),
+      worker(Glasnost.Steemlike.RealtimeOpsSync, [@golos_config], id: :golos),
     ]
   end
 
