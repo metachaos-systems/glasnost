@@ -1,11 +1,11 @@
 defmodule Glasnost.Steemlike.Comment do
 
   def get_data_and_update(author, permlink, blockchain: blockchain) do
-    schema_mod = case blockchain do
-      :steem -> Glasnost.Steem.Comment
-      :golos -> Glasnost.Golos.Comment
+    {schema_mod, client_mod} = case blockchain do
+      :steem -> {Glasnost.Steem.Comment, Golos}
+      :golos -> {Glasnost.Golos.Comment, Steemex}
     end
-    {:ok, new_comment_data} = Golos.get_content(author, permlink)
+    {:ok, new_comment_data} = client_mod.get_content(author, permlink)
     cleaned_comment_data = new_comment_data
       |> parse_json_metadata
       |> extract_put_tags
