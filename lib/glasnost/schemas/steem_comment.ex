@@ -22,11 +22,8 @@ defmodule Glasnost.Steem.Comment do
     |> unique_constraint(:id, name: :steem_comments_id_index)
   end
 
-  def get_data_and_update(author, permlink) do
-    {:ok, comment} = Steemex.get_content(author, permlink)
-    stored_comment = Glasnost.Repo.get(__MODULE__, comment.id) || %__MODULE__{}
-    changeset = changeset(stored_comment, comment)
-    Glasnost.Repo.update(changeset)
+  def get_data_and_update(author, comment) do
+    Glasnost.Steemlike.Comment.get_data_and_update(author, comment, blockchain: :golos)
   end
 
 end

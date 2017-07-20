@@ -24,28 +24,7 @@ defmodule Glasnost.Golos.Comment do
     |> unique_constraint(:id, name: :golos_comments_id_index)
   end
 
-  def get_data_and_update(author, permlink) do
-    {:ok, new_comment_data} = Golos.get_content(author, permlink)
-    new_comment_data = new_comment_data
-      |> Glasnost.Steemlike.Comment.parse_json_metadata
-      |> Glasnost.Steemlike.Comment.extract_put_tags
-    result =
-      case Glasnost.Repo.get(__MODULE__, new_comment_data.id) do
-          nil  -> %__MODULE__{id: new_comment_data.id}
-          comment -> comment
-        end
-        |> __MODULE__.changeset(new_comment_data)
-        |> Glasnost.Repo.insert_or_update
-
-    case result do
-      {:ok, struct}       ->
-        Logger.info("Inserted or update ok")
-        # Inserted or updated with success
-      {:error, changeset} ->
-        Logger.error("Persistence failed...")
-        Logger.error(changeset)
-        # Something went wrong
-    end
+  def get_data_and_update(author, comment) do
+    Glasnost.Steemlike.Comment.get_data_and_update(author, comment, blockchain: :golos)
   end
-
 end
