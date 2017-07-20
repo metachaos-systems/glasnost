@@ -54,4 +54,4 @@ config :glasnost, Glasnost.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  port: "5432"
+  port: "35432"

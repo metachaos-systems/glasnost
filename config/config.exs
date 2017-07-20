@@ -26,12 +26,11 @@ config :phoenix, :template_engines,
   pug: PhoenixExpug.Engine
 
 config :ex_golos,
-  url: System.get_env("GOLOS_URL"),
-  activate_stage_sup: true
+  url: System.get_env("GOLOS_URL")
+
 
 config :steemex,
-  url: System.get_env("STEEM_URL"),
-  activate_stage_sup: true
+  url: System.get_env("STEEM_URL")
 
 
 
