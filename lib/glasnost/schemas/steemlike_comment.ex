@@ -1,16 +1,20 @@
 defmodule Glasnost.Steemlike.Comment do
 
-  def get_data_and_update(author, permlink) do
+  def get_data_and_update(author, permlink, blockchain: blockchain) do
+    schema_mod = case blockchain do
+      :steem -> Glasnost.Steem.Comment
+      :golos -> Glasnost.Golos.Comment
+    end
     {:ok, new_comment_data} = Golos.get_content(author, permlink)
-    new_comment_data = new_comment_data
-      |> Glasnost.Steemlike.Comment.parse_json_metadata
-      |> Glasnost.Steemlike.Comment.extract_put_tags
+    cleaned_comment_data = new_comment_data
+      |> parse_json_metadata
+      |> extract_put_tags
     result =
-      case Glasnost.Repo.get(__MODULE__, new_comment_data.id) do
-          nil  -> %__MODULE__{id: new_comment_data.id}
+      case Glasnost.Repo.get(schema_mod, cleaned_comment_data.id) do
+          nil  -> %schema_mod{id: new_comment_data.id}
           comment -> comment
         end
-        |> __MODULE__.changeset(new_comment_data)
+        |> schema_mod.changeset(cleaned_comment_data)
         |> Glasnost.Repo.insert_or_update
 
     case result do
@@ -23,7 +27,7 @@ defmodule Glasnost.Steemlike.Comment do
         # Something went wrong
     end
   end
-  
+
   def parse_json_metadata(comment) do
      result = case Poison.Parser.parse(comment.json_metadata) do
        {:ok, map} -> map
