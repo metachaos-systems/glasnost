@@ -25,7 +25,6 @@ config :logger, :console,
 config :phoenix, :template_engines,
   pug: PhoenixExpug.Engine
 
-
 config :ex_golos,
   url: System.get_env("GOLOS_URL"),
   activate_stage_sup: true
@@ -34,15 +33,14 @@ config :steemex,
   url: System.get_env("STEEM_URL"),
   activate_stage_sup: true
 
-config :glasnost, Glasnost.Repo,
-  adapter: EctoMnesia.Adapter
 
-config :ecto_mnesia,
-  host: {:system, :atom, "MNESIA_HOST", Kernel.node()},
-  storage_type: {:system, :atom, "MNESIA_STORAGE_TYPE", :ram_copies}
 
-config :mnesia,
-  dir: 'priv/data/mnesia' # Make sure this directory exists
+# config :ecto_mnesia,
+#   host: {:system, :atom, "MNESIA_HOST", Kernel.node()},
+#   storage_type: {:system, :atom, "MNESIA_STORAGE_TYPE", :ram_copies}
+
+# config :mnesia,
+#   dir: 'priv/data/mnesia' # Make sure this directory exists
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
