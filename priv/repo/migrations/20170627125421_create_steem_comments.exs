@@ -3,15 +3,17 @@ defmodule Glasnost.Repo.Migrations.CreateSteemComments do
 
   def change do
     create_if_not_exists table(:steem_comments) do
-        add :id, :type_is_ignored_by_ecto_mnesia
-        add :author, :type_is_ignored_by_ecto_mnesia
-        add :title, :type_is_ignored_by_ecto_mnesia
-        add :permlink, :type_is_ignored_by_ecto_mnesia
-        add :body, :type_is_ignored_by_ecto_mnesia
-        add :tags, :type_is_ignored_by_ecto_mnesia
-        add :category, :type_is_ignored_by_ecto_mnesia
-        add :json_metadata, :type_is_ignored_by_ecto_mnesia
-        add :created, :type_is_ignored_by_ecto_mnesia
+        add :author, :text
+        add :title, :text
+        add :permlink, :text
+        add :body, :text
+        add :body_html, :text
+        add :tags, {:array, :text}
+        add :category, :text
+        add :json_metadata, :map
+        add :created, :timestamp
+
+        timestamps()
       end
   end
 end
