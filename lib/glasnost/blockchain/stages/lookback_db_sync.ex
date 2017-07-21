@@ -30,20 +30,27 @@ defmodule Glasnost.Stage.LookbackBlocks do
     cur_block  = state.current_block
     start_block = state.starting_block
     event_mod = Module.concat([state.client, Event])
-    tasks = for height <- cur_block..cur_block - @blocks_per_tick do
-      Task.async(fn -> state.client.get_block(height) end)
-    end
-    blocks = Task.yield_many(tasks, 10_000)
+    next_block = cur_block - @blocks_per_tick
+    state = put_in(state.current_block, next_block)
+    tasks_results = cur_block..next_block
+      |> Enum.map(&Task.async(fn -> state.client.get_block(&1) end))
+      |> Task.yield_many(10_000)
+
     blocks = for {_, {:ok, {:ok, block}}} <- blocks do
       struct(event_mod, %{data: block, metadata: %{}})
     end
-    if cur_block > start_block - @lookback_max_blocks do
+
+    unless lookback_threshold_reached?(cur_block, start_block) do
       Process.send_after(self(), :next_blocks, 3_000)
-      state = put_in(state.current_block, cur_block - @blocks_per_tick)
     else
       Logger.info("Lookbacks stage finished extracting past blocks...")
     end
     {:noreply, blocks, state}
   end
+
+  def lookback_threshold_reached?(cur_block, start_block) do
+    cur_block > start_block - @lookback_max_blocks
+  end
+
 
 end
