@@ -28,10 +28,6 @@ defmodule Glasnost.Web.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    get "/tags/:tag", PageController, :tags
-    get "/posts/:permlink", PageController, :show
-    get "/authors/:author", PageController, :authors
-    get "/authors/:author/:permlink", PageController, :show
     get "/streaming", PageController, :streaming_demo
     get "/admin", AdminController, :index
     get "/admin/onboarding", AdminController, :onboarding
