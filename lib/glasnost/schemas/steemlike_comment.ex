@@ -50,4 +50,8 @@ defmodule Glasnost.Steemlike.Comment do
      Map.put(comment, :tags, comment.json_metadata["tags"])
   end
 
+  def permitted_fields() do
+    ~w(id author title json_metadata permlink body tags category created body_html total_payout_value pending_payout_value inserted_at updated_at)a
+  end
+
 end

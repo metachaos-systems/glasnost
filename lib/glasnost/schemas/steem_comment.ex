@@ -22,7 +22,7 @@ defmodule Glasnost.Steem.Comment do
 
   def changeset(comment, params) do
     comment
-    |> cast(params, [:id, :author, :title, :json_metadata, :permlink, :body, :tags, :category, :created, :body_html, :inserted_at, :updated_at])
+    |> cast(params, Glasnost.Steemlike.Comment.permitted_fields)
     |> unique_constraint(:id, name: :steem_comments_id_index)
   end
 
