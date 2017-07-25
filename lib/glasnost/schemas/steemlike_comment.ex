@@ -31,6 +31,7 @@ defmodule Glasnost.Steemlike.Comment do
   end
 
 
+
   def add_timestamps(comment) do
     comment
     |> Map.put(:updated_at, NaiveDateTime.utc_now)

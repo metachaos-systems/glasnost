@@ -14,6 +14,8 @@ defmodule Glasnost.Steem.Comment do
     field :json_metadata, :map
     field :category, :string
     field :created, :naive_datetime
+    field :total_payout_value, :float
+    field :pending_payout_value, :float
 
     timestamps()
   end
