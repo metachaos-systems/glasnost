@@ -12,6 +12,8 @@ defmodule Glasnost.Repo.Migrations.CreateSteemComments do
         add :category, :text
         add :json_metadata, :map
         add :created, :timestamp
+        add :total_payout_value, :float
+        add :pending_payout_value, :float
 
         timestamps()
       end
