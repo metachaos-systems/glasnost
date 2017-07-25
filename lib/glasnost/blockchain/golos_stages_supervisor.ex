@@ -10,19 +10,18 @@ defmodule Glasnost.Golos.StageSup do
     }
 
   def start_link do
-    Supervisor.start_link(__MODULE__, :ok, name: :golos_flow_sup)
+    Supervisor.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
   def init(:ok) do
     Logger.info("Flow supervisor for golos is initializing...")
-    sscp = :golos_stage_stale_comments_producer
-    smbp = :golos_stage_lookback_blocks_producer
+    slbp = :golos_stage_lookback_blocks_producer
     streaming_blocks_producer = Golos.Stage.Blocks
     raw_ops_stage = Golos.Stage.RawOps
     munged_ops_stage = Golos.Stage.MungedOps
-    block_producers = [smbp, streaming_blocks_producer]
+    block_producers = [slbp, streaming_blocks_producer]
     children = [
-      worker(Glasnost.Stage.LookbackBlocks, [@config, [name: smbp]]),
+      worker(Glasnost.Stage.LookbackBlocks, [@config, [name: slbp]]),
       worker(streaming_blocks_producer, [[], [name: streaming_blocks_producer]]),
       worker(raw_ops_stage, [[subscribe_to: block_producers], [name: raw_ops_stage]]),
       worker(munged_ops_stage, [[subscribe_to: [raw_ops_stage]], [name: munged_ops_stage]]),
