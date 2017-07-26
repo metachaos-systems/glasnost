@@ -2,7 +2,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
   use GenStage
   alias Glasnost.Repo
   require Logger
-  @blocks_per_tick 1000
+  @blocks_per_tick 10
   @lookback_max_blocks 201_600
 
   def start_link(args, options) do
@@ -51,5 +51,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
     cur_block > start_block - @lookback_max_blocks
   end
 
-
+  def handle_info(msg, state) do
+    Logger.info("unexpected msg: #{inspect msg}")
+  end
 end
