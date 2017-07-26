@@ -29,6 +29,7 @@ config :glasnost, Glasnost.Web.Endpoint,
 #   version: Mix.Project.config[:version]
 
 
+
 # Do not print debug messages in production
 config :logger, level: :info
 
@@ -74,3 +75,11 @@ config :logger, level: :info
 # which should be versioned separately.
 
 # import_config "prod.secret.exs"
+
+config :glasnost, Glasnost.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  database: System.get_env("GLASNOST_DB"),
+  username: System.get_env("GLASNOST_DB_USERNAME"),
+  password: System.get_env("GLASNOST_DB_PASSWORD"),
+  hostname: System.get_env("GLASNOST_DB_HOST"),
+  port: System.get_env("GLASNOST_DB_PORT")
