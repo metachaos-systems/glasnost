@@ -2,7 +2,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
   use GenStage
   alias Glasnost.Repo
   require Logger
-  @blocks_per_tick 5
+  @blocks_per_tick 1000
   @lookback_max_blocks 201_600
 
   def start_link(args, options) do
@@ -36,7 +36,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
       |> Enum.map(&Task.async(fn -> state.client.get_block(&1) end))
       |> Task.yield_many(10_000)
 
-    blocks = for {_, {:ok, {:ok, block}}} <- blocks do
+    blocks = for {_, {:ok, {:ok, block}}} <- tasks_results do
       struct(event_mod, %{data: block, metadata: %{}})
     end
 
