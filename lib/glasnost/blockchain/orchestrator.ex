@@ -8,7 +8,7 @@ defmodule Glasnost.Orchestrator.General do
   end
 
   def init(arg) do
-    Logger.info("Main orchestrator supervisor is initializing... ")
+    Logger.info("Main orchestrator for Steem and Golos is initializing... ")
     children = [
       supervisor(Glasnost.Golos.StageSup, []),
       supervisor(Glasnost.Steem.StageSup, []),
