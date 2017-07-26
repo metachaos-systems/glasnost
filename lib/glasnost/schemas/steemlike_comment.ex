@@ -22,9 +22,9 @@ defmodule Glasnost.Steemlike.Comment do
 
       case result do
         {:ok, struct}       ->
-          Logger.info("Inserted or update ok")
+          :noop
         {:error, changeset} ->
-          Logger.error("Persistence failed...")
+          Logger.error("Persistence failed:")
           Logger.error(inspect changeset)
       end
     end
