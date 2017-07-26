@@ -42,9 +42,8 @@ defmodule Glasnost.Stage.LookbackBlocks do
 
     unless lookback_threshold_reached?(cur_block, start_block) do
       Process.send_after(self(), :next_blocks, 3_000)
-    else
-      Logger.info("Lookbacks stage finished extracting past blocks...")
     end
+
     {:noreply, blocks, state}
   end
 
