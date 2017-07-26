@@ -1,4 +1,4 @@
-defmodule Glasnost.Steemlike.RealtimeOpsSync do
+defmodule Glasnost.Steemlike.EventHandler do
   use GenStage
   require Logger
   alias Glasnost.{Golos, AgentConfig}
@@ -17,13 +17,13 @@ defmodule Glasnost.Steemlike.RealtimeOpsSync do
   end
 
   def handle_events(events, _from, state) do
-    Logger.info("events arrived...")
+    Logger.info("#{length(events)} events arrived to #{state.token} event handler...")
     comments_to_update = events
       |> Enum.filter(& &1.metadata.type in [:comment, :vote])
       |> Enum.map(&Map.get(&1, :data))
       |> Enum.map(&Map.take(&1, [:author, :permlink]))
       |> Enum.uniq
-      |> Enum.each(fn %{author: a, permlink: p} -> state.comment_schema.get_data_and_update(a, p) end)
+      |> Enum.each(fn %{author: a, permlink: p} -> spawn( fn -> state.comment_schema.get_data_and_update(a, p) end) end)
 
     {:noreply, [], state}
   end
