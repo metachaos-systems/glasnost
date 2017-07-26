@@ -1,4 +1,4 @@
-FROM elixir:1.4.4
+FROM elixir:1.5
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -7,7 +7,7 @@ ENV STEEM_URL=wss://steemd.steemit.com
 
 RUN apt update
 RUN apt install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_7.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt install -y nodejs
 
 ADD . /glasnost_app
@@ -26,8 +26,6 @@ RUN npm install && \
  rm -rf ./assets
 
 WORKDIR /glasnost_app
-RUN rm -r /glasnost_app/priv/data/mnesia || true
-RUN mkdir -p /glasnost_app/priv/data/mnesia
 
 RUN mix compile
 RUN mix ecto.create
