@@ -1,4 +1,4 @@
-FROM elixir:1.5
+FROM elixir:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
