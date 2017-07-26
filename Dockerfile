@@ -28,9 +28,7 @@ RUN npm install && \
 WORKDIR /glasnost_app
 
 RUN mix compile
-RUN mix ecto.create
-RUN mix ecto.migrate
 
 RUN mix phx.digest
 
-ENTRYPOINT mix phx.server
+ENTRYPOINT ./start.sh
