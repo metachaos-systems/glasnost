@@ -13,6 +13,9 @@ defmodule Glasnost.Web.Router do
     plug :accepts, ["json"]
   end
 
+  forward "/", Absinthe.Plug,
+    schema: Glasnost.Schema
+
   scope "/api", Glasnost.Web do
     pipe_through :api
 
