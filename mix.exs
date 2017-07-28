@@ -47,6 +47,7 @@ defmodule Glasnost.Mixfile do
      {:con_cache, "~> 0.12.0"},
      {:cowboy, "~> 1.0"},
      {:floki, ">= 0.0.0"},
+     {:absinthe, "~> 1.3.1"},
      {:credo, ">= 0.0.0", only: :dev},
      {:earmark, ">= 0.0.0"}]
   end
