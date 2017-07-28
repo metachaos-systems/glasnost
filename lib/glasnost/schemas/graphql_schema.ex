@@ -3,13 +3,11 @@ defmodule Glasnost.Schema do
   import_types Glasnost.Schema.Types
 
   query do
-    field :steem_comments, list_of(:comment) do
-      resolve fn _args, info -> Glasnost.CommentResolver.all(%{blockchain: :steem}, info) end
+    field :comments, list_of(:comment) do
+      resolve &Glasnost.CommentResolver.all/2
     end
 
-    field :golos_comments, list_of(:comment) do
-      resolve fn _args, info -> Glasnost.CommentResolver.all(%{blockchain: :golos}, info) end
-    end
+
   end
 
 end
