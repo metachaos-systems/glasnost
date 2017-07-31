@@ -16,6 +16,10 @@ defmodule Glasnost.Web.Router do
   forward "/graphql", Absinthe.Plug,
     schema: Glasnost.Schema
 
+  if Mix.env == :dev do
+    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Glasnost.Schema
+  end
+
   scope "/api", Glasnost.Web do
     pipe_through :api
 
