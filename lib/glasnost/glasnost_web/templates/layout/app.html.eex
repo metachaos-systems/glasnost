@@ -16,7 +16,7 @@
 
 <body>
   <header>
-    <%= render Glasnost.Web.LayoutView, "menu.html", assigns %>
+    <%= render GlasnostWeb.LayoutView, "menu.html", assigns %>
   </header>
   <!-- FIXME: needs a sticky footer instread of 100vh -->
   <div class="ui container" style="min-height:100vh;">

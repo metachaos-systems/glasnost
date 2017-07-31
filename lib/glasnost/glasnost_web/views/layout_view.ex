@@ -1,5 +1,5 @@
-defmodule Glasnost.Web.LayoutView do
-  use Glasnost.Web, :view
+defmodule GlasnostWeb.LayoutView do
+  use GlasnostWeb, :view
 
   def naive_translate(key, lang) do
     %{

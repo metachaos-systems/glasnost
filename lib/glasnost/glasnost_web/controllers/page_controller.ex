@@ -1,5 +1,5 @@
-defmodule Glasnost.Web.PageController do
-  use Glasnost.Web, :controller
+defmodule GlasnostWeb.PageController do
+  use GlasnostWeb, :controller
   import Ecto.Query
   @posts_per_page 24
 

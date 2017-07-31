@@ -1,5 +1,5 @@
-defmodule Glasnost.Web.Router do
-  use Glasnost.Web, :router
+defmodule GlasnostWeb.Router do
+  use GlasnostWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -20,7 +20,7 @@ defmodule Glasnost.Web.Router do
     forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Glasnost.Schema
   end
 
-  scope "/api", Glasnost.Web do
+  scope "/api", GlasnostWeb do
     pipe_through :api
 
     get "/golos/comments/search", CommentController, :search
@@ -30,7 +30,7 @@ defmodule Glasnost.Web.Router do
     # resources "/golos/comments", CommentController
   end
 
-  scope "/", Glasnost.Web do
+  scope "/", GlasnostWeb do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
@@ -42,7 +42,7 @@ defmodule Glasnost.Web.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", Glasnost.Web do
+  # scope "/api", GlasnostWeb do
   #   pipe_through :api
   # end
 end

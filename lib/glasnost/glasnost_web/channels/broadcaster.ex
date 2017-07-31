@@ -1,5 +1,5 @@
-defmodule Glasnost.ChannelBroadcaster do
-  alias Glasnost.Web.Endpoint
+defmodule GlasnostWeb.ChannelBroadcaster do
+  alias GlasnostWeb.Endpoint
   @golos_events "channel:golos_events"
   @steem_events "channel:steem_events"
   @steem_meta %{blockchain: :steem, type: :comment}

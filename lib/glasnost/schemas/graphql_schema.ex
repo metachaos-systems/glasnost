@@ -8,8 +8,8 @@ defmodule Glasnost.Schema do
     end
 
     field :comment, type: :comment do
-      arg :author, non_null(:author)
-      arg :permlihk, non_null(:permlink)
+      # arg :author, non_null(:author)
+      # arg :permlink, non_null(:permlink)
       resolve &Glasnost.CommentResolver.find/2
     end
 

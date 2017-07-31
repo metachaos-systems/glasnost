@@ -1,5 +1,5 @@
-defmodule Glasnost.Web.ErrorView do
-  use Glasnost.Web, :view
+defmodule GlasnostWeb.ErrorView do
+  use GlasnostWeb, :view
 
   def render("404.html", _assigns) do
     "Page not found"

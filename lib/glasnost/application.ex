@@ -11,7 +11,7 @@ defmodule Glasnost.Application do
       # Start the Ecto repository
       supervisor(Glasnost.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(Glasnost.Web.Endpoint, []),
+      supervisor(GlasnostWeb.Endpoint, []),
       supervisor(ConCache, [[ttl_check: :timer.minutes(1), ttl: :timer.minutes(30)], [name: :config_cache]]),
       # worker(Glasnost.RuntimeConfig, [%{}, [name: :runtime_config]]),
       # supervisor(Glasnost.SimpleAuthenticator, []),

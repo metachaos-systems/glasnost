@@ -1,7 +1,7 @@
-defmodule Glasnost.Web.Endpoint do
+defmodule GlasnostWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :glasnost
 
-  socket "/socket", Glasnost.Web.UserSocket
+  socket "/socket", GlasnostWeb.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -38,7 +38,7 @@ defmodule Glasnost.Web.Endpoint do
     key: "_glasnost_key",
     signing_salt: "s9wBX/7J"
 
-  plug Glasnost.Web.Router
+  plug GlasnostWeb.Router
 
   @doc """
   Dynamically loads configuration from the system environment

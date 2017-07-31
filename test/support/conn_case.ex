@@ -1,4 +1,4 @@
-defmodule Glasnost.Web.ConnCase do
+defmodule GlasnostWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -19,10 +19,10 @@ defmodule Glasnost.Web.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      import Glasnost.Web.Router.Helpers
+      import GlasnostWeb.Router.Helpers
 
       # The default endpoint for testing
-      @endpoint Glasnost.Web.Endpoint
+      @endpoint GlasnostWeb.Endpoint
     end
   end
 

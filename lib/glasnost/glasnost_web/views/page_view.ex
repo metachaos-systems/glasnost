@@ -1,5 +1,5 @@
-defmodule Glasnost.Web.PageView do
-  use Glasnost.Web, :view
+defmodule GlasnostWeb.PageView do
+  use GlasnostWeb, :view
 
   def format_tag(eng_tag, blockchain) do
     case blockchain do

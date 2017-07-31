@@ -10,10 +10,10 @@ config :glasnost,
   ecto_repos: [Glasnost.Repo]
 
 # Configures the endpoint
-config :glasnost, Glasnost.Web.Endpoint,
+config :glasnost, GlasnostWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "IlPcXpQ1HeGwB09HaGUTGosT6dtEPHqFGNLP41CXnEtdLZj985A5mVhpJXUegvrk",
-  render_errors: [view: Glasnost.Web.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: GlasnostWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Glasnost.PubSub,
            adapter: Phoenix.PubSub.PG2]
 

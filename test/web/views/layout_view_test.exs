@@ -1,3 +1,3 @@
-defmodule Glasnost.Web.LayoutViewTest do
-  use Glasnost.Web.ConnCase, async: true
+defmodule GlasnostWeb.LayoutViewTest do
+  use GlasnostWeb.ConnCase, async: true
 end

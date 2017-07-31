@@ -1,7 +1,7 @@
-defmodule Glasnost.Web.GolosEventsChannel do
+defmodule GlasnostWeb.SteemEventsChannel do
   use Phoenix.Channel
 
-  def join("channel:golos_events", _message, socket) do
+  def join("channel:steem_events", _message, socket) do
     {:ok, socket}
   end
 

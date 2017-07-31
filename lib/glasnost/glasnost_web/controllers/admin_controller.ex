@@ -1,5 +1,5 @@
-defmodule Glasnost.Web.AdminController do
-  use Glasnost.Web, :controller
+defmodule GlasnostWeb.AdminController do
+  use GlasnostWeb, :controller
   alias Glasnost.{SimpleAuthenticator,RuntimeConfig}
 
   def index(conn, _params) do

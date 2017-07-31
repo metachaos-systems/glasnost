@@ -1,5 +1,5 @@
-defmodule Glasnost.Web.PageControllerTest do
-  use Glasnost.Web.ConnCase
+defmodule GlasnostWeb.PageControllerTest do
+  use GlasnostWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"

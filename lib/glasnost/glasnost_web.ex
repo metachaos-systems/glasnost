@@ -1,12 +1,12 @@
-defmodule Glasnost.Web do
+defmodule GlasnostWeb do
   @moduledoc """
   A module that keeps using definitions for controllers,
   views and so on.
 
   This can be used in your application as:
 
-      use Glasnost.Web, :controller
-      use Glasnost.Web, :view
+      use GlasnostWeb, :controller
+      use GlasnostWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -18,17 +18,17 @@ defmodule Glasnost.Web do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: Glasnost.Web
+      use Phoenix.Controller, namespace: GlasnostWeb
       import Plug.Conn
-      import Glasnost.Web.Router.Helpers
-      import Glasnost.Web.Gettext
+      import GlasnostWeb.Router.Helpers
+      import GlasnostWeb.Gettext
     end
   end
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/glasnost/web/templates",
-                        namespace: Glasnost.Web
+      use Phoenix.View, root: "lib/glasnost_web/templates",
+                        namespace: GlasnostWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_csrf_token: 0, get_flash: 2, view_module: 1]
@@ -36,9 +36,9 @@ defmodule Glasnost.Web do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import Glasnost.Web.Router.Helpers
-      import Glasnost.Web.ErrorHelpers
-      import Glasnost.Web.Gettext
+      import GlasnostWeb.Router.Helpers
+      import GlasnostWebErrorHelpers
+      import GlasnostWeb.Gettext
     end
   end
 
@@ -53,7 +53,7 @@ defmodule Glasnost.Web do
   def channel do
     quote do
       use Phoenix.Channel
-      import Glasnost.Web.Gettext
+      import GlasnostWeb.Gettext
     end
   end
 

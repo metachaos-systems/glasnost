@@ -1,5 +1,5 @@
-defmodule Glasnost.Web.CommentController do
-  use Glasnost.Web, :controller
+defmodule GlasnostWeb.CommentController do
+  use GlasnostWeb, :controller
   alias Glasnost.Repo
   import Ecto.Query
   @posts_per_page 24
