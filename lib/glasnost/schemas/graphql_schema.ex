@@ -15,6 +15,10 @@ defmodule Glasnost.Schema do
       resolve &Glasnost.CommentResolver.find/2
     end
 
+    field :statistics, type: :statistic do
+      resolve &Glasnost.StatisticsResolver.all/2
+    end
+
   end
 
 end

@@ -20,4 +20,8 @@ defmodule Glasnost.Schema.Types do
     field :pending_payout_value, :float
   end
 
+  object :statistic do
+    field :count, :integer
+  end
+
 end
