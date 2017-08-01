@@ -9,13 +9,13 @@ config :glasnost, GlasnostWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
-config :hound, driver: "phantomjs"
+# config :hound, driver: "phantomjs"
 
 # Configure your database
 config :glasnost, Glasnost.Repo,
-  adapter: Ecto.Adapters.Mnesia
-  # username: "postgres",
-  # password: "postgres",
-  # database: "glasnost_test",
-  # hostname: "localhost",
-  # pool: Ecto.Adapters.SQL.Sandbox
+  adapter: Ecto.Adapters.Postgres,
+  database: "glasnost_test",
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  port: "35432"
