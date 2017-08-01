@@ -9,6 +9,7 @@ defmodule Glasnost.Schema do
     end
 
     field :comment, type: :comment do
+      arg :blockchain, non_null(:string)
       arg :author, non_null(:string)
       arg :permlink, non_null(:string)
       resolve &Glasnost.CommentResolver.find/2
