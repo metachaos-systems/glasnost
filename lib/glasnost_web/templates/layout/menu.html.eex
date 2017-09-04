@@ -1,23 +1,7 @@
 <div class="ui large fixed inverted menu">
   <div class="ui container">
     <a href="/" class="header item">
-      <img class="logo" src="/images/<%=naive_image_chooser("logo", @conn.assigns[:lang])%>">
+      <!-- <img class="logo" src="/images/<%=naive_image_chooser("logo", @conn.assigns[:lang])%>"> -->
     </a>
-    <%= if !@conn.assigns[:menu] do %>
-    <a href="/" class="item"><%=naive_translate("home", @conn.assigns[:lang])%></a>
-    <!-- FIXME extract to LayoutView -->
-    <% else %>
-    <%= for %{item: item, dropdown_items: dropdown_items} <- @conn.assigns[:menu] do %>
-        <div class="ui dropdown item">
-          <%= item %>
-          <i class="dropdown icon"></i>
-          <div class="menu">
-            <%= for [title, link] <- dropdown_items do %>
-              <a href="<%= link %>" class="item"><%= title %></a>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
   </div>
 </div>
