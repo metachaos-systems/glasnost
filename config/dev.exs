@@ -50,8 +50,8 @@ config :phoenix, :stacktrace_depth, 20
 
 config :glasnost, Glasnost.Repo,
   adapter: Ecto.Adapters.Postgres,
-  database: "glasnost",
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  port: "35432"
+  database: System.get_env("GLASNOST_DB"),
+  username: System.get_env("GLASNOST_DB_USERNAME"),
+  password: System.get_env("GLASNOST_DB_PASSWORD"),
+  hostname: System.get_env("GLASNOST_DB_HOST"),
+  port: System.get_env("GLASNOST_DB_PORT")
