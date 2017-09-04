@@ -6,8 +6,6 @@
     <%= if !@conn.assigns[:menu] do %>
     <a href="/" class="item"><%=naive_translate("home", @conn.assigns[:lang])%></a>
     <!-- FIXME extract to LayoutView -->
-    <a href="/authors/<%=@conn.assigns[:about_blog_author]%>/<%=@conn.assigns[:about_blog_permlink]%>" class="item"><%=naive_translate("about", @conn.assigns[:lang])%></a>
-    <a href="<%=if @conn.assigns[:lang] == "ru", do: "https://golos.io", else: "https://steemit.com"%>" class="item"><%=naive_translate("about_steemlike_chain", @conn.assigns[:lang])%></a>
     <% else %>
     <%= for %{item: item, dropdown_items: dropdown_items} <- @conn.assigns[:menu] do %>
         <div class="ui dropdown item">
