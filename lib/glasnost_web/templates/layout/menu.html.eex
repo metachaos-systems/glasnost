@@ -1,7 +1,6 @@
 <div class="ui large fixed inverted menu">
   <div class="ui container">
     <a href="/" class="header item">
-      <!-- <img class="logo" src="/images/<%=naive_image_chooser("logo", @conn.assigns[:lang])%>"> -->
     </a>
   </div>
 </div>
