@@ -8,7 +8,7 @@ defmodule Glasnost.CommentResolver do
       "golos" -> Glasnost.Golos.Comment
     end
     q = if author do
-      from c in schema, where: c.author === ^author, order_by: [desc: c.created]
+      from c in schema, where: c.author == ^author, order_by: [desc: c.created]
     else
       from c in schema, order_by: [desc: c.created], limit: 1_000
     end
