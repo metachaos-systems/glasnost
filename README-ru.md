@@ -24,3 +24,32 @@ Glasnost теперь требует PostgresSQL.
 * GLASNOST_DB_PASSWORD
 
 Другие параметры, такие как PORT, STEEM_URL и GOLOS_URL, могут быть настроены в файле Docker.
+
+# Примеры GraphQL запроса
+
+```
+{
+  comments(blockchain:"golos", author: "ontofractal"){
+    id,
+    title,
+    author,
+    permlink,
+    created,
+    totalPayoutValue,
+    pendingPayoutValue
+  }
+}
+```
+
+
+```
+{
+  comment(blockchain:"golos", author: "ontofractal", permlink: "anons-novogo-etapa-akademii-i-obsuzhdenie-novykh-pravil"){
+    id,
+    title,
+    created,
+    totalPayoutValue,
+    pendingPayoutValue
+  }
+}
+```

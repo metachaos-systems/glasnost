@@ -24,3 +24,32 @@ You need to setup the following Postgres database settings using Docker ENV vari
 * GLASNOST_DB_PASSWORD
 
 Other settings like PORT, STEEM_URL and GOLOS_URL can be configured in the Dockerfile.
+
+#  GraphQL queries examples
+
+```
+{
+  comments(blockchain:"steem", author: "ontofractal"){
+    id,
+    title,
+    author,
+    permlink,
+    created,
+    totalPayoutValue,
+    pendingPayoutValue
+  }
+}
+```
+
+
+```
+{
+  comment(blockchain:"steem", author: "ontofractal", permlink: "glasnost-v0-12-released-now-with-postgresql-realtime-and-7-day-lookback-comments-data-sync-open-source-app-server-for-steem"){
+    id,
+    title,
+    created,
+    totalPayoutValue,
+    pendingPayoutValue
+  }
+}
+```
