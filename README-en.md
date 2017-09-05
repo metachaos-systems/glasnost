@@ -6,6 +6,7 @@ docker run -it -p 80:80 -e "GLASNOST_DB=..." -e "GLASNOST_DB_HOST=..." -e "GLASN
 
 # Features
 
+* Works both with Steem and Golos blockchains
 * Extractor for Postgres database that will sync comments in realtime and look back 7 days in the past  
 * GraphQL API endpoint at `/graphql`
 * Interactive GraphiQL endpoint at `/graphiql`
