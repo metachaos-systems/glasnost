@@ -4,20 +4,23 @@
 docker run -it -p 80:80 -e "GLASNOST_DB=..." -e "GLASNOST_DB_HOST=..." -e "GLASNOST_DB_USERNAME=..." -e "GLASNOST_DB_PASSWORD=..." -e "GLASNOST_DB_PORT=..." --restart on-failure:10 ontofractal/glasnost:latest
 ```
 
-# Обновление образа Docker перед установкой новой версии Glasnost
+# Функционал
 
-Если вы использовали более раннюю версию Glasnost, то перед запуском новой версии надо обновить Docker образ:
-```
-docker pull ontofractal/glasnost:latest
-```
+* Одновременно работает с блокчейнами Голоса и Steem
+* Экстрактор для базы данных Postgres, которая будет синхронизировать посты и комментариии в реальном времени и оглядываться назад в течение 7 дней
+* Endpoint API GraphQL в `/graphql`
+* Интерактивный браузерный GraphiQL клиент в `/graphiql`
 
+# Конфигурация
 
-# Остановка докер контейнера Glasnost
+Glasnost теперь требует PostgresSQL.
 
-`docker ps`
+Вам необходимо настроить следующие параметры базы данных Postgres с помощью переменных Docker ENV:
 
-и найти имя контейнера `CONTAINER_NAME` (в колонке `NAMES`)
+* GLASNOST_DB
+* GLASNOST_DB_HOST
+* GLASNOST_DB_PORT
+* GLASNOST_DB_USERNAME
+* GLASNOST_DB_PASSWORD
 
-`docker stop CONTAINER_NAME`
-
-`docker rm CONTAINER_NAME`
+Другие параметры, такие как PORT, STEEM_URL и GOLOS_URL, могут быть настроены в файле Docker.
