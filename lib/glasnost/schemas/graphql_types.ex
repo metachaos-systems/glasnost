@@ -2,8 +2,8 @@ defmodule Glasnost.Schema.Types do
   use Absinthe.Schema.Notation
 
   scalar :naive_datetime, description: "ISOz time" do
-    parse &NaiveDateTime.to_string/1
-    serialize &NaiveDateTime.from_iso8601!/2
+    parse &NaiveDateTime.from_iso8601!/1
+    serialize &NaiveDateTime.to_string/1
   end
 
   object :comment do
