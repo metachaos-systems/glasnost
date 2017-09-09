@@ -2,7 +2,7 @@ defmodule Glasnost.CommentResolver do
   alias Glasnost.Repo
   import Ecto.Query
 
-  def all(%{blockchain: blockchain, author: author}, _info) do
+  def all(%{blockchain: blockchain, author: author, tag: tag}, _info) do
     schema = case blockchain do
       "steem" -> Glasnost.Steem.Comment
       "golos" -> Glasnost.Golos.Comment

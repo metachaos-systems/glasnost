@@ -1,15 +1,17 @@
 defmodule Glasnost.Steemlike.Comment do
   require Logger
+  alias Glasnost.Repo
 
   def get_data_and_update(author, permlink, blockchain: blockchain) do
     {schema_mod, client_mod} = case blockchain do
       :steem -> {Glasnost.Steem.Comment, Steemex}
       :golos -> {Glasnost.Golos.Comment, Golos}
     end
+    existing_comment = Repo.get_by(schema_mod, author: author, permlink: permlink)
+    unless existing_comment && existing_comment.updated_at > NaiveDateTime.utc_now 
     {:ok, new_comment_data} = client_mod.get_content(author, permlink)
     unless new_comment_data.id === 0 do
-      cleaned_comment_data = new_comment_data
-        |> add_timestamps()
+      cleaned_comment_data = new_comment_data |> add_timestamps()
       result =
         case Glasnost.Repo.get(schema_mod, cleaned_comment_data.id) do
             nil  -> struct(schema_mod, %{id: cleaned_comment_data.id})
@@ -27,8 +29,6 @@ defmodule Glasnost.Steemlike.Comment do
       end
     end
   end
-
-
 
   def add_timestamps(comment) do
     comment

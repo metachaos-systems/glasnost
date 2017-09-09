@@ -6,6 +6,7 @@ defmodule Glasnost.Schema do
     field :comments, list_of(:comment) do
       arg :blockchain, non_null(:string)
       arg :author, :string
+      arg :tag, :string
       resolve &Glasnost.CommentResolver.all/2
     end
 
