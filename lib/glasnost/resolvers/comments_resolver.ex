@@ -13,6 +13,11 @@ defmodule Glasnost.CommentResolver do
     else
       q
     end
+    q = if tag do
+      from c in q, where: tag in c.tags
+    else
+      q
+    end
     {:ok, Repo.all(q)}
   end
 
