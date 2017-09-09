@@ -8,7 +8,8 @@ defmodule Glasnost.Steemlike.Comment do
       :golos -> {Glasnost.Golos.Comment, Golos}
     end
     existing_comment = Repo.get_by(schema_mod, author: author, permlink: permlink)
-    unless existing_comment && existing_comment.updated_at > NaiveDateTime.utc_now 
+    # TODO: improve update fn to exclude objects already in DB and matching certain clauses
+    # unless existing_comment && existing_comment.updated_at > NaiveDateTime.utc_now 
     {:ok, new_comment_data} = client_mod.get_content(author, permlink)
     unless new_comment_data.id === 0 do
       cleaned_comment_data = new_comment_data |> add_timestamps()

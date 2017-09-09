@@ -10,6 +10,8 @@ defmodule Glasnost.Schema.Types do
     field :id, :integer
     field :author, :string
     field :permlink, :string
+    field :parent_author, :string
+    field :parent_permlink, :string
     field :title, :string
     field :body, :string
     field :body_html, :string

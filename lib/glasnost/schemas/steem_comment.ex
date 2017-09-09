@@ -8,6 +8,8 @@ defmodule Glasnost.Steem.Comment do
     field :author, :string
     field :permlink, :string
     field :title, :string
+    field :parent_author, :string
+    field :parent_permlink, :string
     field :body, :string
     field :body_html, :string
     field :tags, {:array, :string}
