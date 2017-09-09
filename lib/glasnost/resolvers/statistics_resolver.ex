@@ -9,7 +9,8 @@ defmodule Glasnost.StatisticsResolver do
     end
     {:ok, %{
       post_count: Repo.count(from c in schema, where: is_nil(c.parent_author)),
-      comment_count: Repo.count(schema)
+      comment_count: Repo.count(from c in schema, where: not is_nil(c.parent_author)),
+      authors_count: Repo.count(from c in schema, distinct: c.author),
     }}
   end
 
