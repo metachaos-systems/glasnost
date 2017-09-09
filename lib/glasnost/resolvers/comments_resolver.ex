@@ -14,7 +14,7 @@ defmodule Glasnost.CommentResolver do
       q
     end
     q = if tag do
-      from c in q, where: tag in c.tags
+      from c in q, where: ^tag in c.tags
     else
       q
     end
