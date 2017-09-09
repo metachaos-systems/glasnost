@@ -7,10 +7,11 @@ defmodule Glasnost.CommentResolver do
       "steem" -> Glasnost.Steem.Comment
       "golos" -> Glasnost.Golos.Comment
     end
+    q = from c in schema, order_by: [desc: c.created]
     q = if author do
-      from c in schema, where: c.author == ^author, order_by: [desc: c.created]
+      from c in q, where: c.author == ^author
     else
-      from c in schema, order_by: [desc: c.created], limit: 1_000
+      q
     end
     {:ok, Repo.all(q)}
   end
