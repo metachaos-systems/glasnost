@@ -3,10 +3,7 @@ defmodule Glasnost.CommentResolver do
   import Ecto.Query
 
   def all(%{blockchain: blockchain, author: author, tag: tag}, _info) do
-    schema = case blockchain do
-      "steem" -> Glasnost.Steem.Comment
-      "golos" -> Glasnost.Golos.Comment
-    end
+    schema = select_schema(blockchain)
     q = (from c in schema, order_by: [desc: c.created])
       |> add_to_query(:tag, tag)
       |> add_to_query(:author, author)
@@ -14,10 +11,7 @@ defmodule Glasnost.CommentResolver do
   end
 
   def find(%{"blockchain" => blockchain, author: a, permlink: p}, _info) do
-    schema = case blockchain do
-      :steem -> Glasnost.Steem.Comment
-      :golos -> Glasnost.Golos.Comment
-    end
+    schema = select_schema(blockchain)
     {:ok, Repo.find(schema, author: a, permlink: p)}
   end
 
@@ -31,6 +25,13 @@ defmodule Glasnost.CommentResolver do
 
   def add_to_query(q, :author, author) do
     from c in q, where: c.author == ^author
+  end
+
+  def select_schema(blockchain) when is_atom(blockchain) do
+    case blockchain do
+      :steem -> Glasnost.Steem.Comment
+      :golos -> Glasnost.Golos.Comment
+    end
   end
 
 end
