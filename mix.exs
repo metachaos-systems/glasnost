@@ -50,6 +50,7 @@ defmodule Glasnost.Mixfile do
      {:absinthe, "~> 1.3.1"},
      {:absinthe_plug, "~> 1.3.0"},
      {:credo, ">= 0.0.0", only: :dev},
+     {:exfmt, github: "lpil/exfmt", only: :dev},
      {:earmark, ">= 0.0.0"}]
   end
 
