@@ -14,7 +14,7 @@ defmodule Glasnost.Repo.Migrations.CreateGolosComments do
         add :created, :timestamp
         add :total_payout_value, :float
         add :pending_payout_value, :float
-        
+
         timestamps()
       end
   end
