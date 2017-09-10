@@ -29,7 +29,7 @@ defmodule Glasnost.Golos.Comment do
     |> unique_constraint(:id, name: :golos_comments_pkey)
   end
 
-  def get_data_and_update(author, comment) do
-    Glasnost.Steemlike.Comment.get_data_and_update(author, comment, blockchain: :golos)
+  def get_data_and_update(author, comment, source: s) do
+    Glasnost.Steemlike.Comment.get_data_and_update(author, comment, source: s, blockchain: :golos)
   end
 end

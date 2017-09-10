@@ -20,10 +20,8 @@ defmodule Glasnost.Steemlike.EventHandler do
     Logger.info("#{length(events)} events arrived to #{state.token} event handler...")
     comments_to_update = events
       |> Enum.filter(& &1.metadata.type in [:comment, :vote])
-      |> Enum.map(&Map.get(&1, :data))
-      |> Enum.map(&Map.take(&1, [:author, :permlink]))
-      |> Enum.uniq
-      |> Enum.each(fn %{author: a, permlink: p} -> spawn( fn -> state.comment_schema.get_data_and_update(a, p) end) end)
+      |> Enum.uniq_by(fn ev -> {ev.data.author, ev.data.permlink} end)
+      |> Enum.each(fn %{data: %{author: a, permlink: p}, metadata: %{source: s}} -> spawn( fn -> state.comment_schema.get_data_and_update(a, p, source: s) end) end)
 
     {:noreply, [], state}
   end
