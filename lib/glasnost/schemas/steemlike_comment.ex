@@ -13,21 +13,8 @@ defmodule Glasnost.Steemlike.Comment do
       {:ok, new_comment_data} = client_mod.get_content(author, permlink)
       if new_comment_data.id !== 0 do
         cleaned_comment_data = new_comment_data |> add_timestamps()
-        result =
-          case existing_comment do
-              nil  -> struct(schema_mod, %{id: cleaned_comment_data.id})
-              comment -> comment
-            end
-            |> schema_mod.changeset(cleaned_comment_data)
-            |> Glasnost.Repo.insert_or_update
-
-        case result do
-          {:ok, struct}       ->
-            :noop
-          {:error, changeset} ->
-            Logger.error("Persistence failed:")
-            Logger.error(inspect changeset)
-        end
+        c = struct(schema_mod, cleaned_comment_data)
+        Glasnost.Repo.insert(c, on_conflict: :replace_all, conflict_target: [:author, :permlink])
       end
     end
   end
