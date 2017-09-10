@@ -8,16 +8,8 @@ defmodule Glasnost.CommentResolver do
       "golos" -> Glasnost.Golos.Comment
     end
     q = from c in schema, order_by: [desc: c.created]
-    q = if author do
-      from c in q, where: c.author == ^author
-    else
-      q
-    end
-    q = if tag do
-      from c in q, where: ^tag in c.tags
-    else
-      q
-    end
+      |> add_to_query(:tag, tag)
+      |> add_to_query(:author, author)
     {:ok, Repo.all(q)}
   end
 
@@ -28,4 +20,17 @@ defmodule Glasnost.CommentResolver do
     end
     {:ok, Repo.find(schema, author: a, permlink: p)}
   end
+
+  def add_to_query(query, _, nil) do
+    query
+  end
+
+  def add_to_query(query, :tag, tag) do
+    from c in q, where: ^tag in c.tags
+  end
+
+  def add_to_query(query, :author, author) do
+    from c in q, where: c.author == ^author
+  end
+
 end
