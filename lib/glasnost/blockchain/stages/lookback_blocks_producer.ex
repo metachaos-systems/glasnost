@@ -37,7 +37,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
       |> Task.yield_many(10_000)
 
     blocks = for {_, {:ok, {:ok, block}}} <- tasks_results do
-      struct(event_mod, %{data: block, metadata: %{source: :past}})
+      struct(event_mod, %{data: block, metadata: %{source: :resync}})
     end
 
     unless lookback_threshold_reached?(cur_block, start_block) do
