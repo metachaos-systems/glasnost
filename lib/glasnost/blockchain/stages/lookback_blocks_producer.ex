@@ -2,7 +2,8 @@ defmodule Glasnost.Stage.LookbackBlocks do
   use GenStage
   alias Glasnost.Repo
   require Logger
-  @blocks_per_tick 10
+  @blocks_per_tick 100
+  @tick_duration 3_000
   @lookback_max_blocks 201_600
 
   def start_link(args, options) do
@@ -41,7 +42,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
     end
 
     unless lookback_threshold_reached?(cur_block, start_block) do
-      Process.send_after(self(), :next_blocks, 3_000)
+      Process.send_after(self(), :next_blocks, @tick_duration)
     end
 
     {:noreply, blocks, state}
