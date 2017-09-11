@@ -38,7 +38,6 @@ defmodule Glasnost.Mixfile do
      {:gettext, "~> 0.11"},
      {:ex_golos, github: "cyberpunk-ventures/ex_golos"},
      {:steemex, github: "cyberpunk-ventures/steemex"},
-     {:expug, ">= 0.0.0"},
      {:phoenix_expug, ">= 0.0.0"},
      {:calendar, ">= 0.16.0"},
      {:distillery, ">= 0.0.0"},
