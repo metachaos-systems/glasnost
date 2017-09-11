@@ -8,7 +8,7 @@ defmodule Glasnost.Steemlike.Comment do
       :golos -> {Glasnost.Golos.Comment, Golos}
     end
     existing_comment = Repo.get_by(schema_mod, author: author, permlink: permlink)
-    should_be_updated = is_nil(existing_comment) or (source !== :resync)
+    should_be_updated = (source === :resync and is_nil(existing_comment)) or (source === :naive_realtime)
     if should_be_updated do
       {:ok, new_comment_data} = client_mod.get_content(author, permlink)
       if new_comment_data.id !== 0 do
