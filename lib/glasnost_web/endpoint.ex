@@ -47,6 +47,15 @@ defmodule GlasnostWeb.Endpoint do
   It receives the endpoint configuration from the config files
   and must return the updated configuration.
   """
+  def init(_key, config) do
+    if config[:load_from_system_env] do
+      port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
+      {:ok, Keyword.put(config, :http, [:inet6, port: port])}
+    else
+      {:ok, config}
+    end
+  end
+
   def load_from_system_env(config) do
     port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
     {:ok, Keyword.put(config, :http, [:inet6, port: port])}
