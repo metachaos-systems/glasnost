@@ -2,7 +2,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
   use GenStage
   alias Glasnost.Repo
   require Logger
-  @blocks_per_tick 10
+  @blocks_per_tick 100
   @tick_duration 3_000
   @lookback_max_blocks 201_600
 
