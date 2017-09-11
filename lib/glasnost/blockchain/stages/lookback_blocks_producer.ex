@@ -2,7 +2,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
   use GenStage
   alias Glasnost.Repo
   require Logger
-  @blocks_per_tick 100
+  @blocks_per_tick 10
   @tick_duration 3_000
   @lookback_max_blocks 201_600
 
@@ -27,8 +27,8 @@ defmodule Glasnost.Stage.LookbackBlocks do
 
   def handle_info(:next_blocks, state) do
     import Ecto.Query
-    Logger.info("Starting to import blocks from #{state.current_block}")
     cur_block  = state.current_block
+    Logger.info("Starting to import blocks from #{cur_block}")
     start_block = state.starting_block
     event_mod = Module.concat([state.client, Event])
     next_block = cur_block - @blocks_per_tick
@@ -43,13 +43,15 @@ defmodule Glasnost.Stage.LookbackBlocks do
 
     unless lookback_threshold_reached?(cur_block, start_block) do
       Process.send_after(self(), :next_blocks, @tick_duration)
+    else
+      Logger.info("Lookback blocks producer for #{state.token} has completed its' job.")
     end
 
     {:noreply, blocks, state}
   end
 
   def lookback_threshold_reached?(cur_block, start_block) do
-    cur_block > start_block - @lookback_max_blocks
+    cur_block < start_block - @lookback_max_blocks
   end
 
   def handle_info(msg, state) do
