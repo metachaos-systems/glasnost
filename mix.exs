@@ -3,8 +3,8 @@ defmodule Glasnost.Mixfile do
 
   def project do
     [app: :glasnost,
-     version: "0.12.0",
-     elixir: "~> 1.4",
+     version: "0.14.0",
+     elixir: "~> 1.5",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
