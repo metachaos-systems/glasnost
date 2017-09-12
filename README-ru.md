@@ -29,17 +29,21 @@ Glasnost теперь требует базу PostgreSQL.
 
 ```
 {
-  comments(blockchain:"golos", author: "ontofractal"){
+  comments(blockchain:"golos", author: "ontofractal", isPost: true, category: "ru--kriptovalyuty"){
     id,
     title,
     author,
     permlink,
+    parentAuthor,
+    parentPermlink,
+    body
+    tags,
+    category,
     created,
     totalPayoutValue,
     pendingPayoutValue
   }
-}
-```
+}```
 
 
 ```
@@ -47,6 +51,13 @@ Glasnost теперь требует базу PostgreSQL.
   comment(blockchain:"golos", author: "ontofractal", permlink: "anons-novogo-etapa-akademii-i-obsuzhdenie-novykh-pravil"){
     id,
     title,
+    author,
+    permlink,
+    parentAuthor,
+    parentPermlink,
+    body
+    tags,
+    category,
     created,
     totalPayoutValue,
     pendingPayoutValue
