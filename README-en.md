@@ -29,11 +29,16 @@ Other settings like PORT, STEEM_URL and GOLOS_URL can be configured in the Docke
 
 ```
 {
-  comments(blockchain:"steem", author: "ontofractal"){
+  comments(blockchain:"steem", author: "ontofractal", isPost: true, category: "steemdev"){
     id,
     title,
     author,
     permlink,
+    parentAuthor,
+    parentPermlink,
+    body
+    tags,
+    category,
     created,
     totalPayoutValue,
     pendingPayoutValue
@@ -47,6 +52,13 @@ Other settings like PORT, STEEM_URL and GOLOS_URL can be configured in the Docke
   comment(blockchain:"steem", author: "ontofractal", permlink: "glasnost-v0-12-released-now-with-postgresql-realtime-and-7-day-lookback-comments-data-sync-open-source-app-server-for-steem"){
     id,
     title,
+    author,
+    permlink,
+    parentAuthor,
+    parentPermlink,
+    body
+    tags,
+    category,
     created,
     totalPayoutValue,
     pendingPayoutValue
