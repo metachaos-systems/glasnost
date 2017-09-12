@@ -7,9 +7,11 @@ defmodule Glasnost.CommentResolver do
     author = args[:author]
     tag = args[:tag]
     is_post = args[:is_post]
+    category = args[:category]
     schema = select_schema(blockchain)
     q = (from c in schema, order_by: [desc: c.created])
       |> add_to_query(:tag, tag)
+      |> add_to_query(:category, category)
       |> add_to_query(:author, author)
       |> add_to_query(:is_post, is_post)
     {:ok, Repo.all(q)}
@@ -24,8 +26,14 @@ defmodule Glasnost.CommentResolver do
     q
   end
 
-  def add_to_query(q, :is_post, is_post) do
+
+  def add_to_query(q, :is_post, false), do: q
+  def add_to_query(q, :is_post, true) do
     from c in q, where: is_nil(c.parent_author)
+  end
+
+  def add_to_query(q, :category, category) do
+    from c in q, where: c.category == ^category
   end
 
   def add_to_query(q, :tag, tag) do
