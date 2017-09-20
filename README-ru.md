@@ -13,7 +13,7 @@ docker run -it -p 80:80 -e "GLASNOST_DB=..." -e "GLASNOST_DB_HOST=..." -e "GLASN
 
 # Конфигурация
 
-Glasnost теперь требует базу PostgreSQL.
+Для работы Glasnost необходима база PostgreSQL.
 
 Вам необходимо настроить следующие параметры базы данных Postgres с помощью переменных Docker ENV:
 
