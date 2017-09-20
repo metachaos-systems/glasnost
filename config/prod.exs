@@ -82,4 +82,7 @@ config :glasnost, Glasnost.Repo,
   username: System.get_env("GLASNOST_DB_USERNAME"),
   password: System.get_env("GLASNOST_DB_PASSWORD"),
   hostname: System.get_env("GLASNOST_DB_HOST"),
-  port: System.get_env("GLASNOST_DB_PORT")
+  port: System.get_env("GLASNOST_DB_PORT"),
+  pool_timeout: 300_000,
+  timeout: 300_000,
+  pool_size: 20
