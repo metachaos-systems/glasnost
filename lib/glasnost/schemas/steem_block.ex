@@ -9,7 +9,7 @@ defmodule Glasnost.Steem.Block do
   alias Glasnost.Repo
 
   @primary_key false
-  schema "golos_blocks" do
+  schema "steem_blocks" do
     field :extensions, {:array, :map}
     field :previous, :string
     field :timestamp, :naive_datetime
