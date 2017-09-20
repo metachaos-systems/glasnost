@@ -63,11 +63,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
     delta = current_height - blocks
     if delta < 1, do: 1, else: delta
   end
-
-  def lookback_threshold_reached?(cur_block, start_block) do
-    cur_block < start_block - @lookback_max_blocks
-  end
-
+  
   def handle_info(msg, state) do
     Logger.info("unexpected msg: #{inspect msg}")
   end
