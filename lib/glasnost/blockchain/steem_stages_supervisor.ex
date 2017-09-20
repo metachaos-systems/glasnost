@@ -10,7 +10,8 @@ defmodule Glasnost.Steem.StageSup do
     }
 
   def start_link do
-    Supervisor.start_link(__MODULE__, :ok, name: __MODULE__) end
+    Supervisor.start_link(__MODULE__, :ok, name: __MODULE__)
+  end
 
   def init(:ok) do
     Logger.info("Flow supervisor for steem is initializing...")
@@ -24,7 +25,7 @@ defmodule Glasnost.Steem.StageSup do
       worker(streaming_blocks_producer, [[], [name: streaming_blocks_producer]]),
       worker(raw_ops_stage, [[subscribe_to: block_producers], [name: raw_ops_stage]]),
       worker(munged_ops_stage, [[subscribe_to: [raw_ops_stage]], [name: munged_ops_stage]]),
-      worker(Glasnost.Steemlike.EventHandler, [%{@config | subscribe_to: [munged_ops_stage]}]),
+      worker(Glasnost.Steemlike.EventHandler, [%{@config | subscribe_to: [munged_ops_stage, slbp, streaming_blocks_producer]}]),
     ]
 
     supervise(children, strategy: :one_for_one, max_restarts: 10, max_seconds: 5)
