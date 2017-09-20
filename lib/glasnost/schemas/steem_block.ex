@@ -1,31 +1,42 @@
 defmodule Glasnost.Steem.Block do
-    use Ecto.Schema
-    import Ecto.Changeset
-    import Ecto.Query
-    alias Ecto.Adapters.SQL
-    alias Ecto.Multi
-    alias Glasnost.Repo
+  use Ecto.Schema
 
-    @primary_key false
+  import Ecto.Changeset
+  import Ecto.Query
 
-    schema "golos_blocks" do
-      field :extensions, {:array, :map}
-      field :previous, :string
-      field :timestamp, :naive_datetime
-      field :transaction_merkle_root, :string
-      field :transactions, {:array, :map}
-      field :witness, :string
-      field :witness_signatures, {:array, :string}
-      field :height, :integer, primary_key: true
+  alias Ecto.Adapters.SQL
+  alias Ecto.Multi
+  alias Glasnost.Repo
 
-      timestamps
-    end
+  @primary_key false
+  schema "golos_blocks" do
+    field :extensions, {:array, :map}
+    field :previous, :string
+    field :timestamp, :naive_datetime
+    field :transaction_merkle_root, :string
+    field :transactions, {:array, :map}
+    field :witness, :string
+    field :witness_signatures, {:array, :string}
+    field :height, :integer, primary_key: true
+    timestamps
+  end
 
-    def changeset(data, params \\ %{}) do
-      allowed_params = [:previous, :timestamp, :transaction_merkle_root, :witness, :witness_signatures, :transactions, :height]
-      data
-      |> cast(params, allowed_params)
-      |> unique_constraint(:height)
-    end
+  def changeset(data, params \\ %{}) do
+    allowed_params = [
+      :previous,
+      :timestamp,
+      :transaction_merkle_root,
+      :witness,
+      :witness_signatures,
+      :transactions,
+      :height,
+    ]
+    data
+    |> cast(params, allowed_params)
+    |> unique_constraint(:height)
+  end
 
+  def react_to_event(event) do
+    Glasnost.Steemlike.Block.update(event, blockchain: :steem)
+  end
 end
