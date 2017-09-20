@@ -2,7 +2,6 @@ defmodule Glasnost.Steemlike.Comment do
   require Logger
   alias Glasnost.Repo
 
-
   def get_data_and_update(event, blockchain: blockchain) do
     %{data: %{author: author, permlink: permlink}, metadata: %{source: source}} = event
     {schema_mod, client_mod} = case blockchain do
@@ -10,7 +9,7 @@ defmodule Glasnost.Steemlike.Comment do
       :golos -> {Glasnost.Golos.Comment, Golos}
     end
     existing_comment = Repo.get_by(schema_mod, author: author, permlink: permlink)
-    should_be_updated = (source === :resync and is_nil(existing_comment)) or (existing_comment.updated_at < event.metadata.timestamp) or (source === :naive_realtime)
+    should_be_updated = (source === :naive_realtime) or (source === :resync and is_nil(existing_comment)) or (existing_comment.updated_at < event.metadata.timestamp)
     if should_be_updated do
       {:ok, new_comment_data} = client_mod.get_content(author, permlink)
       if new_comment_data.id !== 0 do
