@@ -2,8 +2,9 @@ defmodule Glasnost.Stage.LookbackBlocks do
   use GenStage
   alias Glasnost.Repo
   require Logger
-  @blocks_per_tick 100
-  @tick_duration 3_000
+  alias Ecto.Adapters.SQL
+  # @blocks_per_tick 100
+  @tick_duration 300_000
   @lookback_max_blocks 201_600
 
   def start_link(args, options) do
@@ -27,27 +28,40 @@ defmodule Glasnost.Stage.LookbackBlocks do
 
   def handle_info(:next_blocks, state) do
     import Ecto.Query
-    cur_block  = state.current_block
-    Logger.info("Starting to import blocks from #{cur_block}")
-    start_block = state.starting_block
-    event_mod = Module.concat([state.client, Event])
-    next_block = cur_block - @blocks_per_tick
-    state = put_in(state.current_block, next_block)
-    tasks_results = cur_block..next_block
-      |> Enum.map(&Task.async(fn -> state.client.get_block(&1) end))
-      |> Task.yield_many(10_000)
-
-    blocks = for {_, {:ok, {:ok, block}}} <- tasks_results do
-      struct(event_mod, %{data: block, metadata: %{source: :resync}})
+    {:ok, %{head_block_number: head_block}} = state.client.get_dynamic_global_properties
+    table = Atom.to_string(state.token)
+    block_schema = Module.concat([Glasnost, state.schema, Block])
+    q = ("""
+    SELECT generate_series(
+        #{head_block},
+        #{min_block_to_start(head_block, @lookback_max_blocks)},
+        -1)
+    EXCEPT (
+      SELECT height
+      FROM #{table}
+    )
+    LIMIT 10000
+    ;
+    """)
+    {:ok, %{rows: rows}} = SQL.query(Repo, q)
+    tasks = for block_height <- List.flatten(rows) do
+      Task.async(
+        fn ->
+          {:ok, block} = state.client.get_block(block_height)
+          block
+       end
+      )
     end
-
-    unless lookback_threshold_reached?(cur_block, start_block) do
-      Process.send_after(self(), :next_blocks, @tick_duration)
-    else
-      Logger.info("Lookback blocks producer for #{state.token} has completed its' job.")
+    blocks = for {_, {:ok, block}} <- Task.yield_many(tasks, 300_000) do
+      %{data: block, metadata: %{source: :resync, type: :block}}
     end
-
+    Logger.info("Broadcasting missing #{length blocks} block events for #{Atom.to_string(state.token)}")
     {:noreply, blocks, state}
+  end
+
+  def min_block_to_start(current_height, blocks) when is_integer(blocks)  do
+    delta = current_height - blocks
+    if delta < 1, do: 1, else: delta
   end
 
   def lookback_threshold_reached?(cur_block, start_block) do
