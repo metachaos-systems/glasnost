@@ -4,7 +4,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
   require Logger
   alias Ecto.Adapters.SQL
   # @blocks_per_tick 100
-  @tick_duration 300_000
+  @tick_duration 30_000
   @lookback_max_blocks 201_600
 
   def start_link(args, options) do
@@ -18,7 +18,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
     config = config
       |> Map.put_new(:starting_block, head_block)
       |> Map.put_new(:current_block, head_block)
-    Process.send_after(self(), :next_blocks, 60_000)
+    Process.send_after(self(), :next_blocks, @tick_duration)
     {:producer, config, dispatcher: GenStage.BroadcastDispatcher, buffer_size: 100_000}
   end
 
@@ -40,7 +40,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
       SELECT height
       FROM #{table}
     )
-    LIMIT 10000
+    LIMIT 1000
     ;
     """)
     {:ok, %{rows: rows}} = SQL.query(Repo, q)
@@ -55,6 +55,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
     blocks = for {_, {:ok, block}} <- Task.yield_many(tasks, 300_000) do
       %{data: block, metadata: %{source: :resync, type: :block}}
     end
+    Process.send_after(self(), :next_blocks, @tick_duration)
     Logger.info("Broadcasting missing #{length blocks} block events for #{Atom.to_string(state.token)}")
     {:noreply, blocks, state}
   end
@@ -63,7 +64,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
     delta = current_height - blocks
     if delta < 1, do: 1, else: delta
   end
-  
+
   def handle_info(msg, state) do
     Logger.info("unexpected msg: #{inspect msg}")
   end
