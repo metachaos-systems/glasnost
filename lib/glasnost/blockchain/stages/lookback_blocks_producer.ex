@@ -18,7 +18,7 @@ defmodule Glasnost.Stage.LookbackBlocks do
     config = config
       |> Map.put_new(:starting_block, head_block)
       |> Map.put_new(:current_block, head_block)
-    Process.send_after(self(), :next_blocks, 5_000)
+    Process.send_after(self(), :next_blocks, 60_000)
     {:producer, config, dispatcher: GenStage.BroadcastDispatcher, buffer_size: 100_000}
   end
 
@@ -29,8 +29,8 @@ defmodule Glasnost.Stage.LookbackBlocks do
   def handle_info(:next_blocks, state) do
     import Ecto.Query
     {:ok, %{head_block_number: head_block}} = state.client.get_dynamic_global_properties
-    table = Atom.to_string(state.token)
-    block_schema = Module.concat([Glasnost, state.schema, Block])
+    table = Atom.to_string(state.token) <> "_blocks"
+    block_schema = Module.concat([state.schema, Block])
     q = ("""
     SELECT generate_series(
         #{head_block},
