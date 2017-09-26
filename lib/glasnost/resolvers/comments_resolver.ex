@@ -1,6 +1,7 @@
 defmodule Glasnost.CommentResolver do
   alias Glasnost.Repo
   import Ecto.Query
+  import Glasnost.ResolverUtils, only: [select_schema: 1]
 
   def all(args, _info) do
     blockchain = args[:blockchain]
@@ -42,13 +43,6 @@ defmodule Glasnost.CommentResolver do
 
   def add_to_query(q, :author, author) do
     from c in q, where: c.author == ^author
-  end
-
-  def select_schema(blockchain) when is_binary(blockchain) do
-    case blockchain do
-      "steem" -> Glasnost.Steem.Comment
-      "golos" -> Glasnost.Golos.Comment
-    end
   end
 
 end
