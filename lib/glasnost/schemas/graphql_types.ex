@@ -22,6 +22,16 @@ defmodule Glasnost.Schema.Types do
     field :pending_payout_value, :float
   end
 
+  object :block do
+    field :previous, :string
+    field :timestamp, :naive_datetime
+    field :transaction_merkle_root, :string
+    field :transactions, %Absinthe.Type.List{of_type: :map}
+    field :witness, :string
+    field :witness_signatures, {:array, :string}
+    field :height, :integer
+  end
+
   object :statistic do
     field :count, :integer
   end
