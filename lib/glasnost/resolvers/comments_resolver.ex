@@ -17,7 +17,7 @@ defmodule Glasnost.CommentResolver do
     {:ok, Repo.all(q)}
   end
 
-  def find(%{"blockchain" => blockchain, author: a, permlink: p}, _info) do
+  def find(%{blockchain: blockchain, author: a, permlink: p}, _info) do
     schema = select_schema(blockchain)
     {:ok, Repo.find(schema, author: a, permlink: p)}
   end
