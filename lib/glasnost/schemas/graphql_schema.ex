@@ -19,6 +19,12 @@ defmodule Glasnost.Schema do
       resolve &Glasnost.CommentResolver.find/2
     end
 
+    field :block, type: :block do
+      arg :blockchain, non_null(:string)
+      arg :height, non_null(:integer)
+      resolve &Glasnost.BlockResolver.find/2
+    end
+
     field :statistics, type: :statistic do
       resolve &Glasnost.StatisticsResolver.all/2
     end
