@@ -1,7 +1,7 @@
 defmodule Glasnost.CommentResolver do
   alias Glasnost.Repo
   import Ecto.Query
-  import Glasnost.ResolverUtils, only: [select_schema: 1]
+  import Glasnost.ResolverUtils, only: [select_schema: 2]
 
   def all(args, _info) do
     blockchain = args[:blockchain]
@@ -9,7 +9,7 @@ defmodule Glasnost.CommentResolver do
     tag = args[:tag]
     is_post = args[:is_post]
     category = args[:category]
-    schema = select_schema(blockchain)
+    schema = select_schema(blockchain, :comment)
     q = (from c in schema, order_by: [desc: c.created])
       |> add_to_query(:tag, tag)
       |> add_to_query(:category, category)
@@ -19,7 +19,7 @@ defmodule Glasnost.CommentResolver do
   end
 
   def find(%{blockchain: blockchain, author: a, permlink: p}, _info) do
-    schema = select_schema(blockchain)
+    schema = select_schema(blockchain, :comment)
     {:ok, Repo.find(schema, author: a, permlink: p)}
   end
 

@@ -8,8 +8,8 @@ defmodule Glasnost.ResolverUtils do
 
   def select_schema(blockchain, :block) when is_binary(blockchain) do
     case blockchain do
-      "steem" -> Glasnost.Steem.Comment
-      "golos" -> Glasnost.Golos.Comment
+      "steem" -> Glasnost.Steem.Block
+      "golos" -> Glasnost.Golos.Block
     end
   end
 end
