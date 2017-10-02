@@ -27,6 +27,7 @@ defmodule Glasnost.Schema do
     end
 
     field :statistics, type: :statistic do
+      arg :blockchain, non_null(:string)
       resolve &Glasnost.StatisticsResolver.all/2
     end
 

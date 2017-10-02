@@ -38,7 +38,9 @@ defmodule Glasnost.Schema.Types do
   end
 
   object :statistic do
-    field :count, :integer
+    field :post_count, :integer
+    field :comment_count, :integer
+    field :author_count, :integer
   end
 
 end
