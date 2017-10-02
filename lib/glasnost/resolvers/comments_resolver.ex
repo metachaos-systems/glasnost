@@ -9,8 +9,8 @@ defmodule Glasnost.CommentResolver do
     tag = args[:tag]
     is_post = args[:is_post]
     category = args[:category]
-    order_by = :total_payout_value #args[:order_by]
-    sort = :desc # args[:sort]
+    order_by = args[:order_by] || :created 
+    sort = args[:sort] || :desc
     sort in [:asc, :desc] === true # FIXME
     order_by in [:created, :total_payout_value, :pending_payout_value] === true # FIXME
     schema = select_schema(blockchain, :comment)
