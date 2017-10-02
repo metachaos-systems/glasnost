@@ -20,13 +20,6 @@ RUN mix deps.update --all
 ENV MIX_ENV prod
 ENV PORT 80
 
-WORKDIR /glasnost_app/assets
-RUN npm install && \
- node node_modules/brunch/bin/brunch build && \
- rm -rf ./assets
-
-WORKDIR /glasnost_app
-
 RUN mix compile
 
 RUN mix phx.digest
