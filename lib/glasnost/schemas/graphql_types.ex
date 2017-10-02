@@ -6,6 +6,11 @@ defmodule Glasnost.Schema.Types do
     serialize &NaiveDateTime.to_string/1
   end
 
+  scalar :json, description: "generic JS object" do
+    parse &Poison.Parser.parse!/1
+    serialize & &1
+  end
+
   object :comment do
     field :id, :integer
     field :author, :string
@@ -26,9 +31,9 @@ defmodule Glasnost.Schema.Types do
     field :previous, :string
     field :timestamp, :naive_datetime
     field :transaction_merkle_root, :string
-    field :transactions, %Absinthe.Type.List{of_type: :map}
+    field :transactions, %Absinthe.Type.List{of_type: :json}
     field :witness, :string
-    field :witness_signatures, {:array, :string}
+    # field :witness_signatures, {:array, :string}
     field :height, :integer
   end
 
