@@ -22,6 +22,7 @@ defmodule Glasnost.Schema do
     field :block, type: :block do
       arg :blockchain, non_null(:string)
       arg :height, non_null(:integer)
+      arg :get_last, :boolean
       resolve &Glasnost.BlockResolver.find/2
     end
 
