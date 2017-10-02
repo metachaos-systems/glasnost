@@ -9,8 +9,12 @@ defmodule Glasnost.CommentResolver do
     tag = args[:tag]
     is_post = args[:is_post]
     category = args[:category]
+    order_by = :total_payout_value #args[:order_by]
+    sort = :desc # args[:sort]
+    sort in [:asc, :desc] === true # FIXME
+    order_by in [:created, :total_payout_value, :pending_payout_value] === true # FIXME
     schema = select_schema(blockchain, :comment)
-    q = (from c in schema, order_by: [desc: c.created])
+    q = (from c in schema, order_by: [{^sort, ^order_by}])
       |> add_to_query(:tag, tag)
       |> add_to_query(:category, category)
       |> add_to_query(:author, author)
