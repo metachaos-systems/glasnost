@@ -29,7 +29,7 @@ docker run -it -p 80:80 -e "GLASNOST_DB=..." -e "GLASNOST_DB_HOST=..." -e "GLASN
 
 ```
 {
-  comments(blockchain:"golos", author: "ontofractal", isPost: true, category: "ru--kriptovalyuty"){
+  comments(blockchain:"golos", author: "ontofractal", isPost: true, category: "ru--kriptovalyuty", orderBy: TOTAL_PAYOUT_VALUE, sort: DESC){
     id,
     title,
     author,
@@ -43,7 +43,8 @@ docker run -it -p 80:80 -e "GLASNOST_DB=..." -e "GLASNOST_DB_HOST=..." -e "GLASN
     totalPayoutValue,
     pendingPayoutValue
   }
-}```
+}
+```
 
 
 ```
@@ -61,6 +62,27 @@ docker run -it -p 80:80 -e "GLASNOST_DB=..." -e "GLASNOST_DB_HOST=..." -e "GLASN
     created,
     totalPayoutValue,
     pendingPayoutValue
+  }
+}
+```
+
+```
+{
+  block(blockchain:"golos", get_last: true){
+    height,
+    timestamp,
+    transactions,
+    witness
+  }
+}
+```
+
+```
+{
+  statistics(blockchain:"golos"){
+    postCount,
+    commentCount,
+    authorCount
   }
 }
 ```
