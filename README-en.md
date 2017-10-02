@@ -29,7 +29,7 @@ Other settings like PORT, STEEM_URL and GOLOS_URL can be configured in the Docke
 
 ```
 {
-  comments(blockchain:"steem", author: "ontofractal", isPost: true, category: "steemdev"){
+  comments(blockchain:"steem", author: "ontofractal", isPost: true, category: "steemdev", orderBy: TOTAL_PAYOUT_VALUE, sort: DESC){
     id,
     title,
     author,
@@ -62,6 +62,28 @@ Other settings like PORT, STEEM_URL and GOLOS_URL can be configured in the Docke
     created,
     totalPayoutValue,
     pendingPayoutValue
+  }
+}
+```
+
+
+```
+{
+  block(blockchain:"steem", getLast: true){
+    height,
+    timestamp,
+    transactions,
+    witness
+  }
+}
+```
+
+```
+{
+  statistics(blockchain:"steem"){
+    postCount,
+    commentCount,
+    authorCount
   }
 }
 ```
