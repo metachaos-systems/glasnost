@@ -8,8 +8,8 @@ docker run -it -p 80:80 -e "GLASNOST_DB=..." -e "GLASNOST_DB_HOST=..." -e "GLASN
 
 * Одновременно работает с блокчейнами Голоса и Steem
 * Экстрактор для базы данных Postgres, который синхронизирует новые посты и комментариии в реальном времени, а также за последние 7 дней
-* Добавлен API GraphQL endpoint в `/graphql` с объектами `comments` и `comment` (см. примеры)
-* Добавлен интерактивный браузерный GraphiQL клиент в `/graphiql`
+* API GraphQL endpoint в `/graphql` с объектами `comments`, `comment`, `block`, `statistics` (см. примеры)
+* интерактивный браузерный GraphiQL клиент в `/graphiql`
 
 # Конфигурация
 
