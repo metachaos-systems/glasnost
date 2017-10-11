@@ -10,7 +10,7 @@ defmodule Glasnost.Steem.Block do
 
   @primary_key false
   schema "steem_blocks" do
-    field :extensions, {:array, :map}
+    # field :extensions, {:array, :map}
     field :previous, :string
     field :timestamp, :naive_datetime
     field :transaction_merkle_root, :string
