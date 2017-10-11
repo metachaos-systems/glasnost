@@ -10,8 +10,11 @@ RUN apt install -y curl
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt install -y nodejs
 
+
 ADD . /glasnost_app
 WORKDIR /glasnost_app
+
+RUN chmod +x start.sh
 
 RUN mix local.hex --force
 RUN mix local.rebar --force
