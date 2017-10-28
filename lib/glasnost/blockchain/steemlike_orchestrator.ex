@@ -7,12 +7,22 @@ defmodule Glasnost.Orchestrator.General do
     Supervisor.start_link(__MODULE__, args, options)
   end
 
-  def init(arg) do
+  def init(config) do
     Logger.info("Main orchestrator for Steem and Golos is initializing... ")
-    children = [
-      supervisor(Glasnost.Golos.StageSup, []),
-      supervisor(Glasnost.Steem.StageSup, []),
-    ]
+    children = []
+    golos_sup = if (config.disable_golos_stages) do
+      []
+    else
+      [supervisor(Glasnost.Golos.StageSup, [])]
+    end
+    steem_sup = if (config.disable_steem_stages) do
+      []
+    else
+      [supervisor(Glasnost.Steem.StageSup, [])]
+    end
+
+    children = children ++ golos_sup ++ steem_sup
+
     supervise(children, strategy: :one_for_one)
   end
 
