@@ -30,6 +30,6 @@ defmodule Glasnost.Golos.Comment do
   end
 
   def react_to_event(ev) do
-    Glasnost.Steemlike.Comment.get_data_and_update(ev, blockchain: :steem)
+    Glasnost.Steemlike.Comment.get_data_and_update(ev, blockchain: :golos)
   end
 end
