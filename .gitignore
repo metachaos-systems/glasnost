@@ -34,3 +34,4 @@ npm-debug.log
 /config/*.secret.exs
 priv/glasnost-dev-config.json
 priv/glasnost-test-config.json
+/.elixir_ls/
