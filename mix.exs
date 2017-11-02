@@ -4,7 +4,7 @@ defmodule Glasnost.Mixfile do
   def project do
     [app: :glasnost,
      version: "0.16.0",
-     elixir: "~> 1.4",
+     elixir: "~> 1.5",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
@@ -18,7 +18,7 @@ defmodule Glasnost.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Glasnost.Application, []},
-     extra_applications: [:logger, :ex_golos]]
+     extra_applications: [:logger]]
   end
 
   # Specifies which paths to compile per environment.
@@ -41,6 +41,7 @@ defmodule Glasnost.Mixfile do
      {:phoenix_expug, ">= 0.0.0"},
      {:calendar, ">= 0.16.0"},
      {:distillery, ">= 0.0.0"},
+     {:gen_stage, github: "elixir-lang/gen_stage", override: true},
      {:httpoison, ">= 0.0.0"},
      {:hound, ">= 0.0.0"},
      {:con_cache, "~> 0.12.0"},
